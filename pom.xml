@@ -1,6 +1,6 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>com.antelopesystem.crudframework</groupId>
+    <groupId>studio.crud.crudframework</groupId>
     <artifactId>crud-framework</artifactId>
     <version>0.6.1-SNAPSHOT</version>
     <name>crud-framework</name>
@@ -21,17 +21,17 @@
 
     <developers>
         <developer>
-            <name>Antelope Systems</name>
-            <email>dev@antelopesystem.com</email>
-            <organization>Antelope Systems Limited</organization>
-            <organizationUrl>https://www.antelopesystem.com</organizationUrl>
+            <name>Crud Studio</name>
+            <email>dev@crud.studio</email>
+            <organization>Crud Studio</organization>
+            <organizationUrl>https://www.crud.studio</organizationUrl>
         </developer>
     </developers>
 
     <scm>
-        <connection>scm:git:git://github.com/antelopesystems/crud-framework.git</connection>
-        <developerConnection>scm:git:ssh://git@github.com/antelopesystems/crud-framework.git</developerConnection>
-        <url>https://github.com/antelopesystems/crud-framework</url>
+        <connection>scm:git:git://github.com/crud-studio/crud-framework.git</connection>
+        <developerConnection>scm:git:ssh://git@github.com/crud-studio/crud-framework.git</developerConnection>
+        <url>https://github.com/crud-studio/crud-framework</url>
       <tag>HEAD</tag>
   </scm>
 
@@ -121,7 +121,6 @@
         <module>crud-framework-core</module>
         <module>crud-framework-hibernate5-connector</module>
         <module>crud-framework-mongo-connector</module>
-        <module>crud-framework-dsl</module>
         <module>crud-framework-web</module>
         <module>crud-framework-test</module>
     </modules>

@@ -1,7 +1,7 @@
 # CRUD Framework
 
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.antelopesystem.crudframework/crud-framework/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.antelopesystem.crudframework/crud-framework)
-[![CircleCI](https://circleci.com/gh/antelopesystems/crud-framework.svg?style=shield)](https://circleci.com/gh/antelopesystems/crud-framework)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/studio.crud.crudframework/crud-framework/badge.svg)](https://maven-badges.herokuapp.com/maven-central/studio.crud.crudframework/crud-framework)
+[![CircleCI](https://circleci.com/gh/crud-studio/crud-framework.svg?style=shield)](https://circleci.com/gh/crud-studio/crud-framework)
 
 
 The CRUD Framework is a Spring-powered framework intended to simplify and expand on CRUD operations in Spring, currently
@@ -25,7 +25,7 @@ Maven:
 ```xml
 
 <dependency>
-    <groupId>com.antelopesystem.crudframework</groupId>
+    <groupId>studio.crud.crudframework</groupId>
     <artifactId>crud-framework-hibernate5-connector</artifactId>
     <version>0.4.1</version>
 </dependency>
@@ -34,7 +34,7 @@ Maven:
 Gradle:
 
 ```kotlin
-implementation("com.antelopesystem.crudframework:crud-framework-hibernate5-connector:0.4.1")
+implementation("studio.crud.crudframework:crud-framework-hibernate5-connector:0.4.1")
 ```
 
 ### MongoDB Connector
@@ -42,7 +42,7 @@ implementation("com.antelopesystem.crudframework:crud-framework-hibernate5-conne
 ```xml
 
 <dependency>
-    <groupId>com.antelopesystem.crudframework</groupId>
+    <groupId>studio.crud.crudframework</groupId>
     <artifactId>crud-framework-mongo-connector</artifactId>
     <version>0.4.1</version>
 </dependency>
@@ -51,7 +51,7 @@ implementation("com.antelopesystem.crudframework:crud-framework-hibernate5-conne
 Gradle:
 
 ```kotlin
-implementation("com.antelopesystem.crudframework:crud-framework-mongo-connector:0.4.1")
+implementation("studio.crud.crudframework:crud-framework-mongo-connector:0.4.1")
 ```
 
 
@@ -62,7 +62,7 @@ Contains useful utilities and classes for web operations
 ```xml
 
 <dependency>
-    <groupId>com.antelopesystem.crudframework</groupId>
+    <groupId>studio.crud.crudframework</groupId>
     <artifactId>crud-framework-web</artifactId>
     <version>0.3.3</version>
 </dependency>
@@ -71,7 +71,7 @@ Contains useful utilities and classes for web operations
 Gradle:
 
 ```kotlin
-implementation("com.antelopesystem.crudframework:crud-framework-web:0.3.3")
+implementation("studio.crud.crudframework:crud-framework-web:0.3.3")
 ```
 
 ### Operation

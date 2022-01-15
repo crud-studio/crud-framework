@@ -5,7 +5,7 @@
     <description>A Mongo connector for the Crud Framework</description>
 
     <parent>
-        <groupId>com.antelopesystem.crudframework</groupId>
+        <groupId>studio.crud.crudframework</groupId>
         <artifactId>crud-framework</artifactId>
         <version>0.6.1-SNAPSHOT</version>
     </parent>
@@ -42,7 +42,7 @@
         </dependency>
 
         <dependency>
-            <groupId>com.antelopesystem.crudframework</groupId>
+            <groupId>studio.crud.crudframework</groupId>
             <artifactId>crud-framework-core</artifactId>
             <version>0.6.1-SNAPSHOT</version>
         </dependency>

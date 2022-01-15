@@ -1,0 +1,12 @@
+package studio.crud.crudframework.mongo.config
+
+import studio.crud.crudframework.crud.handler.CrudDao
+import studio.crud.crudframework.mongo.dao.MongoCrudDaoImpl
+import org.springframework.context.annotation.Bean
+import org.springframework.context.annotation.Configuration
+
+@Configuration
+class CrudMongoConnectorConfiguration {
+    @Bean
+    fun mongoCrudDao(): CrudDao = MongoCrudDaoImpl()
+}
