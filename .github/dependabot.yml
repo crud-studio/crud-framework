@@ -1,6 +1,10 @@
 version: 2
 updates:
 - package-ecosystem: maven
+  commit-message:
+    prefix: fix
+    prefix-development: chore
+    include: scope
   directory: "/"
   schedule:
     interval: daily
