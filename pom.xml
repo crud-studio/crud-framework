@@ -402,7 +402,7 @@
                 <repository>
                     <id>github</id>
                     <name>GitHub Packages</name>
-                    <url>https://maven.pkg.github.com/crud-studio/feature-depot</url>
+                    <url>https://maven.pkg.github.com/crud-studio/crud-framework</url>
                 </repository>
             </distributionManagement>
         </profile>
