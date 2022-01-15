@@ -3,12 +3,18 @@
     <artifactId>crud-framework-utils</artifactId>
     <name>crud-framework-utils</name>
     <description>Crud Framework Utils</description>
-
+    <version>${revision}</version>
     <parent>
         <groupId>studio.crud.crudframework</groupId>
         <artifactId>crud-framework</artifactId>
-        <version>0.6.1-SNAPSHOT</version>
+        <version>${revision}</version>
+        <relativePath>../pom.xml</relativePath>
     </parent>
+
+    <properties>
+        <jar-name>crud-framework-utils</jar-name>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>org.springframework.data</groupId>

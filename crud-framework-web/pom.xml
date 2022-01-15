@@ -3,11 +3,18 @@
     <artifactId>crud-framework-web</artifactId>
     <name>crud-framework-web</name>
     <description>Web extensions for the Crud Framework</description>
+    <version>${revision}</version>
     <parent>
         <groupId>studio.crud.crudframework</groupId>
         <artifactId>crud-framework</artifactId>
-        <version>0.6.1-SNAPSHOT</version>
+        <version>${revision}</version>
+        <relativePath>../pom.xml</relativePath>
     </parent>
+
+    <properties>
+        <jar-name>crud-framework-web</jar-name>
+    </properties>
+
     <dependencies>
         <!-- Spring Framework -->
         <dependency>
@@ -34,7 +41,7 @@
         <dependency>
             <groupId>studio.crud.crudframework</groupId>
             <artifactId>crud-framework-core</artifactId>
-            <version>0.6.1-SNAPSHOT</version>
+            <version>${revision}</version>
         </dependency>
     </dependencies>
 </project>

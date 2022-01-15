@@ -3,17 +3,23 @@
     <artifactId>crud-framework-test</artifactId>
     <name>crud-framework-test</name>
     <description>Crud Framework Test</description>
-
+    <version>${revision}</version>
     <parent>
         <groupId>studio.crud.crudframework</groupId>
         <artifactId>crud-framework</artifactId>
-        <version>0.6.1-SNAPSHOT</version>
+        <version>${revision}</version>
+        <relativePath>../pom.xml</relativePath>
     </parent>
+
+    <properties>
+        <jar-name>crud-framework-test</jar-name>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>studio.crud.crudframework</groupId>
             <artifactId>crud-framework-core</artifactId>
-            <version>0.6.1-SNAPSHOT</version>
+            <version>${revision}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>

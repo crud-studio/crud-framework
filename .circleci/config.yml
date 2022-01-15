@@ -1,11 +1,24 @@
 version: 2.1
-jobs:
-  build:
+aliases:
+  - &jdk_image
     docker:
-      - image: circleci/openjdk:8-jdk
+      - image: cimg/openjdk:8.0-node
+  - &plain_image
+    docker:
+      - image: cimg/base:2020.01
+  - &attach_default_workspace
+    attach_workspace:
+      at: /tmp/workspace
+jobs:
+  test:
+    <<: *jdk_image
     steps:
       - checkout
-      - run: mvn test
+      - run:
+          name: Test JAR
+          command: |
+            mvn -f bom/pom.xml install
+            mvn test
       - run:
           name: Save test results
           command: |
@@ -15,4 +28,41 @@ jobs:
       - store_test_results:
           path: ~/test-results
       - store_artifacts:
-          path: ~/test-results/junit       
+          path: ~/test-results/junit
+  release:
+    <<: *jdk_image
+    steps:
+      - checkout
+      - run:
+          name: Import GPG key
+          command: echo -e "$GPG_KEY" | gpg --import
+      - run:
+          name: NPM install semantic release dependencies
+          command: npm i semantic-release @semantic-release/commit-analyzer @semantic-release/release-notes-generator @semantic-release/changelog @semantic-release/git @semantic-release/github @crud-studio/semantic-release-maven
+      - run:
+          name: Run semantic release
+          command: npx semantic-release
+workflows:
+  version: 2
+  test:
+    jobs:
+      - test:
+          filters:
+            branches:
+              ignore:
+                - master
+  release:
+    jobs:
+      - test:
+          filters:
+            branches:
+              only:
+                - master
+      - release:
+          context: crud-framework
+          requires:
+            - test
+          filters:
+            branches:
+              only:
+                - master

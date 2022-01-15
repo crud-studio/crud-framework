@@ -3,12 +3,19 @@
     <artifactId>crud-framework-mongo-connector</artifactId>
     <name>crud-framework-mongo-connector</name>
     <description>A Mongo connector for the Crud Framework</description>
+    <version>${revision}</version>
 
     <parent>
         <groupId>studio.crud.crudframework</groupId>
         <artifactId>crud-framework</artifactId>
-        <version>0.6.1-SNAPSHOT</version>
+        <version>${revision}</version>
+        <relativePath>../pom.xml</relativePath>
     </parent>
+
+    <properties>
+        <jar-name>crud-framework-mongo-connector</jar-name>
+    </properties>
+
     <dependencies>
         <!-- Spring Framework -->
 
@@ -44,7 +51,7 @@
         <dependency>
             <groupId>studio.crud.crudframework</groupId>
             <artifactId>crud-framework-core</artifactId>
-            <version>0.6.1-SNAPSHOT</version>
+            <version>${revision}</version>
         </dependency>
     </dependencies>
 </project>
