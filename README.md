@@ -27,14 +27,14 @@ Maven:
 <dependency>
     <groupId>studio.crud.crudframework</groupId>
     <artifactId>crud-framework-hibernate5-connector</artifactId>
-    <version>0.4.1</version>
+    <version>0.7.0</version>
 </dependency>
 ```
 
 Gradle:
 
 ```kotlin
-implementation("studio.crud.crudframework:crud-framework-hibernate5-connector:0.4.1")
+implementation("studio.crud.crudframework:crud-framework-hibernate5-connector:0.7.0")
 ```
 
 ### MongoDB Connector
@@ -44,14 +44,14 @@ implementation("studio.crud.crudframework:crud-framework-hibernate5-connector:0.
 <dependency>
     <groupId>studio.crud.crudframework</groupId>
     <artifactId>crud-framework-mongo-connector</artifactId>
-    <version>0.4.1</version>
+    <version>0.7.0</version>
 </dependency>
 ```
 
 Gradle:
 
 ```kotlin
-implementation("studio.crud.crudframework:crud-framework-mongo-connector:0.4.1")
+implementation("studio.crud.crudframework:crud-framework-mongo-connector:0.7.0")
 ```
 
 
