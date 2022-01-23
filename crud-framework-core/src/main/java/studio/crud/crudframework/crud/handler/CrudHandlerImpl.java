@@ -34,9 +34,11 @@ import studio.crud.crudframework.model.BaseCrudEntity;
 import studio.crud.crudframework.modelfilter.DynamicModelFilter;
 import studio.crud.crudframework.ro.PagingDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import studio.crud.crudframework.util.DynamicModelFilterUtils;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Objects;
 
 @WrapException(CrudException.class)
 public class CrudHandlerImpl implements CrudHandler {
@@ -275,4 +277,15 @@ public class CrudHandlerImpl implements CrudHandler {
 		crudHelper.validate(target);
 	}
 
+	@Override
+	public <ID extends Serializable, Entity extends BaseCrudEntity<ID>> void validateFilter(DynamicModelFilter filter, Class<Entity> clazz) {
+		crudHelper.validateAndFillFilterFieldMetadata(filter.getFilterFields(), clazz);
+	}
+
+	@Override
+	public <ID extends Serializable, Entity extends BaseCrudEntity<ID>> boolean filterMatches(DynamicModelFilter filter, Entity entity) {
+		Objects.requireNonNull(entity, "'entity' cannot be null");
+		validateFilter(filter, entity.getClass());
+		return DynamicModelFilterUtils.matches(filter, entity);
+	}
 }

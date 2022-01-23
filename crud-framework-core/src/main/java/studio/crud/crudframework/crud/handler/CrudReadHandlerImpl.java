@@ -50,7 +50,7 @@ public class CrudReadHandlerImpl implements CrudReadHandler {
 			filter = new DynamicModelFilter();
 		}
 
-		crudHelper.validateAndFillFilterFieldMetadata(filter.getFilterFields(), crudHelper.getEntityMetadata(clazz));
+		crudHelper.validateAndFillFilterFieldMetadata(filter.getFilterFields(), clazz);
 		List<IndexHooks> indexHooksList = crudHelper.getHooks(IndexHooks.class, clazz);
 
 		if(indexHooksList != null && !indexHooksList.isEmpty()) {
@@ -147,7 +147,7 @@ public class CrudReadHandlerImpl implements CrudReadHandler {
 			filter = new DynamicModelFilter();
 		}
 
-		crudHelper.validateAndFillFilterFieldMetadata(filter.getFilterFields(), crudHelper.getEntityMetadata(clazz));
+		crudHelper.validateAndFillFilterFieldMetadata(filter.getFilterFields(), clazz);
 		List<ShowByHooks> showByHooksList = crudHelper.getHooks(ShowByHooks.class, clazz);
 
 		if(showByHooksList != null && !showByHooksList.isEmpty()) {

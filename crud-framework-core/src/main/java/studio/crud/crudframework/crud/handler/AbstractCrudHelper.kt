@@ -25,7 +25,10 @@ abstract class AbstractCrudHelper : CrudHelper {
         throw UnsupportedOperationException()
     }
 
-    override fun validateAndFillFilterFieldMetadata(filterFields: MutableList<FilterField>?, metadataDTO: EntityMetadataDTO?) {
+    override fun <ID : Serializable?, Entity : BaseCrudEntity<ID>?> validateAndFillFilterFieldMetadata(
+        filterFields: MutableList<FilterField>?,
+        entityClazz: Class<Entity>?
+    ) {
         throw UnsupportedOperationException()
     }
 

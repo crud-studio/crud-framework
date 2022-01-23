@@ -257,4 +257,18 @@ public interface CrudHandler {
 	 * @param target
 	 */
 	void validate(Object target);
+
+	/**
+	 * Validate a filter against an entity
+	 * @param filter the filter
+	 * @param clazz the entity class
+	 */
+    <ID extends Serializable, Entity extends BaseCrudEntity<ID>> void validateFilter(DynamicModelFilter filter, Class<Entity> clazz);
+
+	/**
+	 * Check whether the given filter matches the given entity
+	 * @param filter the filter to check
+	 * @param entity the entity to check against
+	 */
+	<ID extends Serializable, Entity extends BaseCrudEntity<ID>> boolean filterMatches(DynamicModelFilter filter, Entity entity);
 }

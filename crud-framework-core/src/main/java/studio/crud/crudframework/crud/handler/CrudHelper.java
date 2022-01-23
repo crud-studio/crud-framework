@@ -22,7 +22,7 @@ public interface CrudHelper {
 
 	<ID extends Serializable, Entity extends BaseCrudEntity<ID>> void decorateFilter(DynamicModelFilter filter, Class<Entity> entityClazz, DataAccessorDTO accessorDTO, boolean forUpdate);
 
-	void validateAndFillFilterFieldMetadata(List<FilterField> filterFields, EntityMetadataDTO metadataDTO);
+	<ID extends Serializable, Entity extends BaseCrudEntity<ID>> void validateAndFillFilterFieldMetadata(List<FilterField> filterFields, Class<Entity> entityClazz);
 
 	/* transactional */
 	<ID extends Serializable, Entity extends BaseCrudEntity<ID>> List<Entity> getEntities(DynamicModelFilter filter, Class<Entity> entityClazz, DataAccessorDTO accessorDTO, Boolean persistCopy, boolean forUpdate);

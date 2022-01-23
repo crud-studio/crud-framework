@@ -154,11 +154,12 @@ public class CrudHelperImpl implements CrudHelper {
 			}
 		}
 
-		validateAndFillFilterFieldMetadata(filter.getFilterFields(), metadataDTO);
+		validateAndFillFilterFieldMetadata(filter.getFilterFields(), entityClazz);
 	}
 
 	@Override
-	public void validateAndFillFilterFieldMetadata(List<FilterField> filterFields, EntityMetadataDTO metadataDTO) {
+	public <ID extends Serializable, Entity extends BaseCrudEntity<ID>> void validateAndFillFilterFieldMetadata(List<FilterField> filterFields, Class<Entity> entityClazz) {
+		EntityMetadataDTO metadataDTO = getEntityMetadata(entityClazz);
 		for(FilterField filterField : filterFields) {
 			if(filterField.isValidated()) {
 				continue;
@@ -170,7 +171,7 @@ public class CrudHelperImpl implements CrudHelper {
 			boolean isJunction = filterField.getOperation() == FilterFieldOperation.And || filterField.getOperation() == FilterFieldOperation.Or || filterField.getOperation() == FilterFieldOperation.Not || filterField.getOperation() == FilterFieldOperation.RawJunction;
 			if(isJunction) {
 				if(filterField.getChildren() != null && !filterField.getChildren().isEmpty()) {
-					validateAndFillFilterFieldMetadata(filterField.getChildren(), metadataDTO);
+					validateAndFillFilterFieldMetadata(filterField.getChildren(), entityClazz);
 				}
 			} else {
 				if(filterField.getFieldName() != null) {
