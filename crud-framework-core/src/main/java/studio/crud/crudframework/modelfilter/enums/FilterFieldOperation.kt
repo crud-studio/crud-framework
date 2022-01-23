@@ -1,6 +1,6 @@
 package studio.crud.crudframework.modelfilter.enums
 
-enum class FilterFieldOperation {
+enum class FilterFieldOperation(val junction: Boolean = false) {
     Equal,
     NotEqual,
     In,
@@ -13,13 +13,13 @@ enum class FilterFieldOperation {
     Contains,
     IsNull,
     IsNotNull,
-    And,
-    Or,
-    Not,
+    And(true),
+    Or(true),
+    Not(true),
     ContainsIn,
     NotContainsIn,
-    RawJunction,
+    RawJunction(true),
     StartsWith,
     EndsWith,
-    Noop
+    Noop;
 }
