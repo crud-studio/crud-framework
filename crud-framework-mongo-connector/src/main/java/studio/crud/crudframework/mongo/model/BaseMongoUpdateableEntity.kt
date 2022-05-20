@@ -1,7 +1,7 @@
 package studio.crud.crudframework.mongo.model
 
-import studio.crud.crudframework.fieldmapper.annotation.MappedField
-import studio.crud.crudframework.fieldmapper.transformer.DateToLongTransformer
+import dev.krud.shapeshift.annotation.MappedField
+import dev.krud.shapeshift.transformer.DateToLongTransformer
 import studio.crud.crudframework.mongo.ro.BaseMongoUpdatableRO
 import java.util.*
 

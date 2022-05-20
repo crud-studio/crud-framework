@@ -1,13 +1,11 @@
 package studio.crud.crudframework.mongo.model
 
-import studio.crud.crudframework.mongo.annotation.MongoCrudEntity
-import studio.crud.crudframework.fieldmapper.annotation.MappedField
-import studio.crud.crudframework.fieldmapper.transformer.DateToLongTransformer
-import studio.crud.crudframework.model.BaseCrudEntity
-import studio.crud.crudframework.mongo.ro.BaseMongoRO
-import org.bson.conversions.Bson
-import org.bson.types.ObjectId
+import dev.krud.shapeshift.annotation.MappedField
+import dev.krud.shapeshift.transformer.DateToLongTransformer
 import org.springframework.data.annotation.Id
+import studio.crud.crudframework.model.BaseCrudEntity
+import studio.crud.crudframework.mongo.annotation.MongoCrudEntity
+import studio.crud.crudframework.mongo.ro.BaseMongoRO
 import java.util.*
 
 

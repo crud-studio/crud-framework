@@ -6,7 +6,6 @@ import studio.crud.crudframework.crud.dataaccess.model.DataAccessorDTO
 import studio.crud.crudframework.crud.decorator.ObjectDecorator
 import studio.crud.crudframework.crud.hooks.interfaces.CRUDHooks
 import studio.crud.crudframework.crud.model.EntityMetadataDTO
-import studio.crud.crudframework.fieldmapper.transformer.base.FieldTransformer
 import studio.crud.crudframework.model.BaseCrudEntity
 import studio.crud.crudframework.modelfilter.DynamicModelFilter
 import studio.crud.crudframework.modelfilter.FilterField
@@ -107,14 +106,6 @@ abstract class AbstractCrudHelper : CrudHelper {
     }
 
     override fun <ID : Serializable?, Entity : BaseCrudEntity<ID>?> getCrudDaoForEntity(entityClazz: Class<Entity>?): CrudDao {
-        throw UnsupportedOperationException()
-    }
-
-    override fun registerDefaultTransformer(transformer: FieldTransformer<*, *>?) {
-        throw UnsupportedOperationException()
-    }
-
-    override fun registerDefaultTransformer(transformer: FieldTransformer<*, *>?, fromType: Class<*>?, toType: Class<*>?) {
         throw UnsupportedOperationException()
     }
 }

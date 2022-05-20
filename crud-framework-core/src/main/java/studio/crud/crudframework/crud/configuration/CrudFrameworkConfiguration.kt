@@ -18,6 +18,9 @@ class CrudFrameworkConfiguration {
     fun crudHelper(): CrudHelper = CrudHelperImpl()
 
     @Bean
+    fun crudShapeShiftBuilderCustomizer(): CrudShapeShiftBuilderCustomizer = CrudShapeShiftBuilderCustomizer()
+
+    @Bean
     fun crudCreateHandler(): CrudCreateHandler = CrudCreateHandlerImpl()
 
     @Bean

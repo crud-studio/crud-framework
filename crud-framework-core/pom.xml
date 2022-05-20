@@ -16,6 +16,7 @@
 
     <properties>
         <jar-name>crud-framework-core</jar-name>
+        <shapeshift.version>0.1.0</shapeshift.version>
     </properties>
 
     <dependencies>
@@ -26,11 +27,6 @@
         <dependency>
             <groupId>studio.crud.crudframework</groupId>
             <artifactId>crud-framework-utils</artifactId>
-            <version>${revision}</version>
-        </dependency>
-        <dependency>
-            <groupId>studio.crud.crudframework</groupId>
-            <artifactId>crud-framework-fieldmapper</artifactId>
             <version>${revision}</version>
         </dependency>
         <dependency>
@@ -55,11 +51,15 @@
             <artifactId>hibernate-validator</artifactId>
             <version>6.1.0.Final</version>
         </dependency>
-
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
             <version>3.6</version>
+        </dependency>
+        <dependency>
+            <groupId>dev.krud</groupId>
+            <artifactId>spring-boot-starter-shapeshift</artifactId>
+            <version>${shapeshift.version}</version>
         </dependency>
     </dependencies>
 </project>

@@ -54,7 +54,6 @@
     </properties>
 
     <modules>
-        <module>crud-framework-fieldmapper</module>
         <module>crud-framework-utils</module>
         <module>crud-framework-core</module>
         <module>crud-framework-hibernate5-connector</module>
@@ -65,11 +64,6 @@
 
     <dependencyManagement>
         <dependencies>
-            <dependency>
-                <groupId>studio.crud.crudframework</groupId>
-                <artifactId>crud-framework-fieldmapper</artifactId>
-                <version>${revision}</version>
-            </dependency>
             <dependency>
                 <groupId>studio.crud.crudframework</groupId>
                 <artifactId>crud-framework-utils</artifactId>

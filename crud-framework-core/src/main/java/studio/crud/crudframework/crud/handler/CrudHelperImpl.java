@@ -1,5 +1,12 @@
 package studio.crud.crudframework.crud.handler;
 
+import dev.krud.shapeshift.ShapeShift;
+import org.springframework.aop.framework.Advised;
+import org.springframework.aop.support.AopUtils;
+import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.util.ClassUtils;
 import studio.crud.crudframework.crud.cache.CacheManagerAdapter;
 import studio.crud.crudframework.crud.cache.CacheUtils;
 import studio.crud.crudframework.crud.cache.CrudCache;
@@ -17,10 +24,6 @@ import studio.crud.crudframework.crud.model.EntityCacheMetadata;
 import studio.crud.crudframework.crud.model.EntityMetadataDTO;
 import studio.crud.crudframework.exception.WrapException;
 import studio.crud.crudframework.exception.dto.ErrorField;
-import studio.crud.crudframework.fieldmapper.FieldMapper;
-import studio.crud.crudframework.fieldmapper.transformer.DateToLongTransformer;
-import studio.crud.crudframework.fieldmapper.transformer.LongToDateTransformer;
-import studio.crud.crudframework.fieldmapper.transformer.base.FieldTransformer;
 import studio.crud.crudframework.model.BaseCrudEntity;
 import studio.crud.crudframework.modelfilter.DynamicModelFilter;
 import studio.crud.crudframework.modelfilter.FilterField;
@@ -30,12 +33,6 @@ import studio.crud.crudframework.modelfilter.enums.FilterFieldOperation;
 import studio.crud.crudframework.utils.component.componentmap.annotation.ComponentMap;
 import studio.crud.crudframework.utils.utils.FieldUtils;
 import studio.crud.crudframework.utils.utils.ReflectionUtils;
-import org.springframework.aop.framework.Advised;
-import org.springframework.aop.support.AopUtils;
-import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.util.ClassUtils;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
@@ -48,8 +45,6 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class CrudHelperImpl implements CrudHelper {
-
-	private FieldMapper fieldMapper = new FieldMapper();
 
 	@ComponentMap
 	private Map<String, ObjectDecorator> objectDecoratorMap;
@@ -79,15 +74,14 @@ public class CrudHelperImpl implements CrudHelper {
 	@Autowired
 	private CacheManagerAdapter cacheManagerAdapter;
 
-	@Autowired(required = false)
-	private Map<String, FieldTransformer> fieldTransformers = new HashMap<>();
-
 	@Autowired
 	private CrudFrameworkProperties properties;
 
+	@Autowired
+	private ShapeShift shapeShift;
+
 	@PostConstruct
 	private void init() {
-		initFieldMapper();
 		pagingCache = cacheManagerAdapter.createCache("pagingCache",
 				new CrudCacheOptions(
 						60L,
@@ -394,7 +388,7 @@ public class CrudHelperImpl implements CrudHelper {
 		Objects.requireNonNull(fromObject, "fromObject cannot be null");
 		Objects.requireNonNull(toClazz, "toClazz cannot be null");
 
-		To toObject = fieldMapper.processMappedFields(fromObject, toClazz);
+		To toObject = shapeShift.map(fromObject, toClazz);
 		ObjectDecorator objectDecorator = getObjectDecorator(fromObject.getClass(), toObject.getClass());
 		if(objectDecorator != null) {
 			objectDecorator.decorate(fromObject, toObject);
@@ -409,7 +403,7 @@ public class CrudHelperImpl implements CrudHelper {
 		Objects.requireNonNull(fromObject, "fromObject cannot be null");
 		Objects.requireNonNull(toObject, "toObject cannot be null");
 
-		fieldMapper.processMappedFields(fromObject, toObject);
+		shapeShift.map(fromObject, toObject);
 		ObjectDecorator objectDecorator = getObjectDecorator(fromObject.getClass(), toObject.getClass());
 		if(objectDecorator != null) {
 			objectDecorator.decorate(fromObject, toObject);
@@ -450,27 +444,6 @@ public class CrudHelperImpl implements CrudHelper {
 			}
 			return null;
 		});
-	}
-
-	@Override
-	public void registerDefaultTransformer(FieldTransformer transformer) {
-		fieldMapper.registerDefaultTransformer(transformer);
-	}
-
-	@Override
-	public void registerDefaultTransformer(FieldTransformer transformer, Class<?> fromType, Class<?> toType) {
-		fieldMapper.registerDefaultTransformer(transformer, fromType, toType);
-	}
-
-	private void initFieldMapper() {
-		for(Map.Entry<String, FieldTransformer> entry : fieldTransformers.entrySet()) {
-			fieldMapper.registerTransformer(entry.getKey(), entry.getValue());
-		}
-
-		if(properties.getDefaultTransformersEnabled()) {
-			fieldMapper.registerDefaultTransformer(new DateToLongTransformer());
-			fieldMapper.registerDefaultTransformer(new LongToDateTransformer());
-		}
 	}
 
 	private <T> Class<T> getTrueProxyClass(T proxy) {
