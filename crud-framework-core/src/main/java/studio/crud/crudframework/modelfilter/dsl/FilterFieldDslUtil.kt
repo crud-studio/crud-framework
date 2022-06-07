@@ -1,24 +1,24 @@
 package studio.crud.crudframework.modelfilter.dsl
 
+import studio.crud.crudframework.model.PersistentEntity
 import studio.crud.crudframework.modelfilter.DynamicModelFilter
 import studio.crud.crudframework.modelfilter.FilterField
 import studio.crud.crudframework.modelfilter.enums.FilterFieldOperation
 
-
-fun filter(setup: ModelFilterBuilder.() -> Unit): DynamicModelFilter {
-    val modelFilterBuilder = ModelFilterBuilder()
+fun <RootType : PersistentEntity> filter(setup: ModelFilterBuilder<RootType>.() -> Unit): DynamicModelFilter {
+    val modelFilterBuilder = ModelFilterBuilder<RootType>()
     setup(modelFilterBuilder)
     return modelFilterBuilder.build()
 }
 
-fun where(setup: FilterFieldsBuilder.() -> Unit): DynamicModelFilter {
-    val filterFieldsBuilder = FilterFieldsBuilder()
+fun <RootType : PersistentEntity> where(setup: FilterFieldsBuilder<RootType>.() -> Unit): DynamicModelFilter {
+    val filterFieldsBuilder = FilterFieldsBuilder<RootType>()
     setup(filterFieldsBuilder)
     return DynamicModelFilter(filterFieldsBuilder.build().toMutableList())
 }
 
-fun and(setup: FilterFieldsBuilder.() -> Unit): FilterField {
-    val filterFieldsBuilder = FilterFieldsBuilder()
+fun <RootType : PersistentEntity> and(setup: FilterFieldsBuilder<RootType>.() -> Unit): FilterField {
+    val filterFieldsBuilder = FilterFieldsBuilder<RootType>()
     setup(filterFieldsBuilder)
     val filter = DynamicModelFilter(filterFieldsBuilder.build().toMutableList())
 
@@ -28,8 +28,8 @@ fun and(setup: FilterFieldsBuilder.() -> Unit): FilterField {
     }
 }
 
-fun or(setup: FilterFieldsBuilder.() -> Unit): FilterField {
-    val filterFieldsBuilder = FilterFieldsBuilder()
+fun <RootType : PersistentEntity> or(setup: FilterFieldsBuilder<RootType>.() -> Unit): FilterField {
+    val filterFieldsBuilder = FilterFieldsBuilder<RootType>()
     setup(filterFieldsBuilder)
     val filter = DynamicModelFilter(filterFieldsBuilder.build().toMutableList())
 
@@ -39,8 +39,8 @@ fun or(setup: FilterFieldsBuilder.() -> Unit): FilterField {
     }
 }
 
-fun not(setup: FilterFieldsBuilder.() -> Unit): FilterField {
-    val filterFieldsBuilder = FilterFieldsBuilder()
+fun <RootType : PersistentEntity> not(setup: FilterFieldsBuilder<RootType>.() -> Unit): FilterField {
+    val filterFieldsBuilder = FilterFieldsBuilder<RootType>()
     setup(filterFieldsBuilder)
     val filter = DynamicModelFilter(filterFieldsBuilder.build().toMutableList())
 

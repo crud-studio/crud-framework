@@ -1,10 +1,12 @@
 package studio.crud.crudframework.modelfilter.dsl
 
+import studio.crud.crudframework.model.PersistentEntity
+import studio.crud.crudframework.modelfilter.OrderDTO
 import studio.crud.crudframework.modelfilter.dsl.annotation.FilterFieldDsl
+import kotlin.reflect.KProperty1
 
 @FilterFieldDsl
-class OrderBuilder(var by: String = "id", private var desc: Boolean = true) {
-
+class OrderBuilder<RootType : PersistentEntity>(var by: KProperty1<RootType, *>? = null, private var desc: Boolean = true) {
     val descending: Unit
         get() {
             desc = true
@@ -14,5 +16,5 @@ class OrderBuilder(var by: String = "id", private var desc: Boolean = true) {
             desc = false
         }
 
-    fun build() = Pair(by, desc)
+    fun build() = OrderDTO(by?.name ?: "id", desc)
 }

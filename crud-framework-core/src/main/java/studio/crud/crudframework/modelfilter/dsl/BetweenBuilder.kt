@@ -9,5 +9,4 @@ class BetweenBuilder<T>(val fieldName: String, val source: T, val type: FilterFi
     infix fun build(target: T): FilterField {
         return FilterField(fieldName, FilterFieldOperation.Between, type, listOf(source, target))
     }
-
 }
