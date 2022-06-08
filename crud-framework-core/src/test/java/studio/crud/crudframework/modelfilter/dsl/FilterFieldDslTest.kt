@@ -10,26 +10,28 @@ import studio.crud.crudframework.modelfilter.enums.FilterFieldDataType
 import studio.crud.crudframework.modelfilter.enums.FilterFieldOperation
 import java.util.Date
 
+enum class TestEnum {
+    One, Two, Three
+}
+
+class TestClazz : PersistentEntity {
+    val testString: String = "test"
+    val testInt: Int = 1
+    val testLong: Long = 1L
+    val testDouble: Double = 1.0
+    val testDate: Date = Date(0)
+    val testBoolean: Boolean = true
+    val testEnum: TestEnum = TestEnum.One
+    val testStringList: List<String> = emptyList()
+    val testIntList: List<Int> = emptyList()
+    val testLongList: List<Long> = emptyList()
+    val testDoubleList: List<Double> = emptyList()
+    val testDateList: List<Date> = emptyList()
+    val testBooleanList: List<Boolean> = emptyList()
+    val testEnumList: List<TestEnum> = emptyList()
+}
+
 class FilterFieldDslTest {
-    enum class TestEnum {
-        One, Two, Three
-    }
-    class TestClazz : PersistentEntity {
-        val testString: String = "test"
-        val testInt: Int = 1
-        val testLong: Long = 1L
-        val testDouble: Double = 1.0
-        val testDate: Date = Date(0)
-        val testBoolean: Boolean = true
-        val testEnum: TestEnum = TestEnum.One
-        val testStringList: List<String> = emptyList()
-        val testIntList: List<Int> = emptyList()
-        val testLongList: List<Long> = emptyList()
-        val testDoubleList: List<Double> = emptyList()
-        val testDateList: List<Date> = emptyList()
-        val testBooleanList: List<Boolean> = emptyList()
-        val testEnumList: List<TestEnum> = emptyList()
-    }
     @Test
     fun `test Equal#String`() {
         val filterField = and<TestClazz> {
@@ -37,11 +39,7 @@ class FilterFieldDslTest {
         }.children.first()
 
         filterField.runAssertions(
-            "testString",
-            FilterFieldOperation.Equal,
-            FilterFieldDataType.String,
-            1,
-            arrayOf("value")
+            "testString", FilterFieldOperation.Equal, FilterFieldDataType.String, 1, arrayOf("value")
         )
     }
 
@@ -52,11 +50,7 @@ class FilterFieldDslTest {
         }.children.first()
 
         filterField.runAssertions(
-            "testInt",
-            FilterFieldOperation.Equal,
-            FilterFieldDataType.Integer,
-            1,
-            arrayOf(1)
+            "testInt", FilterFieldOperation.Equal, FilterFieldDataType.Integer, 1, arrayOf(1)
         )
     }
 
@@ -67,11 +61,7 @@ class FilterFieldDslTest {
         }.children.first()
 
         filterField.runAssertions(
-            "testLong",
-            FilterFieldOperation.Equal,
-            FilterFieldDataType.Long,
-            1,
-            arrayOf(1L)
+            "testLong", FilterFieldOperation.Equal, FilterFieldDataType.Long, 1, arrayOf(1L)
         )
     }
 
@@ -82,11 +72,7 @@ class FilterFieldDslTest {
         }.children.first()
 
         filterField.runAssertions(
-            "testDouble",
-            FilterFieldOperation.Equal,
-            FilterFieldDataType.Double,
-            1,
-            arrayOf(1.0)
+            "testDouble", FilterFieldOperation.Equal, FilterFieldDataType.Double, 1, arrayOf(1.0)
         )
     }
 
@@ -97,11 +83,7 @@ class FilterFieldDslTest {
         }.children.first()
 
         filterField.runAssertions(
-            "testBoolean",
-            FilterFieldOperation.Equal,
-            FilterFieldDataType.Boolean,
-            1,
-            arrayOf(true)
+            "testBoolean", FilterFieldOperation.Equal, FilterFieldDataType.Boolean, 1, arrayOf(true)
         )
     }
 
@@ -112,11 +94,7 @@ class FilterFieldDslTest {
         }.children.first()
 
         filterField.runAssertions(
-            "testDate",
-            FilterFieldOperation.Equal,
-            FilterFieldDataType.Date,
-            1,
-            arrayOf(Date(0))
+            "testDate", FilterFieldOperation.Equal, FilterFieldDataType.Date, 1, arrayOf(Date(0))
         )
     }
 
@@ -127,12 +105,7 @@ class FilterFieldDslTest {
         }.children.first()
 
         filterField.runAssertions(
-            "testEnum",
-            FilterFieldOperation.Equal,
-            FilterFieldDataType.Enum,
-            1,
-            arrayOf(TestEnum.One),
-            TestEnum::class.java.canonicalName
+            "testEnum", FilterFieldOperation.Equal, FilterFieldDataType.Enum, 1, arrayOf(TestEnum.One), TestEnum::class.java.canonicalName
         )
     }
 
@@ -143,11 +116,7 @@ class FilterFieldDslTest {
         }.children.first()
 
         filterField.runAssertions(
-            "testString",
-            FilterFieldOperation.NotEqual,
-            FilterFieldDataType.String,
-            1,
-            arrayOf("value")
+            "testString", FilterFieldOperation.NotEqual, FilterFieldDataType.String, 1, arrayOf("value")
         )
     }
 
@@ -158,11 +127,7 @@ class FilterFieldDslTest {
         }.children.first()
 
         filterField.runAssertions(
-            "testInt",
-            FilterFieldOperation.NotEqual,
-            FilterFieldDataType.Integer,
-            1,
-            arrayOf(1)
+            "testInt", FilterFieldOperation.NotEqual, FilterFieldDataType.Integer, 1, arrayOf(1)
         )
     }
 
@@ -173,11 +138,7 @@ class FilterFieldDslTest {
         }.children.first()
 
         filterField.runAssertions(
-            "testLong",
-            FilterFieldOperation.NotEqual,
-            FilterFieldDataType.Long,
-            1,
-            arrayOf(1L)
+            "testLong", FilterFieldOperation.NotEqual, FilterFieldDataType.Long, 1, arrayOf(1L)
         )
     }
 
@@ -188,11 +149,7 @@ class FilterFieldDslTest {
         }.children.first()
 
         filterField.runAssertions(
-            "testDouble",
-            FilterFieldOperation.NotEqual,
-            FilterFieldDataType.Double,
-            1,
-            arrayOf(1.0)
+            "testDouble", FilterFieldOperation.NotEqual, FilterFieldDataType.Double, 1, arrayOf(1.0)
         )
     }
 
@@ -203,11 +160,7 @@ class FilterFieldDslTest {
         }.children.first()
 
         filterField.runAssertions(
-            "testBoolean",
-            FilterFieldOperation.NotEqual,
-            FilterFieldDataType.Boolean,
-            1,
-            arrayOf(true)
+            "testBoolean", FilterFieldOperation.NotEqual, FilterFieldDataType.Boolean, 1, arrayOf(true)
         )
     }
 
@@ -218,11 +171,7 @@ class FilterFieldDslTest {
         }.children.first()
 
         filterField.runAssertions(
-            "testDate",
-            FilterFieldOperation.NotEqual,
-            FilterFieldDataType.Date,
-            1,
-            arrayOf(Date(0))
+            "testDate", FilterFieldOperation.NotEqual, FilterFieldDataType.Date, 1, arrayOf(Date(0))
         )
     }
 
@@ -233,12 +182,7 @@ class FilterFieldDslTest {
         }.children.first()
 
         filterField.runAssertions(
-            "testEnum",
-            FilterFieldOperation.NotEqual,
-            FilterFieldDataType.Enum,
-            1,
-            arrayOf(TestEnum.One),
-            TestEnum::class.java.canonicalName
+            "testEnum", FilterFieldOperation.NotEqual, FilterFieldDataType.Enum, 1, arrayOf(TestEnum.One), TestEnum::class.java.canonicalName
         )
     }
 
@@ -249,11 +193,7 @@ class FilterFieldDslTest {
         }.children.first()
 
         filterField.runAssertions(
-            "testString",
-            FilterFieldOperation.Contains,
-            FilterFieldDataType.String,
-            1,
-            arrayOf("value")
+            "testString", FilterFieldOperation.Contains, FilterFieldDataType.String, 1, arrayOf("value")
         )
     }
 
@@ -264,11 +204,7 @@ class FilterFieldDslTest {
         }.children.first()
 
         filterField.runAssertions(
-            "testString",
-            FilterFieldOperation.StartsWith,
-            FilterFieldDataType.String,
-            1,
-            arrayOf("value")
+            "testString", FilterFieldOperation.StartsWith, FilterFieldDataType.String, 1, arrayOf("value")
         )
     }
 
@@ -279,11 +215,7 @@ class FilterFieldDslTest {
         }.children.first()
 
         filterField.runAssertions(
-            "testString",
-            FilterFieldOperation.EndsWith,
-            FilterFieldDataType.String,
-            1,
-            arrayOf("value")
+            "testString", FilterFieldOperation.EndsWith, FilterFieldDataType.String, 1, arrayOf("value")
         )
     }
 
@@ -294,11 +226,7 @@ class FilterFieldDslTest {
         }.children.first()
 
         filterField.runAssertions(
-            "testInt",
-            FilterFieldOperation.GreaterThan,
-            FilterFieldDataType.Integer,
-            1,
-            arrayOf(1)
+            "testInt", FilterFieldOperation.GreaterThan, FilterFieldDataType.Integer, 1, arrayOf(1)
         )
     }
 
@@ -309,11 +237,7 @@ class FilterFieldDslTest {
         }.children.first()
 
         filterField.runAssertions(
-            "testLong",
-            FilterFieldOperation.GreaterThan,
-            FilterFieldDataType.Long,
-            1,
-            arrayOf(1L)
+            "testLong", FilterFieldOperation.GreaterThan, FilterFieldDataType.Long, 1, arrayOf(1L)
         )
     }
 
@@ -324,11 +248,7 @@ class FilterFieldDslTest {
         }.children.first()
 
         filterField.runAssertions(
-            "testDouble",
-            FilterFieldOperation.GreaterThan,
-            FilterFieldDataType.Double,
-            1,
-            arrayOf(1.0)
+            "testDouble", FilterFieldOperation.GreaterThan, FilterFieldDataType.Double, 1, arrayOf(1.0)
         )
     }
 
@@ -339,11 +259,7 @@ class FilterFieldDslTest {
         }.children.first()
 
         filterField.runAssertions(
-            "testDate",
-            FilterFieldOperation.GreaterThan,
-            FilterFieldDataType.Date,
-            1,
-            arrayOf(Date(0))
+            "testDate", FilterFieldOperation.GreaterThan, FilterFieldDataType.Date, 1, arrayOf(Date(0))
         )
     }
 
@@ -354,11 +270,7 @@ class FilterFieldDslTest {
         }.children.first()
 
         filterField.runAssertions(
-            "testInt",
-            FilterFieldOperation.GreaterEqual,
-            FilterFieldDataType.Integer,
-            1,
-            arrayOf(1)
+            "testInt", FilterFieldOperation.GreaterEqual, FilterFieldDataType.Integer, 1, arrayOf(1)
         )
     }
 
@@ -369,11 +281,7 @@ class FilterFieldDslTest {
         }.children.first()
 
         filterField.runAssertions(
-            "testLong",
-            FilterFieldOperation.GreaterEqual,
-            FilterFieldDataType.Long,
-            1,
-            arrayOf(1L)
+            "testLong", FilterFieldOperation.GreaterEqual, FilterFieldDataType.Long, 1, arrayOf(1L)
         )
     }
 
@@ -384,11 +292,7 @@ class FilterFieldDslTest {
         }.children.first()
 
         filterField.runAssertions(
-            "testDouble",
-            FilterFieldOperation.GreaterEqual,
-            FilterFieldDataType.Double,
-            1,
-            arrayOf(1.0)
+            "testDouble", FilterFieldOperation.GreaterEqual, FilterFieldDataType.Double, 1, arrayOf(1.0)
         )
     }
 
@@ -399,11 +303,7 @@ class FilterFieldDslTest {
         }.children.first()
 
         filterField.runAssertions(
-            "testDate",
-            FilterFieldOperation.GreaterEqual,
-            FilterFieldDataType.Date,
-            1,
-            arrayOf(Date(0))
+            "testDate", FilterFieldOperation.GreaterEqual, FilterFieldDataType.Date, 1, arrayOf(Date(0))
         )
     }
 
@@ -414,11 +314,7 @@ class FilterFieldDslTest {
         }.children.first()
 
         filterField.runAssertions(
-            "testInt",
-            FilterFieldOperation.LowerThan,
-            FilterFieldDataType.Integer,
-            1,
-            arrayOf(1)
+            "testInt", FilterFieldOperation.LowerThan, FilterFieldDataType.Integer, 1, arrayOf(1)
         )
     }
 
@@ -429,11 +325,7 @@ class FilterFieldDslTest {
         }.children.first()
 
         filterField.runAssertions(
-            "testLong",
-            FilterFieldOperation.LowerThan,
-            FilterFieldDataType.Long,
-            1,
-            arrayOf(1L)
+            "testLong", FilterFieldOperation.LowerThan, FilterFieldDataType.Long, 1, arrayOf(1L)
         )
     }
 
@@ -444,11 +336,7 @@ class FilterFieldDslTest {
         }.children.first()
 
         filterField.runAssertions(
-            "testDouble",
-            FilterFieldOperation.LowerThan,
-            FilterFieldDataType.Double,
-            1,
-            arrayOf(1.0)
+            "testDouble", FilterFieldOperation.LowerThan, FilterFieldDataType.Double, 1, arrayOf(1.0)
         )
     }
 
@@ -459,11 +347,7 @@ class FilterFieldDslTest {
         }.children.first()
 
         filterField.runAssertions(
-            "testDate",
-            FilterFieldOperation.LowerThan,
-            FilterFieldDataType.Date,
-            1,
-            arrayOf(Date(0))
+            "testDate", FilterFieldOperation.LowerThan, FilterFieldDataType.Date, 1, arrayOf(Date(0))
         )
     }
 
@@ -474,11 +358,7 @@ class FilterFieldDslTest {
         }.children.first()
 
         filterField.runAssertions(
-            "testInt",
-            FilterFieldOperation.LowerEqual,
-            FilterFieldDataType.Integer,
-            1,
-            arrayOf(1)
+            "testInt", FilterFieldOperation.LowerEqual, FilterFieldDataType.Integer, 1, arrayOf(1)
         )
     }
 
@@ -489,11 +369,7 @@ class FilterFieldDslTest {
         }.children.first()
 
         filterField.runAssertions(
-            "testLong",
-            FilterFieldOperation.LowerEqual,
-            FilterFieldDataType.Long,
-            1,
-            arrayOf(1L)
+            "testLong", FilterFieldOperation.LowerEqual, FilterFieldDataType.Long, 1, arrayOf(1L)
         )
     }
 
@@ -504,11 +380,7 @@ class FilterFieldDslTest {
         }.children.first()
 
         filterField.runAssertions(
-            "testDouble",
-            FilterFieldOperation.LowerEqual,
-            FilterFieldDataType.Double,
-            1,
-            arrayOf(1.0)
+            "testDouble", FilterFieldOperation.LowerEqual, FilterFieldDataType.Double, 1, arrayOf(1.0)
         )
     }
 
@@ -519,11 +391,7 @@ class FilterFieldDslTest {
         }.children.first()
 
         filterField.runAssertions(
-            "testDate",
-            FilterFieldOperation.LowerEqual,
-            FilterFieldDataType.Date,
-            1,
-            arrayOf(Date(0))
+            "testDate", FilterFieldOperation.LowerEqual, FilterFieldDataType.Date, 1, arrayOf(Date(0))
         )
     }
 
@@ -533,8 +401,7 @@ class FilterFieldDslTest {
             TestClazz::testStringList RequireIn listOf<String>()
         }.children.first()
 
-        expectThat(filterField.operation)
-            .isEqualTo(FilterFieldOperation.Noop)
+        expectThat(filterField.operation).isEqualTo(FilterFieldOperation.Noop)
     }
 
     @Test
@@ -544,11 +411,7 @@ class FilterFieldDslTest {
         }.children.first()
 
         filterField.runAssertions(
-            "testStringList",
-            FilterFieldOperation.In,
-            FilterFieldDataType.String,
-            2,
-            arrayOf("a", "b")
+            "testStringList", FilterFieldOperation.In, FilterFieldDataType.String, 2, arrayOf("a", "b")
         )
     }
 
@@ -558,8 +421,7 @@ class FilterFieldDslTest {
             TestClazz::testIntList RequireIn listOf<Int>()
         }.children.first()
 
-        expectThat(filterField.operation)
-            .isEqualTo(FilterFieldOperation.Noop)
+        expectThat(filterField.operation).isEqualTo(FilterFieldOperation.Noop)
     }
 
     @Test
@@ -569,11 +431,7 @@ class FilterFieldDslTest {
         }.children.first()
 
         filterField.runAssertions(
-            "testIntList",
-            FilterFieldOperation.In,
-            FilterFieldDataType.Integer,
-            2,
-            arrayOf(1, 2)
+            "testIntList", FilterFieldOperation.In, FilterFieldDataType.Integer, 2, arrayOf(1, 2)
         )
     }
 
@@ -583,8 +441,7 @@ class FilterFieldDslTest {
             TestClazz::testLongList RequireIn listOf<Long>()
         }.children.first()
 
-        expectThat(filterField.operation)
-            .isEqualTo(FilterFieldOperation.Noop)
+        expectThat(filterField.operation).isEqualTo(FilterFieldOperation.Noop)
     }
 
     @Test
@@ -594,11 +451,7 @@ class FilterFieldDslTest {
         }.children.first()
 
         filterField.runAssertions(
-            "testLongList",
-            FilterFieldOperation.In,
-            FilterFieldDataType.Long,
-            2,
-            arrayOf(1L, 2L)
+            "testLongList", FilterFieldOperation.In, FilterFieldDataType.Long, 2, arrayOf(1L, 2L)
         )
     }
 
@@ -608,8 +461,7 @@ class FilterFieldDslTest {
             TestClazz::testDoubleList RequireIn listOf<Double>()
         }.children.first()
 
-        expectThat(filterField.operation)
-            .isEqualTo(FilterFieldOperation.Noop)
+        expectThat(filterField.operation).isEqualTo(FilterFieldOperation.Noop)
     }
 
     @Test
@@ -619,11 +471,7 @@ class FilterFieldDslTest {
         }.children.first()
 
         filterField.runAssertions(
-            "testDoubleList",
-            FilterFieldOperation.In,
-            FilterFieldDataType.Double,
-            2,
-            arrayOf(1.0, 2.0)
+            "testDoubleList", FilterFieldOperation.In, FilterFieldDataType.Double, 2, arrayOf(1.0, 2.0)
         )
     }
 
@@ -633,8 +481,7 @@ class FilterFieldDslTest {
             TestClazz::testDateList RequireIn listOf<Date>()
         }.children.first()
 
-        expectThat(filterField.operation)
-            .isEqualTo(FilterFieldOperation.Noop)
+        expectThat(filterField.operation).isEqualTo(FilterFieldOperation.Noop)
     }
 
     @Test
@@ -644,11 +491,7 @@ class FilterFieldDslTest {
         }.children.first()
 
         filterField.runAssertions(
-            "testDateList",
-            FilterFieldOperation.In,
-            FilterFieldDataType.Date,
-            2,
-            arrayOf(Date(0), Date(1))
+            "testDateList", FilterFieldOperation.In, FilterFieldDataType.Date, 2, arrayOf(Date(0), Date(1))
         )
     }
 
@@ -658,8 +501,7 @@ class FilterFieldDslTest {
             TestClazz::testEnumList RequireIn listOf<TestEnum>()
         }.children.first()
 
-        expectThat(filterField.operation)
-            .isEqualTo(FilterFieldOperation.Noop)
+        expectThat(filterField.operation).isEqualTo(FilterFieldOperation.Noop)
     }
 
     @Test
@@ -669,12 +511,7 @@ class FilterFieldDslTest {
         }.children.first()
 
         filterField.runAssertions(
-            "testEnumList",
-            FilterFieldOperation.In,
-            FilterFieldDataType.Enum,
-            2,
-            arrayOf(TestEnum.One, TestEnum.Two),
-            TestEnum::class.java.canonicalName
+            "testEnumList", FilterFieldOperation.In, FilterFieldDataType.Enum, 2, arrayOf(TestEnum.One, TestEnum.Two), TestEnum::class.java.canonicalName
         )
     }
 
@@ -684,8 +521,7 @@ class FilterFieldDslTest {
             TestClazz::testStringList RequireNotIn listOf<String>()
         }.children.first()
 
-        expectThat(filterField.operation)
-            .isEqualTo(FilterFieldOperation.Noop)
+        expectThat(filterField.operation).isEqualTo(FilterFieldOperation.Noop)
     }
 
     @Test
@@ -695,11 +531,7 @@ class FilterFieldDslTest {
         }.children.first()
 
         filterField.runAssertions(
-            "test",
-            FilterFieldOperation.NotIn,
-            FilterFieldDataType.String,
-            2,
-            arrayOf("a", "b")
+            "testStringList", FilterFieldOperation.NotIn, FilterFieldDataType.String, 2, arrayOf("a", "b")
         )
     }
 
@@ -709,8 +541,7 @@ class FilterFieldDslTest {
             TestClazz::testIntList RequireNotIn listOf<Int>()
         }.children.first()
 
-        expectThat(filterField.operation)
-            .isEqualTo(FilterFieldOperation.Noop)
+        expectThat(filterField.operation).isEqualTo(FilterFieldOperation.Noop)
     }
 
     @Test
@@ -720,11 +551,7 @@ class FilterFieldDslTest {
         }.children.first()
 
         filterField.runAssertions(
-            "testIntList",
-            FilterFieldOperation.NotIn,
-            FilterFieldDataType.Integer,
-            2,
-            arrayOf(1, 2)
+            "testIntList", FilterFieldOperation.NotIn, FilterFieldDataType.Integer, 2, arrayOf(1, 2)
         )
     }
 
@@ -734,8 +561,7 @@ class FilterFieldDslTest {
             TestClazz::testLongList RequireNotIn listOf<Long>()
         }.children.first()
 
-        expectThat(filterField.operation)
-            .isEqualTo(FilterFieldOperation.Noop)
+        expectThat(filterField.operation).isEqualTo(FilterFieldOperation.Noop)
     }
 
     @Test
@@ -745,11 +571,7 @@ class FilterFieldDslTest {
         }.children.first()
 
         filterField.runAssertions(
-            "testLongList",
-            FilterFieldOperation.NotIn,
-            FilterFieldDataType.Long,
-            2,
-            arrayOf(1L, 2L)
+            "testLongList", FilterFieldOperation.NotIn, FilterFieldDataType.Long, 2, arrayOf(1L, 2L)
         )
     }
 
@@ -759,8 +581,7 @@ class FilterFieldDslTest {
             TestClazz::testDoubleList RequireNotIn listOf<Double>()
         }.children.first()
 
-        expectThat(filterField.operation)
-            .isEqualTo(FilterFieldOperation.Noop)
+        expectThat(filterField.operation).isEqualTo(FilterFieldOperation.Noop)
     }
 
     @Test
@@ -770,11 +591,7 @@ class FilterFieldDslTest {
         }.children.first()
 
         filterField.runAssertions(
-            "testDoubleList",
-            FilterFieldOperation.NotIn,
-            FilterFieldDataType.Double,
-            2,
-            arrayOf(1.0, 2.0)
+            "testDoubleList", FilterFieldOperation.NotIn, FilterFieldDataType.Double, 2, arrayOf(1.0, 2.0)
         )
     }
 
@@ -784,8 +601,7 @@ class FilterFieldDslTest {
             TestClazz::testDateList RequireNotIn listOf<Date>()
         }.children.first()
 
-        expectThat(filterField.operation)
-            .isEqualTo(FilterFieldOperation.Noop)
+        expectThat(filterField.operation).isEqualTo(FilterFieldOperation.Noop)
     }
 
     @Test
@@ -795,11 +611,7 @@ class FilterFieldDslTest {
         }.children.first()
 
         filterField.runAssertions(
-            "testDateList",
-            FilterFieldOperation.NotIn,
-            FilterFieldDataType.Date,
-            2,
-            arrayOf(Date(0), Date(1))
+            "testDateList", FilterFieldOperation.NotIn, FilterFieldDataType.Date, 2, arrayOf(Date(0), Date(1))
         )
     }
 
@@ -809,8 +621,7 @@ class FilterFieldDslTest {
             TestClazz::testEnumList RequireNotIn listOf<TestEnum>()
         }.children.first()
 
-        expectThat(filterField.operation)
-            .isEqualTo(FilterFieldOperation.Noop)
+        expectThat(filterField.operation).isEqualTo(FilterFieldOperation.Noop)
     }
 
     @Test
@@ -820,12 +631,7 @@ class FilterFieldDslTest {
         }.children.first()
 
         filterField.runAssertions(
-            "test",
-            FilterFieldOperation.NotIn,
-            FilterFieldDataType.Enum,
-            2,
-            arrayOf(TestEnum.One, TestEnum.Two),
-            TestEnum::class.java.canonicalName
+            "testEnumList", FilterFieldOperation.NotIn, FilterFieldDataType.Enum, 2, arrayOf(TestEnum.One, TestEnum.Two), TestEnum::class.java.canonicalName
         )
     }
 
@@ -836,11 +642,7 @@ class FilterFieldDslTest {
         }.children.first()
 
         filterField.runAssertions(
-            "testStringList",
-            FilterFieldOperation.In,
-            FilterFieldDataType.String,
-            2,
-            arrayOf("a", "b")
+            "testStringList", FilterFieldOperation.In, FilterFieldDataType.String, 2, arrayOf("a", "b")
         )
     }
 
@@ -851,11 +653,7 @@ class FilterFieldDslTest {
         }.children.first()
 
         filterField.runAssertions(
-            "testIntList",
-            FilterFieldOperation.In,
-            FilterFieldDataType.Integer,
-            2,
-            arrayOf(1, 2)
+            "testIntList", FilterFieldOperation.In, FilterFieldDataType.Integer, 2, arrayOf(1, 2)
         )
     }
 
@@ -866,11 +664,7 @@ class FilterFieldDslTest {
         }.children.first()
 
         filterField.runAssertions(
-            "testLongList",
-            FilterFieldOperation.In,
-            FilterFieldDataType.Long,
-            2,
-            arrayOf(1L, 2L)
+            "testLongList", FilterFieldOperation.In, FilterFieldDataType.Long, 2, arrayOf(1L, 2L)
         )
     }
 
@@ -881,11 +675,7 @@ class FilterFieldDslTest {
         }.children.first()
 
         filterField.runAssertions(
-            "testDoubleList",
-            FilterFieldOperation.In,
-            FilterFieldDataType.Double,
-            2,
-            arrayOf(1.0, 2.0)
+            "testDoubleList", FilterFieldOperation.In, FilterFieldDataType.Double, 2, arrayOf(1.0, 2.0)
         )
     }
 
@@ -896,18 +686,13 @@ class FilterFieldDslTest {
         }.children.first()
 
         filterField.runAssertions(
-            "testDateList",
-            FilterFieldOperation.In,
-            FilterFieldDataType.Date,
-            2,
-            arrayOf(Date(0), Date(1))
+            "testDateList", FilterFieldOperation.In, FilterFieldDataType.Date, 2, arrayOf(Date(0), Date(1))
         )
     }
 
     @Test
     fun `test In#Enum if empty`() {
-        expectThrows<NoSuchElementException> {
-            // Since we derive the type from the first element in the collection, this will throw an exception
+        expectThrows<NoSuchElementException> { // Since we derive the type from the first element in the collection, this will throw an exception
             and<TestClazz> {
                 TestClazz::testEnumList In emptyList()
             }.children.first()
@@ -921,12 +706,7 @@ class FilterFieldDslTest {
         }.children.first()
 
         filterField.runAssertions(
-            "testEnumList",
-            FilterFieldOperation.In,
-            FilterFieldDataType.Enum,
-            2,
-            arrayOf(TestEnum.One, TestEnum.Two),
-            TestEnum::class.java.canonicalName
+            "testEnumList", FilterFieldOperation.In, FilterFieldDataType.Enum, 2, arrayOf(TestEnum.One, TestEnum.Two), TestEnum::class.java.canonicalName
         )
     }
 
@@ -937,11 +717,7 @@ class FilterFieldDslTest {
         }.children.first()
 
         filterField.runAssertions(
-            "testStringList",
-            FilterFieldOperation.NotIn,
-            FilterFieldDataType.String,
-            2,
-            arrayOf("a", "b")
+            "testStringList", FilterFieldOperation.NotIn, FilterFieldDataType.String, 2, arrayOf("a", "b")
         )
     }
 
@@ -952,11 +728,7 @@ class FilterFieldDslTest {
         }.children.first()
 
         filterField.runAssertions(
-            "testIntList",
-            FilterFieldOperation.NotIn,
-            FilterFieldDataType.Integer,
-            2,
-            arrayOf(1, 2)
+            "testIntList", FilterFieldOperation.NotIn, FilterFieldDataType.Integer, 2, arrayOf(1, 2)
         )
     }
 
@@ -967,11 +739,7 @@ class FilterFieldDslTest {
         }.children.first()
 
         filterField.runAssertions(
-            "testLongList",
-            FilterFieldOperation.NotIn,
-            FilterFieldDataType.Long,
-            2,
-            arrayOf(1L, 2L)
+            "testLongList", FilterFieldOperation.NotIn, FilterFieldDataType.Long, 2, arrayOf(1L, 2L)
         )
     }
 
@@ -982,11 +750,7 @@ class FilterFieldDslTest {
         }.children.first()
 
         filterField.runAssertions(
-            "testDoubleList",
-            FilterFieldOperation.NotIn,
-            FilterFieldDataType.Double,
-            2,
-            arrayOf(1.0, 2.0)
+            "testDoubleList", FilterFieldOperation.NotIn, FilterFieldDataType.Double, 2, arrayOf(1.0, 2.0)
         )
     }
 
@@ -997,18 +761,13 @@ class FilterFieldDslTest {
         }.children.first()
 
         filterField.runAssertions(
-            "testDateList",
-            FilterFieldOperation.NotIn,
-            FilterFieldDataType.Date,
-            2,
-            arrayOf(Date(0), Date(1))
+            "testDateList", FilterFieldOperation.NotIn, FilterFieldDataType.Date, 2, arrayOf(Date(0), Date(1))
         )
     }
 
     @Test
     fun `test NotIn#Enum if empty`() {
-        expectThrows<NoSuchElementException> {
-            // Since we derive the type from the first element in the collection, this will throw an exception
+        expectThrows<NoSuchElementException> { // Since we derive the type from the first element in the collection, this will throw an exception
             and<TestClazz> {
                 TestClazz::testEnumList NotIn listOf<TestEnum>()
             }.children.first()
@@ -1022,12 +781,7 @@ class FilterFieldDslTest {
         }.children.first()
 
         filterField.runAssertions(
-            "testEnumList",
-            FilterFieldOperation.NotIn,
-            FilterFieldDataType.Enum,
-            2,
-            arrayOf(TestEnum.One, TestEnum.Two),
-            TestEnum::class.java.canonicalName
+            "testEnumList", FilterFieldOperation.NotIn, FilterFieldDataType.Enum, 2, arrayOf(TestEnum.One, TestEnum.Two), TestEnum::class.java.canonicalName
         )
     }
 
@@ -1038,11 +792,7 @@ class FilterFieldDslTest {
         }.children.first()
 
         filterField.runAssertions(
-            "testStringList",
-            FilterFieldOperation.ContainsIn,
-            FilterFieldDataType.String,
-            2,
-            arrayOf("a", "b")
+            "testStringList", FilterFieldOperation.ContainsIn, FilterFieldDataType.String, 2, arrayOf("a", "b")
         )
     }
 
@@ -1053,11 +803,7 @@ class FilterFieldDslTest {
         }.children.first()
 
         filterField.runAssertions(
-            "testStringList",
-            FilterFieldOperation.NotContainsIn,
-            FilterFieldDataType.String,
-            2,
-            arrayOf("a", "b")
+            "testStringList", FilterFieldOperation.NotContainsIn, FilterFieldDataType.String, 2, arrayOf("a", "b")
         )
     }
 
@@ -1068,11 +814,7 @@ class FilterFieldDslTest {
         }.children.first()
 
         filterField.runAssertions(
-            "testInt",
-            FilterFieldOperation.Between,
-            FilterFieldDataType.Integer,
-            2,
-            arrayOf(1, 2)
+            "testInt", FilterFieldOperation.Between, FilterFieldDataType.Integer, 2, arrayOf(1, 2)
         )
     }
 
@@ -1083,11 +825,7 @@ class FilterFieldDslTest {
         }.children.first()
 
         filterField.runAssertions(
-            "testLong",
-            FilterFieldOperation.Between,
-            FilterFieldDataType.Long,
-            2,
-            arrayOf(1L, 2L)
+            "testLong", FilterFieldOperation.Between, FilterFieldDataType.Long, 2, arrayOf(1L, 2L)
         )
     }
 
@@ -1098,11 +836,7 @@ class FilterFieldDslTest {
         }.children.first()
 
         filterField.runAssertions(
-            "testDouble",
-            FilterFieldOperation.Between,
-            FilterFieldDataType.Double,
-            2,
-            arrayOf(1.0, 2.0)
+            "testDouble", FilterFieldOperation.Between, FilterFieldDataType.Double, 2, arrayOf(1.0, 2.0)
         )
     }
 
@@ -1113,11 +847,7 @@ class FilterFieldDslTest {
         }.children.first()
 
         filterField.runAssertions(
-            "testDate",
-            FilterFieldOperation.Between,
-            FilterFieldDataType.Date,
-            2,
-            arrayOf(Date(0), Date(1))
+            "testDate", FilterFieldOperation.Between, FilterFieldDataType.Date, 2, arrayOf(Date(0), Date(1))
         )
     }
 
@@ -1128,11 +858,7 @@ class FilterFieldDslTest {
         }.children.first()
 
         filterField.runAssertions(
-            "test",
-            FilterFieldOperation.IsNull,
-            FilterFieldDataType.Object,
-            2,
-            arrayOf(null, null)
+            "testString", FilterFieldOperation.IsNull, FilterFieldDataType.Object, 2, arrayOf(null, null)
         )
     }
 
@@ -1143,11 +869,7 @@ class FilterFieldDslTest {
         }.children.first()
 
         filterField.runAssertions(
-            "test",
-            FilterFieldOperation.IsNotNull,
-            FilterFieldDataType.Object,
-            2,
-            arrayOf(null, null)
+            "testString", FilterFieldOperation.IsNotNull, FilterFieldDataType.Object, 2, arrayOf(null, null)
         )
     }
 
@@ -1159,20 +881,14 @@ class FilterFieldDslTest {
         expectedValues: Array<Any?>,
         expectedEnumType: String? = null
     ) {
-        expectThat(this.fieldName)
-            .isEqualTo(expectedFieldName)
-        expectThat(this.operation)
-            .isEqualTo(expectedOperation)
-        expectThat(this.dataType)
-            .isEqualTo(expectedDataType)
-        expectThat(this.values.size)
-            .isEqualTo(expectedValuesLength)
-        expectThat(this.values)
-            .isEqualTo(expectedValues)
+        expectThat(this.fieldName).isEqualTo(expectedFieldName)
+        expectThat(this.operation).isEqualTo(expectedOperation)
+        expectThat(this.dataType).isEqualTo(expectedDataType)
+        expectThat(this.values.size).isEqualTo(expectedValuesLength)
+        expectThat(this.values).isEqualTo(expectedValues)
 
         if (expectedEnumType != null) {
-            expectThat(this.enumType)
-                .isEqualTo(enumType)
+            expectThat(this.enumType).isEqualTo(enumType)
         }
     }
 }
