@@ -6,6 +6,7 @@ import strikt.api.expectThrows
 import strikt.assertions.isFalse
 import strikt.assertions.isTrue
 import studio.crud.crudframework.model.BaseCrudEntity
+import studio.crud.crudframework.model.PersistentEntity
 import studio.crud.crudframework.modelfilter.BaseRawJunction
 import studio.crud.crudframework.modelfilter.dsl.where
 import java.util.*
@@ -31,21 +32,23 @@ private class Address(
     val city: String = "Colorado Springs",
     val state: State = State(),
     val zipCode: String = "55234"
-) {
+) : PersistentEntity {
 }
 
 private class State(
     val code: String = "CO",
     val name: String = "Colorado",
     val active: Boolean = true
-)
+) : PersistentEntity
 
 class DynamicModelFilterUtilsTest {
     @Test
     fun `test Equal operation happy flow`() {
         val customer = Customer()
-        val filter = where {
-            "address.street" Equal "Example Street"
+        val filter = where<Customer> {
+            Customer::address Sub {
+                Address::street Equal "Example Street"
+            }
         }
         expectThat(
             filter.matches(customer)
@@ -55,8 +58,10 @@ class DynamicModelFilterUtilsTest {
     @Test
     fun `test Equal operation with false outcome`() {
         val customer = Customer()
-        val filter = where {
-            "address.street" Equal "Example"
+        val filter = where<Customer> {
+            Customer::address Sub {
+                Address::street Equal "Example"
+            }
         }
         expectThat(
             filter.matches(customer)
@@ -66,8 +71,10 @@ class DynamicModelFilterUtilsTest {
     @Test
     fun `test NotEqual operation happy flow`() {
         val customer = Customer()
-        val filter = where {
-            "address.street" NotEqual "Example"
+        val filter = where<Customer> {
+            Customer::address Sub {
+                Address::street NotEqual "Example"
+            }
         }
         expectThat(
             filter.matches(customer)
@@ -77,8 +84,10 @@ class DynamicModelFilterUtilsTest {
     @Test
     fun `test NotEqual operation with false outcome`() {
         val customer = Customer()
-        val filter = where {
-            "address.street" NotEqual "Example Street"
+        val filter = where<Customer> {
+            Customer::address Sub {
+                Address::street NotEqual "Example Street"
+            }
         }
         expectThat(
             filter.matches(customer)
@@ -88,8 +97,8 @@ class DynamicModelFilterUtilsTest {
     @Test
     fun `test In operation happy flow`() {
         val customer = Customer()
-        val filter = where {
-            "favoriteFruits" In listOf("Apple", "Apricot")
+        val filter = where<Customer> {
+            Customer::favoriteFruits In listOf("Apple", "Apricot")
         }
         expectThat(
             filter.matches(customer)
@@ -99,8 +108,8 @@ class DynamicModelFilterUtilsTest {
     @Test
     fun `test In operation with false outcome`() {
         val customer = Customer()
-        val filter = where {
-            "favoriteFruits" In listOf("Tomato", "Apple")
+        val filter = where<Customer> {
+            Customer::favoriteFruits In listOf("Tomato", "Apple")
         }
         expectThat(
             filter.matches(customer)
@@ -110,8 +119,8 @@ class DynamicModelFilterUtilsTest {
     @Test
     fun `test NotIn operation happy flow`() {
         val customer = Customer()
-        val filter = where {
-            "favoriteFruits" NotIn listOf("Tomato", "Mango")
+        val filter = where<Customer> {
+            Customer::favoriteFruits NotIn listOf("Tomato", "Mango")
         }
         expectThat(
             filter.matches(customer)
@@ -121,8 +130,8 @@ class DynamicModelFilterUtilsTest {
     @Test
     fun `test NotIn operation with false outcome`() {
         val customer = Customer()
-        val filter = where {
-            "favoriteFruits" NotIn listOf("Apricot", "Apple")
+        val filter = where<Customer> {
+            Customer::favoriteFruits NotIn listOf("Apricot", "Apple")
         }
         expectThat(
             filter.matches(customer)
@@ -132,8 +141,8 @@ class DynamicModelFilterUtilsTest {
     @Test
     fun `test GreaterThan operation happy flow`() {
         val customer = Customer()
-        val filter = where {
-            "age" GreaterThan 50
+        val filter = where<Customer> {
+            Customer::age GreaterThan 50
         }
         expectThat(
             filter.matches(customer)
@@ -143,8 +152,8 @@ class DynamicModelFilterUtilsTest {
     @Test
     fun `test GreaterThan operation with false outcome`() {
         val customer = Customer()
-        val filter = where {
-            "age" GreaterThan 56
+        val filter = where<Customer> {
+            Customer::age GreaterThan 56
         }
         expectThat(
             filter.matches(customer)
@@ -154,8 +163,8 @@ class DynamicModelFilterUtilsTest {
     @Test
     fun `test GreaterEqual operation happy flow`() {
         val customer = Customer()
-        val filter = where {
-            "age" GreaterOrEqual 55
+        val filter = where<Customer> {
+            Customer::age GreaterOrEqual 55
         }
         expectThat(
             filter.matches(customer)
@@ -165,8 +174,8 @@ class DynamicModelFilterUtilsTest {
     @Test
     fun `test GreaterEqual operation with false outcome`() {
         val customer = Customer()
-        val filter = where {
-            "age" GreaterOrEqual 56
+        val filter = where<Customer> {
+            Customer::age GreaterOrEqual 56
         }
         expectThat(
             filter.matches(customer)
@@ -176,8 +185,8 @@ class DynamicModelFilterUtilsTest {
     @Test
     fun `test LowerThan operation happy flow`() {
         val customer = Customer()
-        val filter = where {
-            "age" LowerThan 60
+        val filter = where<Customer> {
+            Customer::age LowerThan 60
         }
         expectThat(
             filter.matches(customer)
@@ -187,8 +196,8 @@ class DynamicModelFilterUtilsTest {
     @Test
     fun `test LowerThan operation with false outcome`() {
         val customer = Customer()
-        val filter = where {
-            "age" LowerThan 54
+        val filter = where<Customer> {
+            Customer::age LowerThan 54
         }
         expectThat(
             filter.matches(customer)
@@ -198,8 +207,8 @@ class DynamicModelFilterUtilsTest {
     @Test
     fun `test LowerEqual operation happy flow`() {
         val customer = Customer()
-        val filter = where {
-            "age" LowerOrEqual 55
+        val filter = where<Customer> {
+            Customer::age LowerOrEqual 55
         }
         expectThat(
             filter.matches(customer)
@@ -209,8 +218,8 @@ class DynamicModelFilterUtilsTest {
     @Test
     fun `test LowerEqual operation with false outcome`() {
         val customer = Customer()
-        val filter = where {
-            "age" LowerOrEqual 54
+        val filter = where<Customer> {
+            Customer::age LowerOrEqual 54
         }
         expectThat(
             filter.matches(customer)
@@ -220,8 +229,8 @@ class DynamicModelFilterUtilsTest {
     @Test
     fun `test Between operation happy flow`() {
         val customer = Customer()
-        val filter = where {
-            "creationTime" Between Date(0) And Date(2000)
+        val filter = where<Customer> {
+            Customer::creationTime Between Date(0) And Date(2000)
         }
         expectThat(
             filter.matches(customer)
@@ -231,8 +240,8 @@ class DynamicModelFilterUtilsTest {
     @Test
     fun `test Between operation with false outcome`() {
         val customer = Customer()
-        val filter = where {
-            "creationTime" Between Date(1500) And Date(2000)
+        val filter = where<Customer> {
+            Customer::creationTime Between Date(1500) And Date(2000)
         }
         expectThat(
             filter.matches(customer)
@@ -242,8 +251,8 @@ class DynamicModelFilterUtilsTest {
     @Test
     fun `test Contains operation happy flow`() {
         val customer = Customer()
-        val filter = where {
-            "name" Contains "Te"
+        val filter = where<Customer> {
+            Customer::name Contains "Te"
         }
         expectThat(
             filter.matches(customer)
@@ -253,8 +262,8 @@ class DynamicModelFilterUtilsTest {
     @Test
     fun `test Contains operation with false outcome`() {
         val customer = Customer()
-        val filter = where {
-            "name" Contains "John"
+        val filter = where<Customer> {
+            Customer::name Contains "John"
         }
         expectThat(
             filter.matches(customer)
@@ -264,8 +273,8 @@ class DynamicModelFilterUtilsTest {
     @Test
     fun `test StartsWith operation happy flow`() {
         val customer = Customer()
-        val filter = where {
-            "name" StartsWith "Te"
+        val filter = where<Customer> {
+            Customer::name StartsWith "Te"
         }
         expectThat(
             filter.matches(customer)
@@ -275,8 +284,8 @@ class DynamicModelFilterUtilsTest {
     @Test
     fun `test StartsWith  operation with false outcome`() {
         val customer = Customer()
-        val filter = where {
-            "name" StartsWith "De"
+        val filter = where<Customer> {
+            Customer::name StartsWith "De"
         }
         expectThat(
             filter.matches(customer)
@@ -286,8 +295,8 @@ class DynamicModelFilterUtilsTest {
     @Test
     fun `test EndsWith operation happy flow`() {
         val customer = Customer()
-        val filter = where {
-            "name" EndsWith "st"
+        val filter = where<Customer> {
+            Customer::name EndsWith "st"
         }
         expectThat(
             filter.matches(customer)
@@ -297,8 +306,8 @@ class DynamicModelFilterUtilsTest {
     @Test
     fun `test EndsWith  operation with false outcome`() {
         val customer = Customer()
-        val filter = where {
-            "name" EndsWith "dt"
+        val filter = where<Customer> {
+            Customer::name EndsWith "dt"
         }
         expectThat(
             filter.matches(customer)
@@ -308,8 +317,8 @@ class DynamicModelFilterUtilsTest {
     @Test
     fun `test IsNull operation happy flow`() {
         val customer = Customer()
-        val filter = where {
-            "zodiacSign".isNull()
+        val filter = where<Customer> {
+            Customer::zodiacSign.isNull()
         }
         expectThat(
             filter.matches(customer)
@@ -319,8 +328,8 @@ class DynamicModelFilterUtilsTest {
     @Test
     fun `test IsNull operation with false outcome`() {
         val customer = Customer()
-        val filter = where {
-            "name".isNull()
+        val filter = where<Customer> {
+            Customer::name.isNull()
         }
         expectThat(
             filter.matches(customer)
@@ -330,8 +339,8 @@ class DynamicModelFilterUtilsTest {
     @Test
     fun `test IsNotNull operation happy flow`() {
         val customer = Customer()
-        val filter = where {
-            "name".isNotNull()
+        val filter = where<Customer> {
+            Customer::name.isNotNull()
         }
         expectThat(
             filter.matches(customer)
@@ -341,8 +350,8 @@ class DynamicModelFilterUtilsTest {
     @Test
     fun `test IsNotNull operation with false outcome`() {
         val customer = Customer()
-        val filter = where {
-            "zodiacSign".isNotNull()
+        val filter = where<Customer> {
+            Customer::zodiacSign.isNotNull()
         }
         expectThat(
             filter.matches(customer)
@@ -352,8 +361,8 @@ class DynamicModelFilterUtilsTest {
     @Test
     fun `test ContainsIn operation happy flow`() {
         val customer = Customer()
-        val filter = where {
-            "favoriteFruits" ContainsIn listOf("App")
+        val filter = where<Customer> {
+            Customer::favoriteFruits ContainsIn listOf("App")
         }
 
         expectThrows<UnsupportedOperationException> {
@@ -364,8 +373,8 @@ class DynamicModelFilterUtilsTest {
     @Test
     fun `test NotContainsIn operation happy flow`() {
         val customer = Customer()
-        val filter = where {
-            "favoriteFruits" NotContainsIn listOf("App")
+        val filter = where<Customer> {
+            Customer::favoriteFruits NotContainsIn listOf("App")
         }
 
         expectThrows<UnsupportedOperationException> {
@@ -376,7 +385,7 @@ class DynamicModelFilterUtilsTest {
     @Test
     fun `test RawJunction operation happy flow`() {
         val customer = Customer()
-        val filter = where {
+        val filter = where<Customer> {
             rawJunction {
                 object : BaseRawJunction<Any>(1) {}
             }
@@ -390,8 +399,12 @@ class DynamicModelFilterUtilsTest {
     @Test
     fun `test nested field matches`() {
         val customer = Customer()
-        val filter = where {
-            "address/state.code" Equal "CO"
+        val filter = where<Customer> {
+            Customer::address Sub {
+                Address::state Sub {
+                    State::code Equal "CO"
+                }
+            }
         }
         expectThat(
             filter.matches(customer)
@@ -401,23 +414,15 @@ class DynamicModelFilterUtilsTest {
     @Test
     fun `test nested field doesn't match`() {
         val customer = Customer()
-        val filter = where {
-            "address/state.active" NotEqual true
+        val filter = where<Customer> {
+            Customer::address Sub {
+                Address::state Sub {
+                    State::active NotEqual true
+                }
+            }
         }
         expectThat(
             filter.matches(customer)
         ).isFalse()
     }
-
-    @Test
-    fun `test nested field doesn't exist`() {
-        val customer = Customer()
-        val filter = where {
-            "address/state.other" NotEqual true
-        }
-        expectThrows<NoSuchFieldException> {
-            filter.matches(customer)
-        }
-    }
-
 }
