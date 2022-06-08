@@ -1,7 +1,7 @@
 package studio.crud.crudframework.jpa.ro
 
 import java.io.Serializable
-import java.util.*
+import java.util.Date
 
 abstract class AbstractJpaUpdatableCrudRO : Serializable {
     val id: Long? = null

@@ -1,8 +1,8 @@
-import studio.crud.crudframework.utils.component.componentmap.annotation.ComponentMap
-import studio.crud.crudframework.utils.component.componentmap.annotation.ComponentMapKey
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.core.annotation.Order
+import studio.crud.crudframework.utils.component.componentmap.annotation.ComponentMap
+import studio.crud.crudframework.utils.component.componentmap.annotation.ComponentMapKey
 
 interface TestHandler {
     @get:ComponentMapKey

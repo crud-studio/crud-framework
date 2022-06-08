@@ -9,7 +9,7 @@ import studio.crud.crudframework.model.BaseCrudEntity
 import studio.crud.crudframework.model.PersistentEntity
 import studio.crud.crudframework.modelfilter.BaseRawJunction
 import studio.crud.crudframework.modelfilter.dsl.where
-import java.util.*
+import java.util.Date
 
 private class Customer(
     val name: String = "Test",
@@ -32,8 +32,7 @@ private class Address(
     val city: String = "Colorado Springs",
     val state: State = State(),
     val zipCode: String = "55234"
-) : PersistentEntity {
-}
+) : PersistentEntity
 
 private class State(
     val code: String = "CO",

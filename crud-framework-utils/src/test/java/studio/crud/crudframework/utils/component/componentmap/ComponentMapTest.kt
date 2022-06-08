@@ -5,14 +5,13 @@ import TestImpl1
 import TestImpl2
 import TestImpl2Duplicate
 import TestMapUser
-import studio.crud.crudframework.utils.component.componentmap.configuration.ComponentMapConfiguration
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.junit.jupiter.SpringExtension
-
+import studio.crud.crudframework.utils.component.componentmap.configuration.ComponentMapConfiguration
 
 @ExtendWith(SpringExtension::class)
 @ContextConfiguration(classes = [ComponentMapConfiguration::class, ComponentMapTestConfig::class])
@@ -37,8 +36,8 @@ class ComponentMapTest {
     @Test
     fun `test component map populates correctly`() {
         val expected = mapOf(
-                testImpl1.type to testImpl1,
-                testImpl2.type to testImpl2
+            testImpl1.type to testImpl1,
+            testImpl2.type to testImpl2
         )
         assertEquals(expected, testMapUser.map)
     }
@@ -46,8 +45,8 @@ class ComponentMapTest {
     @Test
     fun `test component map of list populates correctly`() {
         val expected = mapOf(
-                testImpl1.type to listOf(testImpl1),
-                testImpl2.type to listOf(testImpl2, testImpl2Duplicate)
+            testImpl1.type to listOf(testImpl1),
+            testImpl2.type to listOf(testImpl2, testImpl2Duplicate)
         )
         assertEquals(expected, testMapUser.multiMap)
     }

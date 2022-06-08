@@ -1,9 +1,7 @@
 package studio.crud.crudframework.crud.test
 
 import studio.crud.crudframework.crud.annotation.CrudEntity
-import studio.crud.crudframework.crud.test.TestCrudDao
 import studio.crud.crudframework.model.BaseCrudEntity
-import java.util.*
 
 @CrudEntity(TestCrudDao::class)
 abstract class AbstractTestEntity : BaseCrudEntity<Long>() {

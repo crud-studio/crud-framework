@@ -1,17 +1,17 @@
 package studio.crud.crudframework.crud.cache.adapter.ehcache
 
-import studio.crud.crudframework.crud.cache.CacheManagerAdapter
-import studio.crud.crudframework.crud.cache.CrudCache
-import studio.crud.crudframework.crud.cache.CrudCacheOptions
 import net.sf.ehcache.Cache
 import net.sf.ehcache.CacheManager
 import net.sf.ehcache.config.CacheConfiguration
 import org.slf4j.LoggerFactory
+import studio.crud.crudframework.crud.cache.CacheManagerAdapter
+import studio.crud.crudframework.crud.cache.CrudCache
+import studio.crud.crudframework.crud.cache.CrudCacheOptions
 
 class EhCacheManagerAdapter(
-        private val cacheManager: CacheManager
+    private val cacheManager: CacheManager
 ) : CacheManagerAdapter {
-    override fun getCache(name: String) : CrudCache? {
+    override fun getCache(name: String): CrudCache? {
         val vendorCache = cacheManager.getCache(name) ?: return null
         return CrudEhCacheImpl(vendorCache)
     }
@@ -20,15 +20,15 @@ class EhCacheManagerAdapter(
         log.debug("Attempting to create cache with name [ $name ] and options [ $options ]")
         val configuration = CacheConfiguration(name, 0)
         val (timeToLiveSeconds, timeToIdleSeconds, maxEntries) = options
-        if(timeToLiveSeconds != null) {
+        if (timeToLiveSeconds != null) {
             configuration.timeToLiveSeconds = timeToLiveSeconds
         }
 
-        if(timeToIdleSeconds != null) {
+        if (timeToIdleSeconds != null) {
             configuration.timeToIdleSeconds = timeToIdleSeconds
         }
 
-        if(maxEntries != null) {
+        if (maxEntries != null) {
             configuration.maxEntriesLocalHeap = maxEntries
         }
 
@@ -41,4 +41,3 @@ class EhCacheManagerAdapter(
         private val log = LoggerFactory.getLogger(EhCacheManagerAdapter::class.java)
     }
 }
-

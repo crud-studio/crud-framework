@@ -5,4 +5,3 @@ import studio.crud.crudframework.jpa.lazyinitializer.LazyInitializerPersistentHo
 
 @WithHooks(hooks = [LazyInitializerPersistentHooks::class])
 annotation class DynamicLazyInitialization
-

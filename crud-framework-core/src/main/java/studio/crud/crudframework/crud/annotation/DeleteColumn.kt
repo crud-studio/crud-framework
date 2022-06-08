@@ -15,4 +15,4 @@ package studio.crud.crudframework.crud.annotation
  * ```
  */
 @Target(AnnotationTarget.FIELD)
-annotation class DeleteColumn 
+annotation class DeleteColumn

@@ -8,9 +8,8 @@ import kotlin.reflect.KClass
  */
 @Target(AnnotationTarget.ANNOTATION_CLASS, AnnotationTarget.CLASS, AnnotationTarget.ANNOTATION_CLASS)
 annotation class CrudEntity(
-        /**
-         * Which [CrudDao] should be used when interacting with the given entity
-         */
-        val dao: KClass<out CrudDao>
+    /**
+     * Which [CrudDao] should be used when interacting with the given entity
+     */
+    val dao: KClass<out CrudDao>
 )
-

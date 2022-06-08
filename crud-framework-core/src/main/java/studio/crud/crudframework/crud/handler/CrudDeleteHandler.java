@@ -2,7 +2,9 @@ package studio.crud.crudframework.crud.handler;
 
 import studio.crud.crudframework.crud.dataaccess.model.DataAccessorDTO;
 import studio.crud.crudframework.crud.hooks.HooksDTO;
-import studio.crud.crudframework.crud.hooks.delete.*;
+import studio.crud.crudframework.crud.hooks.delete.CRUDOnDeleteHook;
+import studio.crud.crudframework.crud.hooks.delete.CRUDPostDeleteHook;
+import studio.crud.crudframework.crud.hooks.delete.CRUDPreDeleteHook;
 import studio.crud.crudframework.model.BaseCrudEntity;
 
 import java.io.Serializable;

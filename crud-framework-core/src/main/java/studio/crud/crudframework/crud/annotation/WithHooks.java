@@ -2,7 +2,11 @@ package studio.crud.crudframework.crud.annotation;
 
 import studio.crud.crudframework.crud.hooks.interfaces.CRUDHooks;
 
-import java.lang.annotation.*;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Repeatable;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
  * Entity annotation, used to define generic persistent hooks which will run on the given entity

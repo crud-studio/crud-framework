@@ -2,8 +2,12 @@ package studio.crud.crudframework.crud.handler;
 
 import studio.crud.crudframework.crud.dataaccess.model.DataAccessorDTO;
 import studio.crud.crudframework.crud.hooks.HooksDTO;
-import studio.crud.crudframework.crud.hooks.create.*;
-import studio.crud.crudframework.crud.hooks.create.from.*;
+import studio.crud.crudframework.crud.hooks.create.CRUDOnCreateHook;
+import studio.crud.crudframework.crud.hooks.create.CRUDPostCreateHook;
+import studio.crud.crudframework.crud.hooks.create.CRUDPreCreateHook;
+import studio.crud.crudframework.crud.hooks.create.from.CRUDOnCreateFromHook;
+import studio.crud.crudframework.crud.hooks.create.from.CRUDPostCreateFromHook;
+import studio.crud.crudframework.crud.hooks.create.from.CRUDPreCreateFromHook;
 import studio.crud.crudframework.model.BaseCrudEntity;
 
 import java.io.Serializable;

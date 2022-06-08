@@ -1,8 +1,8 @@
 package studio.crud.crudframework.utils.component.startup.configuration
 
-import studio.crud.crudframework.utils.component.startup.PostStartupHandler
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import studio.crud.crudframework.utils.component.startup.PostStartupHandler
 
 @Configuration
 class PostStartupConfiguration {

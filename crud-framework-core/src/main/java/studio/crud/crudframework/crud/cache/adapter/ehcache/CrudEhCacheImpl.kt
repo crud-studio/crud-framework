@@ -1,8 +1,8 @@
 package studio.crud.crudframework.crud.cache.adapter.ehcache
 
-import studio.crud.crudframework.crud.cache.CrudCache
 import net.sf.ehcache.Ehcache
 import net.sf.ehcache.Element
+import studio.crud.crudframework.crud.cache.CrudCache
 
 class CrudEhCacheImpl(private val vendorCache: Ehcache) : CrudCache {
     override fun get(key: Any): Any? {

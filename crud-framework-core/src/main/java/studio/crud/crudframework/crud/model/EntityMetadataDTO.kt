@@ -1,6 +1,14 @@
 package studio.crud.crudframework.crud.model
 
-import studio.crud.crudframework.crud.annotation.*
+import org.springframework.core.annotation.AnnotatedElementUtils
+import org.springframework.core.annotation.AnnotationUtils
+import studio.crud.crudframework.crud.annotation.CachedBy
+import studio.crud.crudframework.crud.annotation.CrudEntity
+import studio.crud.crudframework.crud.annotation.DeleteColumn
+import studio.crud.crudframework.crud.annotation.Deleteable
+import studio.crud.crudframework.crud.annotation.Immutable
+import studio.crud.crudframework.crud.annotation.PersistCopyOnFetch
+import studio.crud.crudframework.crud.annotation.WithHooks
 import studio.crud.crudframework.crud.cache.CrudCacheOptions
 import studio.crud.crudframework.crud.handler.CrudDao
 import studio.crud.crudframework.crud.hooks.interfaces.CRUDHooks
@@ -8,8 +16,6 @@ import studio.crud.crudframework.model.BaseCrudEntity
 import studio.crud.crudframework.model.PersistentEntity
 import studio.crud.crudframework.utils.utils.ReflectionUtils
 import studio.crud.crudframework.utils.utils.getGenericClass
-import org.springframework.core.annotation.AnnotatedElementUtils
-import org.springframework.core.annotation.AnnotationUtils
 import java.lang.reflect.Field
 import kotlin.reflect.KClass
 import kotlin.reflect.full.allSuperclasses
@@ -52,18 +58,18 @@ class EntityMetadataDTO {
 
     private fun getFields(entityClazz: Class<out PersistentEntity>, prefix: String? = null, currentDepth: Int = 0) {
         val effectivePrefix: String
-        if(prefix.isNullOrBlank()) {
+        if (prefix.isNullOrBlank()) {
             effectivePrefix = ""
         } else {
             effectivePrefix = prefix.replace(".", "/") + "."
         }
 
         ReflectionUtils.getFields(entityClazz).forEach {
-            if(it.name == "copy" && it.type == BaseCrudEntity::class.java) {
+            if (it.name == "copy" && it.type == BaseCrudEntity::class.java) {
                 return
             }
 
-            var fieldClazz = it.type;
+            var fieldClazz = it.type
             if (Collection::class.java.isAssignableFrom(fieldClazz)) {
                 val potentialFieldClazz = it.getGenericClass(0)
                 if (potentialFieldClazz != null && PersistentEntity::class.java.isAssignableFrom(potentialFieldClazz)) {
@@ -71,7 +77,7 @@ class EntityMetadataDTO {
                 }
             }
 
-            if(PersistentEntity::class.java.isAssignableFrom(fieldClazz) && currentDepth < MAX_FILTERFIELD_DEPTH) {
+            if (PersistentEntity::class.java.isAssignableFrom(fieldClazz) && currentDepth < MAX_FILTERFIELD_DEPTH) {
                 getFields(fieldClazz as Class<out PersistentEntity>, effectivePrefix + it.name, currentDepth + 1)
             } else {
                 fields[effectivePrefix + it.name] = it
@@ -82,23 +88,21 @@ class EntityMetadataDTO {
     private fun collectHookAnnotations(entityClazz: Class<out BaseCrudEntity<*>>) {
         val hookAnnotations = mutableSetOf<WithHooks>()
         val annotations = entityClazz.declaredAnnotations + entityClazz.kotlin.allSuperclasses
-                .flatMap { it.java.declaredAnnotations.toList() }
+            .flatMap { it.java.declaredAnnotations.toList() }
 
         // The first search targets the WithHooks.List annotation, which is the repeatable container for WithHooks
         annotations
-                .mapNotNull {
-                    AnnotationUtils.findAnnotation(AnnotatedElementUtils.forAnnotations(it), WithHooks.List::class.java)
-                }
-                .filter {
-                    it.value.isNotEmpty()
-                }
-                .flatMapTo(hookAnnotations) { it.value.toList() }
+            .mapNotNull {
+                AnnotationUtils.findAnnotation(AnnotatedElementUtils.forAnnotations(it), WithHooks.List::class.java)
+            }
+            .filter {
+                it.value.isNotEmpty()
+            }
+            .flatMapTo(hookAnnotations) { it.value.toList() }
 
         // We run this second search because a nested, single WithHooks annotation in a Kotlin file does not register as WithHooks.List
         annotations
-                .mapNotNullTo(hookAnnotations) { AnnotationUtils.findAnnotation(AnnotatedElementUtils.forAnnotations(it), WithHooks::class.java) }
-
-
+            .mapNotNullTo(hookAnnotations) { AnnotationUtils.findAnnotation(AnnotatedElementUtils.forAnnotations(it), WithHooks::class.java) }
 
         if (hookAnnotations.isNotEmpty()) {
             for (hookAnnotation in hookAnnotations) {
@@ -117,20 +121,20 @@ class EntityMetadataDTO {
 
     private fun getEntityCacheMetadata(clazz: Class<out BaseCrudEntity<*>>): EntityCacheMetadata? {
         val cachedBy = clazz.getDeclaredAnnotation(CachedBy::class.java) ?: return null
-        fun Long.nullIfMinusOne(): Long? = if(this == -1L) {
+        fun Long.nullIfMinusOne(): Long? = if (this == -1L) {
             null
         } else {
             this
         }
 
         return EntityCacheMetadata(
-                cachedBy.value,
-                cachedBy.createIfMissing,
-                CrudCacheOptions(
-                        cachedBy.timeToLiveSeconds.nullIfMinusOne(),
-                        cachedBy.timeToIdleSeconds.nullIfMinusOne(),
-                        cachedBy.maxEntries.nullIfMinusOne()
-                )
+            cachedBy.value,
+            cachedBy.createIfMissing,
+            CrudCacheOptions(
+                cachedBy.timeToLiveSeconds.nullIfMinusOne(),
+                cachedBy.timeToIdleSeconds.nullIfMinusOne(),
+                cachedBy.maxEntries.nullIfMinusOne()
+            )
         )
     }
 
@@ -174,7 +178,7 @@ class EntityMetadataDTO {
 }
 
 data class EntityCacheMetadata(
-        val name: String,
-        val createIfMissing: Boolean,
-        val options: CrudCacheOptions
+    val name: String,
+    val createIfMissing: Boolean,
+    val options: CrudCacheOptions
 )

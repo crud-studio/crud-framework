@@ -7,5 +7,5 @@ import org.hibernate.sql.JoinType
  */
 @Target(AnnotationTarget.FIELD)
 annotation class CrudJoinType(
-        val joinType: JoinType
+    val joinType: JoinType
 )

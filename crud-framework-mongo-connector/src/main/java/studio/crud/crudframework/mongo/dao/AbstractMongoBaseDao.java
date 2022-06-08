@@ -1,17 +1,23 @@
 package studio.crud.crudframework.mongo.dao;
 
-import studio.crud.crudframework.model.BaseCrudEntity;
-import studio.crud.crudframework.modelfilter.*;
-import studio.crud.crudframework.modelfilter.enums.FilterFieldOperation;
-import studio.crud.crudframework.mongo.modelfilter.MongoRawJunctionDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import studio.crud.crudframework.model.BaseCrudEntity;
+import studio.crud.crudframework.modelfilter.DynamicModelFilter;
+import studio.crud.crudframework.modelfilter.FilterField;
+import studio.crud.crudframework.modelfilter.OrderDTO;
+import studio.crud.crudframework.modelfilter.enums.FilterFieldOperation;
+import studio.crud.crudframework.mongo.modelfilter.MongoRawJunctionDTO;
 
 import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.regex.Pattern;
 
 public abstract class AbstractMongoBaseDao {

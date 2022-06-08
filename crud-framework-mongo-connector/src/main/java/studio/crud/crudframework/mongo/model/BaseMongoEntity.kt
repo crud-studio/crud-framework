@@ -6,8 +6,7 @@ import org.springframework.data.annotation.Id
 import studio.crud.crudframework.model.BaseCrudEntity
 import studio.crud.crudframework.mongo.annotation.MongoCrudEntity
 import studio.crud.crudframework.mongo.ro.BaseMongoRO
-import java.util.*
-
+import java.util.Date
 
 @MongoCrudEntity
 abstract class BaseMongoEntity : BaseCrudEntity<String>() {
@@ -20,4 +19,3 @@ abstract class BaseMongoEntity : BaseCrudEntity<String>() {
 
     override fun exists(): Boolean = this::id.isInitialized
 }
-

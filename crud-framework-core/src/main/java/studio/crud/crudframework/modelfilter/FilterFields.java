@@ -3,7 +3,9 @@ package studio.crud.crudframework.modelfilter;
 import studio.crud.crudframework.modelfilter.enums.FilterFieldDataType;
 import studio.crud.crudframework.modelfilter.enums.FilterFieldOperation;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
 
 public final class FilterFields {
 

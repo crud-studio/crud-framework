@@ -8,5 +8,5 @@ interface CrudCache {
     fun put(key: Any, value: Any?)
     fun remove(key: Any)
     fun removeAll()
-    fun unwrap() : Any
+    fun unwrap(): Any
 }

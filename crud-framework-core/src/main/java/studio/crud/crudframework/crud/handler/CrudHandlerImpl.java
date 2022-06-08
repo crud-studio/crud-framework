@@ -1,5 +1,6 @@
 package studio.crud.crudframework.crud.handler;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import studio.crud.crudframework.crud.enums.ShowByMode;
 import studio.crud.crudframework.crud.exception.CrudException;
 import studio.crud.crudframework.crud.hooks.create.CRUDOnCreateHook;
@@ -33,7 +34,6 @@ import studio.crud.crudframework.exception.WrapException;
 import studio.crud.crudframework.model.BaseCrudEntity;
 import studio.crud.crudframework.modelfilter.DynamicModelFilter;
 import studio.crud.crudframework.ro.PagingDTO;
-import org.springframework.beans.factory.annotation.Autowired;
 import studio.crud.crudframework.util.DynamicModelFilterUtils;
 
 import java.io.Serializable;

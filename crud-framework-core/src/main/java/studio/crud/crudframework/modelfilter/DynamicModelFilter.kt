@@ -8,7 +8,6 @@ class DynamicModelFilter(
 ) {
     val cacheKey: String get() = "CacheKey_" + this.javaClass.simpleName + "_" + this.hashCode()
 
-
     constructor() : this(null, null, mutableSetOf(), mutableListOf())
 
     constructor(filterFields: MutableList<FilterField>) : this(null, null, mutableSetOf(), filterFields)

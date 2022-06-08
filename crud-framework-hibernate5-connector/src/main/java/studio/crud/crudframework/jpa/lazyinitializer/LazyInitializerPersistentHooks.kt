@@ -1,20 +1,27 @@
 package studio.crud.crudframework.jpa.lazyinitializer
 
-import studio.crud.crudframework.crud.hooks.interfaces.*
+import org.hibernate.Hibernate
+import studio.crud.crudframework.crud.hooks.interfaces.CreateFromHooks
+import studio.crud.crudframework.crud.hooks.interfaces.CreateHooks
+import studio.crud.crudframework.crud.hooks.interfaces.IndexHooks
+import studio.crud.crudframework.crud.hooks.interfaces.ShowByHooks
+import studio.crud.crudframework.crud.hooks.interfaces.ShowHooks
+import studio.crud.crudframework.crud.hooks.interfaces.UpdateFromHooks
+import studio.crud.crudframework.crud.hooks.interfaces.UpdateHooks
 import studio.crud.crudframework.jpa.lazyinitializer.annotation.InitializeLazyOn
 import studio.crud.crudframework.model.BaseCrudEntity
 import studio.crud.crudframework.modelfilter.DynamicModelFilter
 import studio.crud.crudframework.ro.PagingDTO
 import studio.crud.crudframework.utils.utils.ReflectionUtils
-import org.hibernate.Hibernate
 
-class LazyInitializerPersistentHooks : ShowHooks<Long, BaseCrudEntity<Long>>,
-        ShowByHooks<Long, BaseCrudEntity<Long>>,
-        IndexHooks<Long, BaseCrudEntity<Long>>,
-        UpdateHooks<Long, BaseCrudEntity<Long>>,
-        UpdateFromHooks<Long, BaseCrudEntity<Long>>,
-        CreateHooks<Long, BaseCrudEntity<Long>>,
-        CreateFromHooks<Long, BaseCrudEntity<Long>> {
+class LazyInitializerPersistentHooks :
+    ShowHooks<Long, BaseCrudEntity<Long>>,
+    ShowByHooks<Long, BaseCrudEntity<Long>>,
+    IndexHooks<Long, BaseCrudEntity<Long>>,
+    UpdateHooks<Long, BaseCrudEntity<Long>>,
+    UpdateFromHooks<Long, BaseCrudEntity<Long>>,
+    CreateHooks<Long, BaseCrudEntity<Long>>,
+    CreateFromHooks<Long, BaseCrudEntity<Long>> {
 
     override fun onShow(entity: BaseCrudEntity<Long>?) {
         entity ?: return
@@ -52,7 +59,7 @@ class LazyInitializerPersistentHooks : ShowHooks<Long, BaseCrudEntity<Long>>,
     private fun initializeLazyFields(entity: BaseCrudEntity<Long>, condition: (annotation: InitializeLazyOn) -> Boolean) {
         ReflectionUtils.doWithFields(entity::class.java) {
             val annotation = it.getDeclaredAnnotation(ANNOTATION_TYPE) ?: return@doWithFields
-            if(condition(annotation)) {
+            if (condition(annotation)) {
                 ReflectionUtils.makeAccessible(it)
                 Hibernate.initialize(it.get(entity))
             }

@@ -28,6 +28,4 @@ class SingletonComponentMap<K, V>(private val originalMap: Map<K, Collection<V>>
     override fun isEmpty(): Boolean {
         return originalMap.isEmpty()
     }
-
-
 }

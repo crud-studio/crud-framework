@@ -9,7 +9,7 @@ private fun getPropertyValue(target: Any, string: String): Any? {
     var item: Any? = target
     val parts = string.split(".").toTypedArray()
     for (part in parts) {
-        if(item == null) {
+        if (item == null) {
             break
         }
         val clazz: Class<*> = item.javaClass
@@ -33,12 +33,12 @@ fun DynamicModelFilter.matches(target: Any): Boolean {
  * Check if [target] matches the given filter field
  */
 fun FilterField.matches(target: Any): Boolean {
-    val actualValue: Any? = if(this.operation.junction) {
+    val actualValue: Any? = if (this.operation.junction) {
         null
     } else {
         getPropertyValue(target, this.fieldName.replace("/", "."))
     }
-    when(this.operation) {
+    when (this.operation) {
         FilterFieldOperation.Equal -> {
             return actualValue == this.value1
         }
@@ -118,4 +118,3 @@ fun FilterField.matches(target: Any): Boolean {
         null -> return false
     }
 }
-

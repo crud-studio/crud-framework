@@ -470,7 +470,7 @@ class FilterFieldDslTest {
     @Test
     fun `test LowerOrEqual#Int`() {
         val filterField = and<TestClazz> {
-            TestClazz::testInt LowerOrEqual  1
+            TestClazz::testInt LowerOrEqual 1
         }.children.first()
 
         filterField.runAssertions(
@@ -1151,7 +1151,14 @@ class FilterFieldDslTest {
         )
     }
 
-    private fun FilterField.runAssertions(expectedFieldName: String, expectedOperation: FilterFieldOperation, expectedDataType: FilterFieldDataType, expectedValuesLength: Int, expectedValues: Array<Any?>, expectedEnumType: String? = null) {
+    private fun FilterField.runAssertions(
+        expectedFieldName: String,
+        expectedOperation: FilterFieldOperation,
+        expectedDataType: FilterFieldDataType,
+        expectedValuesLength: Int,
+        expectedValues: Array<Any?>,
+        expectedEnumType: String? = null
+    ) {
         expectThat(this.fieldName)
             .isEqualTo(expectedFieldName)
         expectThat(this.operation)
@@ -1163,7 +1170,7 @@ class FilterFieldDslTest {
         expectThat(this.values)
             .isEqualTo(expectedValues)
 
-        if(expectedEnumType != null) {
+        if (expectedEnumType != null) {
             expectThat(this.enumType)
                 .isEqualTo(enumType)
         }

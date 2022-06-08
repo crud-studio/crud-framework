@@ -9,7 +9,7 @@ import org.springframework.core.annotation.AnnotationUtils
 import kotlin.reflect.full.primaryConstructor
 
 @Aspect
-class  WrapExceptionAspect {
+class WrapExceptionAspect {
 
     @Pointcut("@within(wrapExceptionAnnotation)")
     fun typeLevel(wrapExceptionAnnotation: WrapException) {
@@ -33,18 +33,17 @@ class  WrapExceptionAspect {
             return pjp.proceed(pjp.args)
         } catch (e: Exception) {
             val exceptionClazz = actualAnnotation.value
-            if(exceptionClazz.java.isAssignableFrom(e::class.java)) {
+            if (exceptionClazz.java.isAssignableFrom(e::class.java)) {
                 throw e
             }
 
-            val exceptionInstance = if(e.message == null) {
-                val message = if(e is NullPointerException) {
+            val exceptionInstance = if (e.message == null) {
+                val message = if (e is NullPointerException) {
                     "Null pointer"
                 } else {
                     "No message"
                 }
                 exceptionClazz.primaryConstructor?.call(message)?.initCause(e)
-
             } else {
                 exceptionClazz.primaryConstructor?.call(e.message)?.initCause(e)
             } ?: e

@@ -1,20 +1,27 @@
 package studio.crud.crudframework.crud.handler;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import studio.crud.crudframework.crud.dataaccess.model.DataAccessorDTO;
 import studio.crud.crudframework.crud.exception.CrudUpdateException;
 import studio.crud.crudframework.crud.hooks.HooksDTO;
-import studio.crud.crudframework.crud.hooks.interfaces.*;
-import studio.crud.crudframework.crud.hooks.update.*;
-import studio.crud.crudframework.crud.hooks.update.from.*;
+import studio.crud.crudframework.crud.hooks.interfaces.UpdateFromHooks;
+import studio.crud.crudframework.crud.hooks.interfaces.UpdateHooks;
+import studio.crud.crudframework.crud.hooks.update.CRUDOnUpdateHook;
+import studio.crud.crudframework.crud.hooks.update.CRUDPostUpdateHook;
+import studio.crud.crudframework.crud.hooks.update.CRUDPreUpdateHook;
+import studio.crud.crudframework.crud.hooks.update.from.CRUDOnUpdateFromHook;
+import studio.crud.crudframework.crud.hooks.update.from.CRUDPostUpdateFromHook;
+import studio.crud.crudframework.crud.hooks.update.from.CRUDPreUpdateFromHook;
 import studio.crud.crudframework.exception.WrapException;
 import studio.crud.crudframework.model.BaseCrudEntity;
 import studio.crud.crudframework.modelfilter.DynamicModelFilter;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 @WrapException(value = CrudUpdateException.class)
 public class CrudUpdateHandlerImpl implements CrudUpdateHandler {

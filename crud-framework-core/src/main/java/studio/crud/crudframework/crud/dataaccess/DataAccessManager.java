@@ -1,10 +1,8 @@
 package studio.crud.crudframework.crud.dataaccess;
 
-import studio.crud.crudframework.utils.component.componentmap.annotation.ComponentMapKey;
-import studio.crud.crudframework.modelfilter.DynamicModelFilter;
 import org.jetbrains.annotations.NotNull;
-
-import java.io.Serializable;
+import studio.crud.crudframework.modelfilter.DynamicModelFilter;
+import studio.crud.crudframework.utils.component.componentmap.annotation.ComponentMapKey;
 
 public interface DataAccessManager<Accessor, AccessorId, Entity> {
 

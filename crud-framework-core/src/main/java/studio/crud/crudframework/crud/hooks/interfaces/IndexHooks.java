@@ -1,9 +1,9 @@
 package studio.crud.crudframework.crud.hooks.interfaces;
 
+import org.jetbrains.annotations.NotNull;
 import studio.crud.crudframework.model.BaseCrudEntity;
 import studio.crud.crudframework.modelfilter.DynamicModelFilter;
 import studio.crud.crudframework.ro.PagingDTO;
-import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
 

@@ -1,9 +1,9 @@
 package studio.crud.crudframework.jpa.dao;
 
+import org.hibernate.Criteria;
 import studio.crud.crudframework.crud.handler.CrudDao;
 import studio.crud.crudframework.model.BaseCrudEntity;
 import studio.crud.crudframework.modelfilter.DynamicModelFilter;
-import org.hibernate.Criteria;
 
 import java.io.Serializable;
 import java.util.List;

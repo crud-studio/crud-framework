@@ -1,16 +1,16 @@
 package studio.crud.crudframework.crud.cache.adapter.inmemory
 
+import org.slf4j.LoggerFactory
 import studio.crud.crudframework.crud.cache.CacheManagerAdapter
 import studio.crud.crudframework.crud.cache.CrudCache
 import studio.crud.crudframework.crud.cache.CrudCacheOptions
-import org.slf4j.LoggerFactory
 
 class InMemoryCacheManagerAdapter : CacheManagerAdapter {
     private val caches = mutableMapOf<String, CrudCache>()
-    override fun getCache(name: String) : CrudCache? {
+    override fun getCache(name: String): CrudCache? {
         log.debug("Attempting to find cache with name [ $name ]")
         val cache = caches[name]
-        if(cache != null) {
+        if (cache != null) {
             log.debug("Found cache with $name")
         } else {
             log.debug("Did not find cache with $name")
@@ -31,6 +31,3 @@ class InMemoryCacheManagerAdapter : CacheManagerAdapter {
         private val log = LoggerFactory.getLogger(InMemoryCacheManagerAdapter::class.java)
     }
 }
-
-
-

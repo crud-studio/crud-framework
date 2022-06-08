@@ -5,7 +5,7 @@ import studio.crud.crudframework.crud.handler.AbstractCrudHelper
 /**
  * Bare minimum test implementation for CrudHelper
  */
-class TestCrudHelper: AbstractCrudHelper() {
+class TestCrudHelper : AbstractCrudHelper() {
     override fun <From, To> fill(fromObject: From, toClazz: Class<To>): To {
         return toClazz.newInstance()
     }

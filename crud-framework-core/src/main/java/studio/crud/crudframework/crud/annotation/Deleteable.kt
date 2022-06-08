@@ -5,8 +5,8 @@ package studio.crud.crudframework.crud.annotation
  */
 @Target(AnnotationTarget.ANNOTATION_CLASS, AnnotationTarget.CLASS)
 annotation class Deleteable(
-        /**
-         * Denotes whether the entity is soft deleteable or hard deleteable
-         */
-        val softDelete: Boolean
+    /**
+     * Denotes whether the entity is soft deleteable or hard deleteable
+     */
+    val softDelete: Boolean
 )

@@ -1,7 +1,7 @@
 package studio.crud.crudframework.crud.hooks.interfaces;
 
-import studio.crud.crudframework.model.BaseCrudEntity;
 import org.jetbrains.annotations.NotNull;
+import studio.crud.crudframework.model.BaseCrudEntity;
 
 import java.io.Serializable;
 

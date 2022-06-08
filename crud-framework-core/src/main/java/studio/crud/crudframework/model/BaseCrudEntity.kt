@@ -1,9 +1,7 @@
 package studio.crud.crudframework.model
 
 import org.springframework.beans.BeanUtils
-import org.springframework.cglib.beans.ImmutableBean
 import java.io.Serializable
-import java.util.*
 
 abstract class BaseCrudEntity<ID : Serializable> : PersistentEntity, Serializable {
 
@@ -22,7 +20,7 @@ abstract class BaseCrudEntity<ID : Serializable> : PersistentEntity, Serializabl
                     val internalCopy = javaClass.newInstance()
                     internalCopy.isCopy = true
                     BeanUtils.copyProperties(this, internalCopy)
-                    copy = internalCopy //ImmutableBean.create(internalCopy) as BaseCrudEntity<ID>
+                    copy = internalCopy // ImmutableBean.create(internalCopy) as BaseCrudEntity<ID>
                 } else {
                     return null
                 }
@@ -44,5 +42,4 @@ abstract class BaseCrudEntity<ID : Serializable> : PersistentEntity, Serializabl
             return "CacheKey_" + clazz.simpleName + "_" + id
         }
     }
-
 }

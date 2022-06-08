@@ -1,6 +1,8 @@
 package studio.crud.crudframework.modelfilter.enums;
 
-import java.util.*;
+import java.util.EnumSet;
+import java.util.HashMap;
+import java.util.Map;
 
 public enum FilterFieldDataType {
 	String(java.lang.String.class), Integer(java.lang.Integer.class), Long(java.lang.Long.class), Double(java.lang.Double.class), Boolean(java.lang.Boolean.class), Date(java.util.Date.class), Object(java.lang.Object.class), Enum(java.lang.Enum.class), None;

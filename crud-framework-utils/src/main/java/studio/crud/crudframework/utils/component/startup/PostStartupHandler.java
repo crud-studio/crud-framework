@@ -1,7 +1,5 @@
 package studio.crud.crudframework.utils.component.startup;
 
-import studio.crud.crudframework.utils.component.startup.annotation.PostStartUp;
-import studio.crud.crudframework.utils.utils.ReflectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.aop.TargetClassAware;
@@ -12,6 +10,8 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.stereotype.Component;
+import studio.crud.crudframework.utils.component.startup.annotation.PostStartUp;
+import studio.crud.crudframework.utils.utils.ReflectionUtils;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;

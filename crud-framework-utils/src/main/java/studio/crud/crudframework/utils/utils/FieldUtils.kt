@@ -5,20 +5,20 @@ import java.lang.reflect.Field
 import java.lang.reflect.ParameterizedType
 import java.lang.reflect.WildcardType
 
-fun Field.getGenericClass(index: Int) : Class<*>? {
+fun Field.getGenericClass(index: Int): Class<*>? {
     return try {
         val genericType = this.genericType as ParameterizedType
         val typeArgument = genericType.actualTypeArguments[index]
-        if(typeArgument is WildcardType) {
+        if (typeArgument is WildcardType) {
             val upperBound = typeArgument.upperBounds[0]
-            return if(upperBound is ParameterizedType) {
+            return if (upperBound is ParameterizedType) {
                 upperBound.rawType as Class<*>
             } else {
                 upperBound as Class<*>
             }
         }
         return typeArgument as Class<*>
-    } catch(e: ArrayIndexOutOfBoundsException) { null }
+    } catch (e: ArrayIndexOutOfBoundsException) { null }
 }
 
 /**
@@ -26,17 +26,17 @@ fun Field.getGenericClass(index: Int) : Class<*>? {
  */
 fun Field.resolveNestedGeneric(parentIndex: Int, childIndex: Int = 0): Class<*> {
     val genericType = this.genericType
-    if(genericType !is ParameterizedType) {
+    if (genericType !is ParameterizedType) {
         error("${this.type} is not a parameterized type")
     }
     var childType = genericType.actualTypeArguments[parentIndex]
-    while(childType is WildcardType) {
+    while (childType is WildcardType) {
         childType = childType.upperBounds[0]
     }
 
-    if(childType is ParameterizedType) {
+    if (childType is ParameterizedType) {
         var returnValue = childType.actualTypeArguments[childIndex]
-        while(returnValue is WildcardType) {
+        while (returnValue is WildcardType) {
             returnValue = returnValue.upperBounds[0]
         }
         return returnValue as Class<*>
