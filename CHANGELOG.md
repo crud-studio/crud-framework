@@ -1,3 +1,21 @@
+# [1.0.0](https://github.com/crud-studio/crud-framework/compare/v0.8.0...v1.0.0) (2022-06-08)
+
+
+### Bug Fixes
+
+* Fix mongo dao for new DSL ([ef2658f](https://github.com/crud-studio/crud-framework/commit/ef2658f0f767cc82c0139bd0566052f0582e3700))
+
+
+### Features
+
+* make filter field DSL type safe ([4b9f593](https://github.com/crud-studio/crud-framework/commit/4b9f5930101199fee264de96385f9b1e121d3815))
+* switch fieldmapper to shapeshift ([f6a0b1c](https://github.com/crud-studio/crud-framework/commit/f6a0b1c872237ae81e0ac721408f94c3049357db))
+
+
+### BREAKING CHANGES
+
+* registerDefaultTransformer removed from CrudHelper, FieldTransformers, @MappedField now reside in the dev.krud.shapeshift package
+
 # [0.8.0](https://github.com/crud-studio/crud-framework/compare/v0.7.0...v0.8.0) (2022-01-27)
 
 
