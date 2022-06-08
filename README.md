@@ -1,6 +1,6 @@
 # CRUD Framework
 
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/studio.crud.crudframework/crud-framework/badge.svg)](https://maven-badges.herokuapp.com/maven-central/studio.crud.crudframework/crud-framework)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/studio.crud.crudframework/crud-framewor-core/badge.svg)](https://maven-badges.herokuapp.com/maven-central/studio.crud.crudframework/crud-framework)
 [![CircleCI](https://circleci.com/gh/crud-studio/crud-framework.svg?style=shield)](https://circleci.com/gh/crud-studio/crud-framework)
 
 
