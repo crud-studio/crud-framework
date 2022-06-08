@@ -22,8 +22,8 @@ class MongoCrudDaoImpl : CrudDao, AbstractMongoBaseDao() {
     override fun <ID : Serializable?, Entity : BaseCrudEntity<ID>?> softDeleteById(id: ID, deleteColumn: String?, clazz: Class<Entity>?) {
         mongoTemplate.updateFirst(
             buildQuery(
-                where {
-                    "id" Equal id as String
+                where<BaseCrudEntity<String>> {
+                     BaseCrudEntity<String>::id Equal id as String
                 }
             ),
             Update.update(deleteColumn, true),
