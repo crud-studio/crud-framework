@@ -45,6 +45,7 @@ import javax.validation.Validator;
 import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 public class CrudHelperImpl implements CrudHelper {
@@ -72,7 +73,7 @@ public class CrudHelperImpl implements CrudHelper {
 	@Autowired
 	private ApplicationContext applicationContext;
 
-	private Map<Class<? extends BaseCrudEntity<?>>, EntityMetadataDTO> entityMetadataDTOs = new HashMap<>();
+	private Map<Class<? extends BaseCrudEntity<?>>, EntityMetadataDTO> entityMetadataDTOs = new ConcurrentHashMap<>();
 
 	private CrudCache pagingCache;
 
