@@ -49,6 +49,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 public class CrudHelperImpl implements CrudHelper {
@@ -74,7 +75,7 @@ public class CrudHelperImpl implements CrudHelper {
 	@Autowired
 	private ApplicationContext applicationContext;
 
-	private Map<Class<? extends BaseCrudEntity<?>>, EntityMetadataDTO> entityMetadataDTOs = new HashMap<>();
+	private Map<Class<? extends BaseCrudEntity<?>>, EntityMetadataDTO> entityMetadataDTOs = new ConcurrentHashMap<>();
 
 	private CrudCache pagingCache;
 
