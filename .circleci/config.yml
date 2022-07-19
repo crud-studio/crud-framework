@@ -1,17 +1,12 @@
 version: 2.1
-aliases:
-  - &jdk_image
+executors:
+  jdk11:
     docker:
-      - image: cimg/openjdk:8.0-node
-  - &plain_image
-    docker:
-      - image: cimg/base:2020.01
-  - &attach_default_workspace
-    attach_workspace:
-      at: /tmp/workspace
+      - image: cimg/openjdk:11.0
+    resource_class: large
 jobs:
   test:
-    <<: *jdk_image
+    executor: jdk11
     steps:
       - checkout
       - run:
@@ -29,7 +24,7 @@ jobs:
       - store_artifacts:
           path: ~/test-results/junit
   release:
-    <<: *jdk_image
+    executor: jdk11
     steps:
       - checkout
       - run:
@@ -50,18 +45,18 @@ workflows:
             branches:
               ignore:
                 - master
-  release:
-    jobs:
-      - test:
-          filters:
-            branches:
-              only:
-                - master
-      - release:
-          context: crud-framework
-          requires:
-            - test
-          filters:
-            branches:
-              only:
-                - master
+#  release:
+#    jobs:
+#      - test:
+#          filters:
+#            branches:
+#              only:
+#                - master
+#      - release:
+#          context: crud-framework
+#          requires:
+#            - test
+#          filters:
+#            branches:
+#              only:
+#                - master
