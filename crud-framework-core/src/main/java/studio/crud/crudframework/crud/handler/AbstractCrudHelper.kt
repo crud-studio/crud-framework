@@ -3,7 +3,6 @@ package studio.crud.crudframework.crud.handler
 import studio.crud.crudframework.crud.cache.CrudCache
 import studio.crud.crudframework.crud.dataaccess.DataAccessManager
 import studio.crud.crudframework.crud.dataaccess.model.DataAccessorDTO
-import studio.crud.crudframework.crud.decorator.ObjectDecorator
 import studio.crud.crudframework.crud.hooks.interfaces.CRUDHooks
 import studio.crud.crudframework.crud.model.EntityMetadataDTO
 import studio.crud.crudframework.model.BaseCrudEntity
@@ -70,10 +69,6 @@ abstract class AbstractCrudHelper : CrudHelper {
     }
 
     override fun <ID : Serializable?, Entity : BaseCrudEntity<ID>?> evictEntityFromCache(entity: Entity) {
-        throw UnsupportedOperationException()
-    }
-
-    override fun <Entity : Any?, E : Any?> getObjectDecorator(fromClass: Class<Entity>?, toClass: Class<E>?): ObjectDecorator<Entity, E> {
         throw UnsupportedOperationException()
     }
 
