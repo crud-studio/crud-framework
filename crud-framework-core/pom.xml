@@ -16,7 +16,7 @@
 
     <properties>
         <jar-name>crud-framework-core</jar-name>
-        <shapeshift.version>0.1.0</shapeshift.version>
+        <shapeshift.version>0.3.0</shapeshift.version>
     </properties>
 
     <dependencies>
@@ -55,6 +55,11 @@
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
             <version>3.6</version>
+        </dependency>
+        <dependency>
+            <groupId>dev.krud</groupId>
+            <artifactId>shapeshift</artifactId>
+            <version>${shapeshift.version}</version>
         </dependency>
         <dependency>
             <groupId>dev.krud</groupId>

@@ -14,7 +14,6 @@ import studio.crud.crudframework.crud.handler.CrudHelper
 import studio.crud.crudframework.crud.handler.CrudHelperImpl
 import studio.crud.crudframework.crud.handler.CrudReadHandler
 import studio.crud.crudframework.crud.handler.CrudReadHandlerImpl
-import studio.crud.crudframework.crud.handler.CrudShapeShiftBuilderCustomizer
 import studio.crud.crudframework.crud.handler.CrudUpdateHandler
 import studio.crud.crudframework.crud.handler.CrudUpdateHandlerImpl
 import studio.crud.crudframework.exception.WrapExceptionAspect

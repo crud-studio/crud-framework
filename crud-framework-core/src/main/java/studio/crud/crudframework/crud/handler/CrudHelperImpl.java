@@ -11,7 +11,6 @@ import studio.crud.crudframework.crud.cache.CacheManagerAdapter;
 import studio.crud.crudframework.crud.cache.CacheUtils;
 import studio.crud.crudframework.crud.cache.CrudCache;
 import studio.crud.crudframework.crud.cache.CrudCacheOptions;
-import studio.crud.crudframework.crud.configuration.properties.CrudFrameworkProperties;
 import studio.crud.crudframework.crud.dataaccess.DataAccessManager;
 import studio.crud.crudframework.crud.dataaccess.model.DataAccessorDTO;
 import studio.crud.crudframework.crud.decorator.ObjectDecorator;
@@ -81,9 +80,6 @@ public class CrudHelperImpl implements CrudHelper {
 
 	@Autowired
 	private CacheManagerAdapter cacheManagerAdapter;
-
-	@Autowired
-	private CrudFrameworkProperties properties;
 
 	@Autowired
 	private ShapeShift shapeShift;
