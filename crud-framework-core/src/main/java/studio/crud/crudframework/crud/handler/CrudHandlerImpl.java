@@ -257,22 +257,7 @@ public class CrudHandlerImpl implements CrudHandler {
 		);
 	}
 
-	@Override
-	public <Entity, RO> RO fill(Entity fromObject, Class<RO> toClazz) {
-		return crudHelper.fill(fromObject, toClazz);
-	}
-
-	@Override
-	public <Entity, RO> void fill(Entity fromObject, RO toObject) {
-		crudHelper.fill(fromObject, toObject);
-	}
-
-	@Override
-	public <From, To> List<To> fillMany(List<From> fromObjects, Class<To> toClazz) {
-		return crudHelper.fillMany(fromObjects, toClazz);
-	}
-
-	@Override
+    @Override
 	public void validate(Object target) {
 		crudHelper.validate(target);
 	}

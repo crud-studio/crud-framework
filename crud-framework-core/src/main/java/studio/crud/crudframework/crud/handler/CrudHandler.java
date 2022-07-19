@@ -217,38 +217,6 @@ public interface CrudHandler {
     <ID extends Serializable, Entity extends BaseCrudEntity<ID>, RO> ReadCRUDRequestBuilder<CRUDPreShowHook<ID, Entity>, CRUDOnShowHook<ID, Entity>, CRUDPostShowHook<ID, Entity>, RO> show(ID id, Class<Entity> clazz,
                                                                                                                                                                                             Class<RO> toClazz);
 
-    /**
-     * Instantiates {@code toClass} and fills it with fields which are not null from {@code fromObject}
-     *
-     * @param <From>     the from type parameter
-     * @param <To>       the to type parameter
-     * @param fromObject the from object
-     * @param toClazz    the return object class
-     * @return the e
-     */
-    <From, To> To fill(From fromObject, Class<To> toClazz);
-
-    /**
-     * Fills {@code toObject} with fields which are not null from {@code fromObject}
-     *
-     * @param <From>     the from type parameter
-     * @param <To>       the to type parameter
-     * @param fromObject the object from which the entity is filled
-     * @param toObject   the to object
-     */
-    <From, To> void fill(From fromObject, To toObject);
-
-    /**
-     * Builds a list of ROs of the given entity to the {@code toClazz}
-     *
-     * @param <From>      the from type parameter
-     * @param <To>        the to type parameter
-     * @param fromObjects the from objects
-     * @param toClazz     the return object class
-     * @return the r os
-     */
-    <From, To> List<To> fillMany(List<From> fromObjects, Class<To> toClazz);
-
 
     /**
      * Runs field validation on {@code target}, throwing an exception with violations if the validation failed
