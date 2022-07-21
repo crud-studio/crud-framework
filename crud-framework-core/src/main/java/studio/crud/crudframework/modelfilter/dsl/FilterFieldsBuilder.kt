@@ -13,140 +13,140 @@ import kotlin.reflect.KProperty1
 @FilterFieldDsl
 class FilterFieldsBuilder<RootType : PersistentEntity>(private val filterFields: MutableList<FilterField> = mutableListOf(), private val fieldPrefix: String = "") {
 
-    infix fun KProperty1<RootType, String>.Equal(target: String) {
+    infix fun KProperty1<RootType, String?>.Equal(target: String) {
         filterFields += FilterField(effectiveName, FilterFieldOperation.Equal, FilterFieldDataType.String, target)
     }
 
-    infix fun KProperty1<RootType, Int>.Equal(target: Int) {
+    infix fun KProperty1<RootType, Int?>.Equal(target: Int) {
         filterFields += FilterField(effectiveName, FilterFieldOperation.Equal, FilterFieldDataType.Integer, target)
     }
 
-    infix fun KProperty1<RootType, Long>.Equal(target: Long) {
+    infix fun KProperty1<RootType, Long?>.Equal(target: Long) {
         filterFields += FilterField(effectiveName, FilterFieldOperation.Equal, FilterFieldDataType.Long, target)
     }
 
-    infix fun KProperty1<RootType, Double>.Equal(target: Double) {
+    infix fun KProperty1<RootType, Double?>.Equal(target: Double) {
         filterFields += FilterField(effectiveName, FilterFieldOperation.Equal, FilterFieldDataType.Double, target)
     }
 
-    infix fun KProperty1<RootType, Boolean>.Equal(target: Boolean) {
+    infix fun KProperty1<RootType, Boolean?>.Equal(target: Boolean) {
         filterFields += FilterField(effectiveName, FilterFieldOperation.Equal, FilterFieldDataType.Boolean, target)
     }
 
-    infix fun KProperty1<RootType, Date>.Equal(target: Date) {
+    infix fun KProperty1<RootType, Date?>.Equal(target: Date) {
         filterFields += FilterField(effectiveName, FilterFieldOperation.Equal, FilterFieldDataType.Date, target)
     }
 
-    infix fun <EnumType : Enum<EnumType>> KProperty1<RootType, EnumType>.Equal(target: EnumType) {
+    infix fun <EnumType : Enum<EnumType>> KProperty1<RootType, EnumType?>.Equal(target: EnumType) {
         filterFields += FilterField(effectiveName, FilterFieldOperation.Equal, target.javaClass.canonicalName, target)
     }
 
-    infix fun KProperty1<RootType, String>.NotEqual(target: String) {
+    infix fun KProperty1<RootType, String?>.NotEqual(target: String) {
         filterFields += FilterField(effectiveName, FilterFieldOperation.NotEqual, FilterFieldDataType.String, target)
     }
 
-    infix fun KProperty1<RootType, Int>.NotEqual(target: Int) {
+    infix fun KProperty1<RootType, Int?>.NotEqual(target: Int) {
         filterFields += FilterField(effectiveName, FilterFieldOperation.NotEqual, FilterFieldDataType.Integer, target)
     }
 
-    infix fun KProperty1<RootType, Long>.NotEqual(target: Long) {
+    infix fun KProperty1<RootType, Long?>.NotEqual(target: Long) {
         filterFields += FilterField(effectiveName, FilterFieldOperation.NotEqual, FilterFieldDataType.Long, target)
     }
 
-    infix fun KProperty1<RootType, Double>.NotEqual(target: Double) {
+    infix fun KProperty1<RootType, Double?>.NotEqual(target: Double) {
         filterFields += FilterField(effectiveName, FilterFieldOperation.NotEqual, FilterFieldDataType.Double, target)
     }
 
-    infix fun KProperty1<RootType, Boolean>.NotEqual(target: Boolean) {
+    infix fun KProperty1<RootType, Boolean?>.NotEqual(target: Boolean) {
         filterFields += FilterField(effectiveName, FilterFieldOperation.NotEqual, FilterFieldDataType.Boolean, target)
     }
 
-    infix fun KProperty1<RootType, Date>.NotEqual(target: Date) {
+    infix fun KProperty1<RootType, Date?>.NotEqual(target: Date) {
         filterFields += FilterField(effectiveName, FilterFieldOperation.NotEqual, FilterFieldDataType.Date, target)
     }
 
-    infix fun <EnumType : Enum<EnumType>> KProperty1<RootType, EnumType>.NotEqual(target: EnumType) {
+    infix fun <EnumType : Enum<EnumType>> KProperty1<RootType, EnumType?>.NotEqual(target: EnumType) {
         filterFields += FilterField(effectiveName, FilterFieldOperation.NotEqual, target.javaClass.canonicalName, target)
     }
 
-    infix fun KProperty1<RootType, String>.Contains(target: String) {
+    infix fun KProperty1<RootType, String?>.Contains(target: String) {
         filterFields += FilterField(effectiveName, FilterFieldOperation.Contains, FilterFieldDataType.String, target)
     }
 
-    infix fun KProperty1<RootType, String>.StartsWith(target: String) {
+    infix fun KProperty1<RootType, String?>.StartsWith(target: String) {
         filterFields += FilterField(effectiveName, FilterFieldOperation.StartsWith, FilterFieldDataType.String, target)
     }
 
-    infix fun KProperty1<RootType, String>.EndsWith(target: String) {
+    infix fun KProperty1<RootType, String?>.EndsWith(target: String) {
         filterFields += FilterField(effectiveName, FilterFieldOperation.EndsWith, FilterFieldDataType.String, target)
     }
 
-    infix fun KProperty1<RootType, Int>.GreaterThan(target: Int) {
+    infix fun KProperty1<RootType, Int?>.GreaterThan(target: Int) {
         filterFields += FilterField(effectiveName, FilterFieldOperation.GreaterThan, FilterFieldDataType.Integer, target)
     }
 
-    infix fun KProperty1<RootType, Long>.GreaterThan(target: Long) {
+    infix fun KProperty1<RootType, Long?>.GreaterThan(target: Long) {
         filterFields += FilterField(effectiveName, FilterFieldOperation.GreaterThan, FilterFieldDataType.Long, target)
     }
 
-    infix fun KProperty1<RootType, Double>.GreaterThan(target: Double) {
+    infix fun KProperty1<RootType, Double?>.GreaterThan(target: Double) {
         filterFields += FilterField(effectiveName, FilterFieldOperation.GreaterThan, FilterFieldDataType.Double, target)
     }
 
-    infix fun KProperty1<RootType, Date>.GreaterThan(target: Date) {
+    infix fun KProperty1<RootType, Date?>.GreaterThan(target: Date) {
         filterFields += FilterField(effectiveName, FilterFieldOperation.GreaterThan, FilterFieldDataType.Date, target)
     }
 
-    infix fun KProperty1<RootType, Int>.GreaterOrEqual(target: Int) {
+    infix fun KProperty1<RootType, Int?>.GreaterOrEqual(target: Int) {
         filterFields += FilterField(effectiveName, FilterFieldOperation.GreaterEqual, FilterFieldDataType.Integer, target)
     }
 
-    infix fun KProperty1<RootType, Long>.GreaterOrEqual(target: Long) {
+    infix fun KProperty1<RootType, Long?>.GreaterOrEqual(target: Long) {
         filterFields += FilterField(effectiveName, FilterFieldOperation.GreaterEqual, FilterFieldDataType.Long, target)
     }
 
-    infix fun KProperty1<RootType, Double>.GreaterOrEqual(target: Double) {
+    infix fun KProperty1<RootType, Double?>.GreaterOrEqual(target: Double) {
         filterFields += FilterField(effectiveName, FilterFieldOperation.GreaterEqual, FilterFieldDataType.Double, target)
     }
 
-    infix fun KProperty1<RootType, Date>.GreaterOrEqual(target: Date) {
+    infix fun KProperty1<RootType, Date?>.GreaterOrEqual(target: Date) {
         filterFields += FilterField(effectiveName, FilterFieldOperation.GreaterEqual, FilterFieldDataType.Date, target)
     }
 
-    infix fun KProperty1<RootType, Int>.LowerThan(target: Int) {
+    infix fun KProperty1<RootType, Int?>.LowerThan(target: Int) {
         filterFields += FilterField(effectiveName, FilterFieldOperation.LowerThan, FilterFieldDataType.Integer, target)
     }
 
-    infix fun KProperty1<RootType, Long>.LowerThan(target: Long) {
+    infix fun KProperty1<RootType, Long?>.LowerThan(target: Long) {
         filterFields += FilterField(effectiveName, FilterFieldOperation.LowerThan, FilterFieldDataType.Long, target)
     }
 
-    infix fun KProperty1<RootType, Double>.LowerThan(target: Double) {
+    infix fun KProperty1<RootType, Double?>.LowerThan(target: Double) {
         filterFields += FilterField(effectiveName, FilterFieldOperation.LowerThan, FilterFieldDataType.Double, target)
     }
 
-    infix fun KProperty1<RootType, Date>.LowerThan(target: Date) {
+    infix fun KProperty1<RootType, Date?>.LowerThan(target: Date) {
         filterFields += FilterField(effectiveName, FilterFieldOperation.LowerThan, FilterFieldDataType.Date, target)
     }
 
-    infix fun KProperty1<RootType, Int>.LowerOrEqual(target: Int) {
+    infix fun KProperty1<RootType, Int?>.LowerOrEqual(target: Int) {
         filterFields += FilterField(effectiveName, FilterFieldOperation.LowerEqual, FilterFieldDataType.Integer, target)
     }
 
-    infix fun KProperty1<RootType, Long>.LowerOrEqual(target: Long) {
+    infix fun KProperty1<RootType, Long?>.LowerOrEqual(target: Long) {
         filterFields += FilterField(effectiveName, FilterFieldOperation.LowerEqual, FilterFieldDataType.Long, target)
     }
 
-    infix fun KProperty1<RootType, Double>.LowerOrEqual(target: Double) {
+    infix fun KProperty1<RootType, Double?>.LowerOrEqual(target: Double) {
         filterFields += FilterField(effectiveName, FilterFieldOperation.LowerEqual, FilterFieldDataType.Double, target)
     }
 
-    infix fun KProperty1<RootType, Date>.LowerOrEqual(target: Date) {
+    infix fun KProperty1<RootType, Date?>.LowerOrEqual(target: Date) {
         filterFields += FilterField(effectiveName, FilterFieldOperation.LowerEqual, FilterFieldDataType.Date, target)
     }
 
     @JvmName("stringRequireIn")
-    infix fun KProperty1<RootType, String>.RequireIn(target: Collection<String>) {
+    infix fun KProperty1<RootType, Collection<String>?>.RequireIn(target: Collection<String>) {
         if (target.isEmpty()) {
             noop()
         } else {
@@ -155,7 +155,7 @@ class FilterFieldsBuilder<RootType : PersistentEntity>(private val filterFields:
     }
 
     @JvmName("intRequireIn")
-    infix fun KProperty1<RootType, Int>.RequireIn(target: Collection<Int>) {
+    infix fun KProperty1<RootType, Collection<Int>?>.RequireIn(target: Collection<Int>) {
         if (target.isEmpty()) {
             noop()
         } else {
@@ -164,7 +164,7 @@ class FilterFieldsBuilder<RootType : PersistentEntity>(private val filterFields:
     }
 
     @JvmName("longRequireIn")
-    infix fun KProperty1<RootType, Long>.RequireIn(target: Collection<Long>) {
+    infix fun KProperty1<RootType, Collection<Long>?>.RequireIn(target: Collection<Long>) {
         if (target.isEmpty()) {
             noop()
         } else {
@@ -173,7 +173,7 @@ class FilterFieldsBuilder<RootType : PersistentEntity>(private val filterFields:
     }
 
     @JvmName("doubleRequireIn")
-    infix fun KProperty1<RootType, Double>.RequireIn(target: Collection<Double>) {
+    infix fun KProperty1<RootType, Collection<Double>?>.RequireIn(target: Collection<Double>) {
         if (target.isEmpty()) {
             noop()
         } else {
@@ -182,7 +182,7 @@ class FilterFieldsBuilder<RootType : PersistentEntity>(private val filterFields:
     }
 
     @JvmName("dateRequireIn")
-    infix fun KProperty1<RootType, Date>.RequireIn(target: Collection<Date>) {
+    infix fun KProperty1<RootType, Collection<Date>?>.RequireIn(target: Collection<Date>) {
         if (target.isEmpty()) {
             noop()
         } else {
@@ -191,7 +191,7 @@ class FilterFieldsBuilder<RootType : PersistentEntity>(private val filterFields:
     }
 
     @JvmName("enumRequireIn")
-    infix fun <EnumType : Enum<EnumType>> KProperty1<RootType, EnumType>.RequireIn(target: Collection<EnumType>) {
+    infix fun <EnumType : Enum<EnumType>> KProperty1<RootType, Collection<EnumType>?>.RequireIn(target: Collection<EnumType>) {
         if (target.isEmpty()) {
             noop()
         } else {
@@ -200,7 +200,7 @@ class FilterFieldsBuilder<RootType : PersistentEntity>(private val filterFields:
     }
 
     @JvmName("stringRequireNotIn")
-    infix fun KProperty1<RootType, String>.RequireNotIn(target: Collection<String>) {
+    infix fun KProperty1<RootType, Collection<String>?>.RequireNotIn(target: Collection<String>) {
         if (target.isEmpty()) {
             noop()
         } else {
@@ -209,7 +209,7 @@ class FilterFieldsBuilder<RootType : PersistentEntity>(private val filterFields:
     }
 
     @JvmName("intRequireNotIn")
-    infix fun KProperty1<RootType, Int>.RequireNotIn(target: Collection<Int>) {
+    infix fun KProperty1<RootType, Collection<Int>?>.RequireNotIn(target: Collection<Int>) {
         if (target.isEmpty()) {
             noop()
         } else {
@@ -218,7 +218,7 @@ class FilterFieldsBuilder<RootType : PersistentEntity>(private val filterFields:
     }
 
     @JvmName("longRequireNotIn")
-    infix fun KProperty1<RootType, Long>.RequireNotIn(target: Collection<Long>) {
+    infix fun KProperty1<RootType, Collection<Long>?>.RequireNotIn(target: Collection<Long>) {
         if (target.isEmpty()) {
             noop()
         } else {
@@ -227,7 +227,7 @@ class FilterFieldsBuilder<RootType : PersistentEntity>(private val filterFields:
     }
 
     @JvmName("doubleRequireNotIn")
-    infix fun KProperty1<RootType, Double>.RequireNotIn(target: Collection<Double>) {
+    infix fun KProperty1<RootType, Collection<Double>?>.RequireNotIn(target: Collection<Double>) {
         if (target.isEmpty()) {
             noop()
         } else {
@@ -236,7 +236,7 @@ class FilterFieldsBuilder<RootType : PersistentEntity>(private val filterFields:
     }
 
     @JvmName("dateRequireNotIn")
-    infix fun KProperty1<RootType, Date>.RequireNotIn(target: Collection<Date>) {
+    infix fun KProperty1<RootType, Collection<Date>?>.RequireNotIn(target: Collection<Date>) {
         if (target.isEmpty()) {
             noop()
         } else {
@@ -245,7 +245,7 @@ class FilterFieldsBuilder<RootType : PersistentEntity>(private val filterFields:
     }
 
     @JvmName("enumRequireNotIn")
-    infix fun <EnumType : Enum<EnumType>> KProperty1<RootType, EnumType>.RequireNotIn(target: Collection<EnumType>) {
+    infix fun <EnumType : Enum<EnumType>> KProperty1<RootType, Collection<EnumType>?>.RequireNotIn(target: Collection<EnumType>) {
         if (target.isEmpty()) {
             noop()
         } else {
@@ -254,88 +254,88 @@ class FilterFieldsBuilder<RootType : PersistentEntity>(private val filterFields:
     }
 
     @JvmName("stringIn")
-    infix fun KProperty1<RootType, String>.In(target: Collection<String>) {
+    infix fun KProperty1<RootType, Collection<String>?>.In(target: Collection<String>) {
         filterFields += FilterField(effectiveName, FilterFieldOperation.In, FilterFieldDataType.String, *target.toTypedArray())
     }
 
     @JvmName("intIn")
-    infix fun KProperty1<RootType, Int>.In(target: Collection<Int>) {
+    infix fun KProperty1<RootType, Collection<Int>?>.In(target: Collection<Int>) {
         filterFields += FilterField(effectiveName, FilterFieldOperation.In, FilterFieldDataType.Integer, *target.toTypedArray())
     }
 
     @JvmName("longIn")
-    infix fun KProperty1<RootType, Long>.In(target: Collection<Long>) {
+    infix fun KProperty1<RootType, Collection<Long>?>.In(target: Collection<Long>) {
         filterFields += FilterField(effectiveName, FilterFieldOperation.In, FilterFieldDataType.Long, *target.toTypedArray())
     }
 
     @JvmName("doubleIn")
-    infix fun KProperty1<RootType, Double>.In(target: Collection<Double>) {
+    infix fun KProperty1<RootType, Collection<Double>?>.In(target: Collection<Double>) {
         filterFields += FilterField(effectiveName, FilterFieldOperation.In, FilterFieldDataType.Double, *target.toTypedArray())
     }
 
     @JvmName("dateIn")
-    infix fun KProperty1<RootType, Date>.In(target: Collection<Date>) {
+    infix fun KProperty1<RootType, Collection<Date>?>.In(target: Collection<Date>) {
         filterFields += FilterField(effectiveName, FilterFieldOperation.In, FilterFieldDataType.Date, *target.toTypedArray())
     }
 
     @JvmName("enumIn")
-    infix fun <EnumType : Enum<EnumType>> KProperty1<RootType, EnumType>.In(target: Collection<EnumType>) {
+    infix fun <EnumType : Enum<EnumType>> KProperty1<RootType, Collection<EnumType>?>.In(target: Collection<EnumType>) {
         filterFields += FilterField(effectiveName, FilterFieldOperation.In, target.first()::class.java.canonicalName, *(target as Collection<*>).toTypedArray())
     }
 
     @JvmName("stringNotIn")
-    infix fun KProperty1<RootType, String>.NotIn(target: Collection<String>) {
+    infix fun KProperty1<RootType, Collection<String>?>.NotIn(target: Collection<String>) {
         filterFields += FilterField(effectiveName, FilterFieldOperation.NotIn, FilterFieldDataType.String, *target.toTypedArray())
     }
 
     @JvmName("intNotIn")
-    infix fun KProperty1<RootType, Int>.NotIn(target: Collection<Int>) {
+    infix fun KProperty1<RootType, Collection<Int>?>.NotIn(target: Collection<Int>) {
         filterFields += FilterField(effectiveName, FilterFieldOperation.NotIn, FilterFieldDataType.Integer, *target.toTypedArray())
     }
 
     @JvmName("longNotIn")
-    infix fun KProperty1<RootType, Long>.NotIn(target: Collection<Long>) {
+    infix fun KProperty1<RootType, Collection<Long>?>.NotIn(target: Collection<Long>) {
         filterFields += FilterField(effectiveName, FilterFieldOperation.NotIn, FilterFieldDataType.Long, *target.toTypedArray())
     }
 
     @JvmName("doubleNotIn")
-    infix fun KProperty1<RootType, Double>.NotIn(target: Collection<Double>) {
+    infix fun KProperty1<RootType, Collection<Double>?>.NotIn(target: Collection<Double>) {
         filterFields += FilterField(effectiveName, FilterFieldOperation.NotIn, FilterFieldDataType.Double, *target.toTypedArray())
     }
 
     @JvmName("dateNotIn")
-    infix fun KProperty1<RootType, Date>.NotIn(target: Collection<Date>) {
+    infix fun KProperty1<RootType, Collection<Date>?>.NotIn(target: Collection<Date>) {
         filterFields += FilterField(effectiveName, FilterFieldOperation.NotIn, FilterFieldDataType.Date, *target.toTypedArray())
     }
 
     @JvmName("enumNotIn")
-    infix fun <EnumType : Enum<EnumType>> KProperty1<RootType, EnumType>.NotIn(target: Collection<EnumType>) {
+    infix fun <EnumType : Enum<EnumType>> KProperty1<RootType, Collection<EnumType>?>.NotIn(target: Collection<EnumType>) {
         filterFields += FilterField(effectiveName, FilterFieldOperation.NotIn, target.first()::class.java.canonicalName, *(target as Collection<*>).toTypedArray())
     }
 
     @JvmName("stringContainsIn")
-    infix fun KProperty1<RootType, String>.ContainsIn(target: Collection<String>) {
+    infix fun KProperty1<RootType, Collection<String>?>.ContainsIn(target: Collection<String>) {
         filterFields += FilterField(effectiveName, FilterFieldOperation.ContainsIn, FilterFieldDataType.String, *(target as Collection<*>).toTypedArray())
     }
 
     @JvmName("stringNotContainsIn")
-    infix fun KProperty1<RootType, String>.NotContainsIn(target: Collection<String>) {
+    infix fun KProperty1<RootType, Collection<String>?>.NotContainsIn(target: Collection<String>) {
         filterFields += FilterField(effectiveName, FilterFieldOperation.NotContainsIn, FilterFieldDataType.String, *(target as Collection<*>).toTypedArray())
     }
 
-    infix fun KProperty1<RootType, Int>.Between(target: Int): BetweenBuilder<Int> {
+    infix fun KProperty1<RootType, Int?>.Between(target: Int): BetweenBuilder<Int> {
         return BetweenBuilder(effectiveName, target, FilterFieldDataType.Integer)
     }
 
-    infix fun KProperty1<RootType, Long>.Between(target: Long): BetweenBuilder<Long> {
+    infix fun KProperty1<RootType, Long?>.Between(target: Long): BetweenBuilder<Long> {
         return BetweenBuilder(effectiveName, target, FilterFieldDataType.Long)
     }
 
-    infix fun KProperty1<RootType, Double>.Between(target: Double): BetweenBuilder<Double> {
+    infix fun KProperty1<RootType, Double?>.Between(target: Double): BetweenBuilder<Double> {
         return BetweenBuilder(effectiveName, target, FilterFieldDataType.Double)
     }
 
-    infix fun KProperty1<RootType, Date>.Between(target: Date): BetweenBuilder<Date> {
+    infix fun KProperty1<RootType, Date?>.Between(target: Date): BetweenBuilder<Date> {
         return BetweenBuilder(effectiveName, target, FilterFieldDataType.Date)
     }
 
@@ -362,7 +362,7 @@ class FilterFieldsBuilder<RootType : PersistentEntity>(private val filterFields:
         }
     }
 
-    infix fun <ChildType : PersistentEntity> KProperty1<RootType, ChildType>.Sub(setup: FilterFieldsBuilder<ChildType>.() -> Unit) {
+    infix fun <ChildType : PersistentEntity> KProperty1<RootType, ChildType?>.Sub(setup: FilterFieldsBuilder<ChildType>.() -> Unit) {
         val prefix = if (fieldPrefix.isEmpty()) name else "$fieldPrefix/$name"
         val filterFieldsBuilder = FilterFieldsBuilder<ChildType>(fieldPrefix = prefix)
         setup(filterFieldsBuilder)
