@@ -398,12 +398,7 @@ public class CrudHelperImpl implements CrudHelper {
     @Override
     @WrapException(CrudTransformationException.class)
     public <From, To> List<To> fillMany(List<From> fromObjects, Class<To> toClazz) {
-        List<To> toObjects = new ArrayList<To>();
-        for (From fromObject : fromObjects) {
-            toObjects.add(crudHelperProxy.fill(fromObject, toClazz));
-        }
-
-        return toObjects;
+        return shapeShift.mapCollection(fromObjects, toClazz);
     }
 
     @Override
