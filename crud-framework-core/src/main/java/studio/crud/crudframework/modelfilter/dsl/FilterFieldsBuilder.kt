@@ -416,7 +416,8 @@ class FilterFieldsBuilder<RootType : PersistentEntity>(private val filterFields:
 
     fun build() = filterFields.toList()
 
-    private val KProperty<*>.effectiveName: String get() {
-        return if (fieldPrefix.isEmpty()) name else "$fieldPrefix.$name"
-    }
+    private val KProperty<*>.effectiveName: String
+        get() {
+            return if (fieldPrefix.isEmpty()) name else "$fieldPrefix.$name"
+        }
 }
