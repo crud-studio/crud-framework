@@ -39,14 +39,7 @@ import javax.validation.Validation;
 import javax.validation.Validator;
 import java.io.Serializable;
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
@@ -161,7 +154,7 @@ public class CrudHelperImpl implements CrudHelper {
                 throw new IllegalStateException("A FilterField must have an operation");
             }
 
-            boolean isJunction = filterField.getOperation() == FilterFieldOperation.And || filterField.getOperation() == FilterFieldOperation.Or || filterField.getOperation() == FilterFieldOperation.Not || filterField.getOperation() == FilterFieldOperation.RawJunction;
+            boolean isJunction = filterField.getOperation() == FilterFieldOperation.And || filterField.getOperation() == FilterFieldOperation.Or || filterField.getOperation() == FilterFieldOperation.Not;
             if (isJunction) {
                 if (filterField.getChildren() != null && !filterField.getChildren().isEmpty()) {
                     validateAndFillFilterFieldMetadata(filterField.getChildren(), entityClazz);

@@ -7,9 +7,8 @@ import strikt.assertions.isFalse
 import strikt.assertions.isTrue
 import studio.crud.crudframework.model.BaseCrudEntity
 import studio.crud.crudframework.model.PersistentEntity
-import studio.crud.crudframework.modelfilter.BaseRawJunction
 import studio.crud.crudframework.modelfilter.dsl.where
-import java.util.Date
+import java.util.*
 
 private class Customer(
     val name: String = "Test",
@@ -374,20 +373,6 @@ class DynamicModelFilterUtilsTest {
         val customer = Customer()
         val filter = where<Customer> {
             Customer::favoriteFruits NotContainsIn listOf("App")
-        }
-
-        expectThrows<UnsupportedOperationException> {
-            filter.matches(customer)
-        }
-    }
-
-    @Test
-    fun `test RawJunction operation happy flow`() {
-        val customer = Customer()
-        val filter = where<Customer> {
-            rawJunction {
-                object : BaseRawJunction<Any>(1) {}
-            }
         }
 
         expectThrows<UnsupportedOperationException> {

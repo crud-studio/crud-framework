@@ -10,14 +10,9 @@ import studio.crud.crudframework.modelfilter.DynamicModelFilter;
 import studio.crud.crudframework.modelfilter.FilterField;
 import studio.crud.crudframework.modelfilter.OrderDTO;
 import studio.crud.crudframework.modelfilter.enums.FilterFieldOperation;
-import studio.crud.crudframework.mongo.modelfilter.MongoRawJunctionDTO;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.regex.Pattern;
 
 public abstract class AbstractMongoBaseDao {
@@ -110,7 +105,7 @@ public abstract class AbstractMongoBaseDao {
 
 
 	private Criteria buildCriterion(Criteria criteria, FilterField filterField) {
-		if(filterField.getOperation() == FilterFieldOperation.RawJunction || filterField.getChildren() != null || isValidSimpleFilterField(filterField)) {
+		if(filterField.getChildren() != null || isValidSimpleFilterField(filterField)) {
 
 			switch(filterField.getOperation()) {
 				case Equal:
@@ -223,13 +218,6 @@ public abstract class AbstractMongoBaseDao {
 						}
 
 						criteria.not().andOperator(criterias.toArray(new Criteria[]{}));
-					}
-					break;
-
-				case RawJunction:
-					MongoRawJunctionDTO dto = (MongoRawJunctionDTO) filterField.getValue1();
-					if(dto != null && dto.getJunction() != null) {
-						criteria.andOperator(dto.getJunction());
 					}
 					break;
 				case Noop:

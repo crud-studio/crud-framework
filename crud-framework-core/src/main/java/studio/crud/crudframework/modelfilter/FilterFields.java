@@ -387,14 +387,6 @@ public final class FilterFields {
 		return null;
 	}
 
-	public static FilterField rawJunction(BaseRawJunction rawJunctionDTO) {
-		if(rawJunctionDTO == null || rawJunctionDTO.getJunction() == null) {
-			return null;
-		}
-
-		return createFilterField("", FilterFieldOperation.RawJunction, FilterFieldDataType.None, null, rawJunctionDTO);
-	}
-
 	public static FilterField notContainsIn(String fieldName, String... values) {
 		if(values != null && values.length > 0) {
 			return createFilterField(fieldName, FilterFieldOperation.NotContainsIn, FilterFieldDataType.String, null, values);

@@ -18,7 +18,6 @@ enum class FilterFieldOperation(val junction: Boolean = false) {
     Not(true),
     ContainsIn,
     NotContainsIn,
-    RawJunction(true),
     StartsWith,
     EndsWith,
     Noop;

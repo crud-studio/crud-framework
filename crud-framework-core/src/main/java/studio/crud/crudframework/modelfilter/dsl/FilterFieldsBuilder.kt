@@ -1,12 +1,11 @@
 package studio.crud.crudframework.modelfilter.dsl
 
 import studio.crud.crudframework.model.PersistentEntity
-import studio.crud.crudframework.modelfilter.BaseRawJunction
 import studio.crud.crudframework.modelfilter.FilterField
 import studio.crud.crudframework.modelfilter.dsl.annotation.FilterFieldDsl
 import studio.crud.crudframework.modelfilter.enums.FilterFieldDataType
 import studio.crud.crudframework.modelfilter.enums.FilterFieldOperation
-import java.util.Date
+import java.util.*
 import kotlin.reflect.KProperty
 import kotlin.reflect.KProperty1
 
@@ -352,14 +351,6 @@ class FilterFieldsBuilder<RootType : PersistentEntity>(private val filterFields:
 
     fun KProperty1<RootType, *>.isNotNull() {
         filterFields += FilterField(effectiveName, FilterFieldOperation.IsNotNull, FilterFieldDataType.Object, null, null)
-    }
-
-    fun rawJunction(junctionSupplier: () -> BaseRawJunction<*>) {
-        filterFields += FilterField().apply {
-            this.operation = FilterFieldOperation.RawJunction
-            this.dataType = FilterFieldDataType.None
-            this.values = arrayOf(junctionSupplier())
-        }
     }
 
     infix fun <ChildType : PersistentEntity> KProperty1<RootType, ChildType?>.Sub(setup: FilterFieldsBuilder<ChildType>.() -> Unit) {

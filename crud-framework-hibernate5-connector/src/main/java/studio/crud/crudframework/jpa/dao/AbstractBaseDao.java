@@ -2,21 +2,12 @@ package studio.crud.crudframework.jpa.dao;
 
 import org.hibernate.Criteria;
 import org.hibernate.Session;
-import org.hibernate.criterion.Conjunction;
-import org.hibernate.criterion.CriteriaSpecification;
-import org.hibernate.criterion.Criterion;
-import org.hibernate.criterion.Disjunction;
-import org.hibernate.criterion.Junction;
-import org.hibernate.criterion.MatchMode;
-import org.hibernate.criterion.Order;
-import org.hibernate.criterion.Projections;
-import org.hibernate.criterion.Restrictions;
+import org.hibernate.criterion.*;
 import studio.crud.crudframework.jpa.annotation.CrudJoinType;
 import studio.crud.crudframework.model.BaseCrudEntity;
 import studio.crud.crudframework.model.PersistentEntity;
 import studio.crud.crudframework.modelfilter.DynamicModelFilter;
 import studio.crud.crudframework.modelfilter.FilterField;
-import studio.crud.crudframework.modelfilter.JpaRawJunctionDTO;
 import studio.crud.crudframework.modelfilter.OrderDTO;
 import studio.crud.crudframework.modelfilter.enums.FilterFieldOperation;
 
@@ -25,12 +16,7 @@ import javax.persistence.PersistenceContext;
 import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public abstract class AbstractBaseDao implements BaseDao {
 
@@ -180,11 +166,6 @@ public abstract class AbstractBaseDao implements BaseDao {
 			if(filterField.getFieldName() != null) {
 				flatFilterFieldNames.add(filterField.getFieldName());
 			}
-
-			if(filterField.getOperation() == FilterFieldOperation.RawJunction && filterField.getValue1() instanceof JpaRawJunctionDTO) {
-				flatFilterFieldNames.addAll(((JpaRawJunctionDTO) filterField.getValue1()).getRequestedAliases());
-			}
-
 			if(filterField.getChildren() != null && !filterField.getChildren().isEmpty()) {
 				flattenFilterFieldNames(flatFilterFieldNames, filterField.getChildren());
 			}
@@ -195,7 +176,7 @@ public abstract class AbstractBaseDao implements BaseDao {
 
 		Junction junction = Restrictions.and();
 
-		if((filterField.getOperation() == FilterFieldOperation.RawJunction || filterField.getOperation() == FilterFieldOperation.Noop) || filterField.getChildren() != null || isValidSimpleFilterField(filterField)) {
+		if(filterField.getOperation() == FilterFieldOperation.Noop || filterField.getChildren() != null || isValidSimpleFilterField(filterField)) {
 
 			switch(filterField.getOperation()) {
 				case Equal:
@@ -296,13 +277,6 @@ public abstract class AbstractBaseDao implements BaseDao {
 						}
 					}
 					junction.add(Restrictions.not(notContainsInJunction));
-					break;
-
-				case RawJunction:
-					JpaRawJunctionDTO dto = (JpaRawJunctionDTO) filterField.getValue1();
-					if(dto != null && dto.getJunction() != null) {
-						junction.add(dto.getJunction());
-					}
 					break;
 				case Noop:
 					junction.add(Restrictions.sqlRestriction("1=0"));

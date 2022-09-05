@@ -103,7 +103,6 @@ fun FilterField.matches(target: Any): Boolean {
         FilterFieldOperation.NotContainsIn -> {
             throw UnsupportedOperationException("Cannot use NotContainsIn in FilterField.matches")
         }
-        FilterFieldOperation.RawJunction -> throw UnsupportedOperationException("Cannot use RawJunction in FilterField.matches")
         FilterFieldOperation.StartsWith -> {
             actualValue as String
             val value = this.value1 as String
