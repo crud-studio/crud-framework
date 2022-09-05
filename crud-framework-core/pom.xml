@@ -16,7 +16,7 @@
 
     <properties>
         <jar-name>crud-framework-core</jar-name>
-        <shapeshift.version>0.4.0</shapeshift.version>
+        <shapeshift.version>0.6.0</shapeshift.version>
     </properties>
 
     <dependencies>
