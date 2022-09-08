@@ -222,6 +222,9 @@ public abstract class AbstractMongoBaseDao {
 					break;
 				case Noop:
 					criteria.and("id").in();
+                    break;
+                default:
+                    throw new UnsupportedOperationException("Unsupported filter operation: " + filterField.getOperation());
 			}
 		}
 

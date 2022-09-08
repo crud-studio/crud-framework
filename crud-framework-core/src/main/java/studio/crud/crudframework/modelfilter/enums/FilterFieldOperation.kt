@@ -13,6 +13,8 @@ enum class FilterFieldOperation(val junction: Boolean = false) {
     Contains,
     IsNull,
     IsNotNull,
+    IsEmpty,
+    IsNotEmpty,
     And(true),
     Or(true),
     Not(true),

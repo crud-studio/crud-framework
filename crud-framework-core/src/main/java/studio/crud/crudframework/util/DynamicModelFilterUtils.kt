@@ -89,6 +89,14 @@ fun FilterField.matches(target: Any): Boolean {
         FilterFieldOperation.IsNotNull -> {
             return actualValue != null
         }
+        FilterFieldOperation.IsEmpty -> {
+            val value = this.value1 as Collection<*>
+            return value.isEmpty()
+        }
+        FilterFieldOperation.IsNotEmpty -> {
+            val value = this.value1 as Collection<*>
+            return value.isNotEmpty()
+        }
         FilterFieldOperation.And -> {
             return children.all { it.matches(target) }
         }

@@ -353,6 +353,14 @@ class FilterFieldsBuilder<RootType : PersistentEntity>(private val filterFields:
         filterFields += FilterField(effectiveName, FilterFieldOperation.IsNotNull, FilterFieldDataType.Object, null, null)
     }
 
+    fun KProperty1<RootType, Collection<*>>.isEmpty() {
+        filterFields += FilterField(effectiveName, FilterFieldOperation.IsEmpty, FilterFieldDataType.Object, null, null)
+    }
+
+    fun KProperty1<RootType, Collection<*>>.isNotEmpty() {
+        filterFields += FilterField(effectiveName, FilterFieldOperation.IsNotEmpty, FilterFieldDataType.Object, null, null)
+    }
+
     infix fun <ChildType : PersistentEntity> KProperty1<RootType, ChildType?>.Sub(setup: FilterFieldsBuilder<ChildType>.() -> Unit) {
         val prefix = if (fieldPrefix.isEmpty()) name else "$fieldPrefix/$name"
         val filterFieldsBuilder = FilterFieldsBuilder<ChildType>(fieldPrefix = prefix)

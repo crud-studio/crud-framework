@@ -402,6 +402,16 @@ public final class FilterFields {
 		return createFilterField(fieldName, FilterFieldOperation.IsNotNull, null, null, null);
 	}
 
+    public static FilterField isEmpty(String fieldName) {
+        return createFilterField(fieldName, FilterFieldOperation.IsEmpty, null, null, null);
+    }
+
+    public static FilterField isNotEmpty(String fieldName) {
+        return createFilterField(fieldName, FilterFieldOperation.IsNotEmpty, null, null, null);
+    }
+
+
+
 	public static FilterField or(FilterField... filterFields) {
 		FilterField filterField = new FilterField();
 		filterField.setOperation(FilterFieldOperation.Or);

@@ -230,6 +230,12 @@ public abstract class AbstractBaseDao implements BaseDao {
 				case IsNotNull:
 					junction.add(Restrictions.isNotNull(filterField.getFieldName()));
 					break;
+                case IsEmpty:
+                    junction.add(Restrictions.isEmpty(filterField.getFieldName()));
+                    break;
+                case IsNotEmpty:
+                    junction.add(Restrictions.isNotEmpty(filterField.getFieldName()));
+                    break;
 				case And:
 					if(filterField.getChildren() != null && !filterField.getChildren().isEmpty()) {
 						Conjunction conjunction = Restrictions.and();

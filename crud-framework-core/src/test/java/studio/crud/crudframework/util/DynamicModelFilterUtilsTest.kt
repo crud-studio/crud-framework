@@ -2,13 +2,12 @@ package studio.crud.crudframework.util
 
 import org.junit.jupiter.api.Test
 import strikt.api.expectThat
-import strikt.api.expectThrows
 import strikt.assertions.isFalse
 import strikt.assertions.isTrue
 import studio.crud.crudframework.model.BaseCrudEntity
 import studio.crud.crudframework.model.PersistentEntity
 import studio.crud.crudframework.modelfilter.dsl.where
-import java.util.*
+import java.util.Date
 
 private class Customer(
     val name: String = "Test",
@@ -86,50 +85,6 @@ class DynamicModelFilterUtilsTest {
             Customer::address Sub {
                 Address::street NotEqual "Example Street"
             }
-        }
-        expectThat(
-            filter.matches(customer)
-        ).isFalse()
-    }
-
-    @Test
-    fun `test In operation happy flow`() {
-        val customer = Customer()
-        val filter = where<Customer> {
-            Customer::favoriteFruits In listOf("Apple", "Apricot")
-        }
-        expectThat(
-            filter.matches(customer)
-        ).isTrue()
-    }
-
-    @Test
-    fun `test In operation with false outcome`() {
-        val customer = Customer()
-        val filter = where<Customer> {
-            Customer::favoriteFruits In listOf("Tomato", "Apple")
-        }
-        expectThat(
-            filter.matches(customer)
-        ).isFalse()
-    }
-
-    @Test
-    fun `test NotIn operation happy flow`() {
-        val customer = Customer()
-        val filter = where<Customer> {
-            Customer::favoriteFruits NotIn listOf("Tomato", "Mango")
-        }
-        expectThat(
-            filter.matches(customer)
-        ).isTrue()
-    }
-
-    @Test
-    fun `test NotIn operation with false outcome`() {
-        val customer = Customer()
-        val filter = where<Customer> {
-            Customer::favoriteFruits NotIn listOf("Apricot", "Apple")
         }
         expectThat(
             filter.matches(customer)
@@ -354,30 +309,6 @@ class DynamicModelFilterUtilsTest {
         expectThat(
             filter.matches(customer)
         ).isFalse()
-    }
-
-    @Test
-    fun `test ContainsIn operation happy flow`() {
-        val customer = Customer()
-        val filter = where<Customer> {
-            Customer::favoriteFruits ContainsIn listOf("App")
-        }
-
-        expectThrows<UnsupportedOperationException> {
-            filter.matches(customer)
-        }
-    }
-
-    @Test
-    fun `test NotContainsIn operation happy flow`() {
-        val customer = Customer()
-        val filter = where<Customer> {
-            Customer::favoriteFruits NotContainsIn listOf("App")
-        }
-
-        expectThrows<UnsupportedOperationException> {
-            filter.matches(customer)
-        }
     }
 
     @Test
