@@ -18,9 +18,5 @@ enum class FilterFieldOperation(val junction: Boolean = false) {
     And(true),
     Or(true),
     Not(true),
-    ContainsIn,
-    NotContainsIn,
-    StartsWith,
-    EndsWith,
     Noop;
 }

@@ -372,28 +372,6 @@ public final class FilterFields {
 		return createFilterField(fieldName, FilterFieldOperation.Contains, FilterFieldDataType.String, null, value);
 	}
 
-	public static FilterField startsWith(String fieldName, String value) {
-		return createFilterField(fieldName, FilterFieldOperation.StartsWith, FilterFieldDataType.String, null, value);
-	}
-
-	public static FilterField endsWith(String fieldName, String value) {
-		return createFilterField(fieldName, FilterFieldOperation.EndsWith, FilterFieldDataType.String, null, value);
-	}
-
-	public static FilterField containsIn(String fieldName, String... values) {
-		if(values != null && values.length > 0) {
-			return createFilterField(fieldName, FilterFieldOperation.ContainsIn, FilterFieldDataType.String, null, values);
-		}
-		return null;
-	}
-
-	public static FilterField notContainsIn(String fieldName, String... values) {
-		if(values != null && values.length > 0) {
-			return createFilterField(fieldName, FilterFieldOperation.NotContainsIn, FilterFieldDataType.String, null, values);
-		}
-		return null;
-	}
-
 	public static FilterField isNull(String fieldName) {
 		return createFilterField(fieldName, FilterFieldOperation.IsNull, null, null, null);
 	}

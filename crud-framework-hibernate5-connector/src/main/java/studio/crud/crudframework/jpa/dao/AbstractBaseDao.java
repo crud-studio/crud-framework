@@ -2,7 +2,15 @@ package studio.crud.crudframework.jpa.dao;
 
 import org.hibernate.Criteria;
 import org.hibernate.Session;
-import org.hibernate.criterion.*;
+import org.hibernate.criterion.Conjunction;
+import org.hibernate.criterion.CriteriaSpecification;
+import org.hibernate.criterion.Criterion;
+import org.hibernate.criterion.Disjunction;
+import org.hibernate.criterion.Junction;
+import org.hibernate.criterion.MatchMode;
+import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Restrictions;
 import studio.crud.crudframework.jpa.annotation.CrudJoinType;
 import studio.crud.crudframework.model.BaseCrudEntity;
 import studio.crud.crudframework.model.PersistentEntity;
@@ -16,7 +24,12 @@ import javax.persistence.PersistenceContext;
 import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 public abstract class AbstractBaseDao implements BaseDao {
 
@@ -212,18 +225,6 @@ public abstract class AbstractBaseDao implements BaseDao {
 						junction.add(Restrictions.like(filterField.getFieldName(), replaceSpecialCharacters(valueString), MatchMode.ANYWHERE).ignoreCase());
 					}
 					break;
-				case StartsWith:
-					if(filterField.getValue1() != null && !filterField.getValue1().toString().trim().isEmpty()) {
-						String valueString = filterField.getValue1().toString();
-						junction.add(Restrictions.like(filterField.getFieldName(), replaceSpecialCharacters(valueString), MatchMode.START).ignoreCase());
-					}
-					break;
-				case EndsWith:
-					if(filterField.getValue1() != null && !filterField.getValue1().toString().trim().isEmpty()) {
-						String valueString = filterField.getValue1().toString();
-						junction.add(Restrictions.like(filterField.getFieldName(), replaceSpecialCharacters(valueString), MatchMode.END).ignoreCase());
-					}
-					break;
 				case IsNull:
 					junction.add(Restrictions.isNull(filterField.getFieldName()));
 					break;
@@ -261,28 +262,6 @@ public abstract class AbstractBaseDao implements BaseDao {
 						FilterField child = filterField.getChildren().get(0);
 						junction.add(Restrictions.not(buildCriterion(child)));
 					}
-					break;
-				case ContainsIn:
-					Disjunction containsInJunction = Restrictions.or();
-					if(filterField.getValues() != null && filterField.getValues().length > 0) {
-						for(Object value : filterField.getValues()) {
-							if(value != null && !value.toString().trim().isEmpty()) {
-								containsInJunction.add(Restrictions.like(filterField.getFieldName(), value.toString(), MatchMode.ANYWHERE).ignoreCase());
-							}
-						}
-					}
-					junction.add(containsInJunction);
-					break;
-				case NotContainsIn:
-					Disjunction notContainsInJunction = Restrictions.or();
-					if(filterField.getValues() != null && filterField.getValues().length > 0) {
-						for(Object value : filterField.getValues()) {
-							if(value != null && !value.toString().trim().isEmpty()) {
-								notContainsInJunction.add(Restrictions.like(filterField.getFieldName(), value.toString(), MatchMode.ANYWHERE).ignoreCase());
-							}
-						}
-					}
-					junction.add(Restrictions.not(notContainsInJunction));
 					break;
 				case Noop:
 					junction.add(Restrictions.sqlRestriction("1=0"));

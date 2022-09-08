@@ -224,50 +224,6 @@ class DynamicModelFilterUtilsTest {
     }
 
     @Test
-    fun `test StartsWith operation happy flow`() {
-        val customer = Customer()
-        val filter = where<Customer> {
-            Customer::name StartsWith "Te"
-        }
-        expectThat(
-            filter.matches(customer)
-        ).isTrue()
-    }
-
-    @Test
-    fun `test StartsWith  operation with false outcome`() {
-        val customer = Customer()
-        val filter = where<Customer> {
-            Customer::name StartsWith "De"
-        }
-        expectThat(
-            filter.matches(customer)
-        ).isFalse()
-    }
-
-    @Test
-    fun `test EndsWith operation happy flow`() {
-        val customer = Customer()
-        val filter = where<Customer> {
-            Customer::name EndsWith "st"
-        }
-        expectThat(
-            filter.matches(customer)
-        ).isTrue()
-    }
-
-    @Test
-    fun `test EndsWith  operation with false outcome`() {
-        val customer = Customer()
-        val filter = where<Customer> {
-            Customer::name EndsWith "dt"
-        }
-        expectThat(
-            filter.matches(customer)
-        ).isFalse()
-    }
-
-    @Test
     fun `test IsNull operation happy flow`() {
         val customer = Customer()
         val filter = where<Customer> {

@@ -5,7 +5,7 @@ import studio.crud.crudframework.modelfilter.FilterField
 import studio.crud.crudframework.modelfilter.dsl.annotation.FilterFieldDsl
 import studio.crud.crudframework.modelfilter.enums.FilterFieldDataType
 import studio.crud.crudframework.modelfilter.enums.FilterFieldOperation
-import java.util.*
+import java.util.Date
 import kotlin.reflect.KProperty
 import kotlin.reflect.KProperty1
 
@@ -70,14 +70,6 @@ class FilterFieldsBuilder<RootType : PersistentEntity>(private val filterFields:
 
     infix fun KProperty1<RootType, String?>.Contains(target: String) {
         filterFields += FilterField(effectiveName, FilterFieldOperation.Contains, FilterFieldDataType.String, target)
-    }
-
-    infix fun KProperty1<RootType, String?>.StartsWith(target: String) {
-        filterFields += FilterField(effectiveName, FilterFieldOperation.StartsWith, FilterFieldDataType.String, target)
-    }
-
-    infix fun KProperty1<RootType, String?>.EndsWith(target: String) {
-        filterFields += FilterField(effectiveName, FilterFieldOperation.EndsWith, FilterFieldDataType.String, target)
     }
 
     infix fun KProperty1<RootType, Int?>.GreaterThan(target: Int) {
@@ -310,16 +302,6 @@ class FilterFieldsBuilder<RootType : PersistentEntity>(private val filterFields:
     @JvmName("enumNotIn")
     infix fun <EnumType : Enum<EnumType>> KProperty1<RootType, EnumType?>.NotIn(target: Collection<EnumType>) {
         filterFields += FilterField(effectiveName, FilterFieldOperation.NotIn, target.first()::class.java.canonicalName, *(target as Collection<*>).toTypedArray())
-    }
-
-    @JvmName("stringContainsIn")
-    infix fun KProperty1<RootType, String?>.ContainsIn(target: Collection<String>) {
-        filterFields += FilterField(effectiveName, FilterFieldOperation.ContainsIn, FilterFieldDataType.String, *(target as Collection<*>).toTypedArray())
-    }
-
-    @JvmName("stringNotContainsIn")
-    infix fun KProperty1<RootType, String?>.NotContainsIn(target: Collection<String>) {
-        filterFields += FilterField(effectiveName, FilterFieldOperation.NotContainsIn, FilterFieldDataType.String, *(target as Collection<*>).toTypedArray())
     }
 
     infix fun KProperty1<RootType, Int?>.Between(target: Int): BetweenBuilder<Int> {

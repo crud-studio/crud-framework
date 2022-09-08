@@ -12,7 +12,11 @@ import studio.crud.crudframework.modelfilter.OrderDTO;
 import studio.crud.crudframework.modelfilter.enums.FilterFieldOperation;
 
 import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.regex.Pattern;
 
 public abstract class AbstractMongoBaseDao {
@@ -143,18 +147,6 @@ public abstract class AbstractMongoBaseDao {
 						criteria.and(filterField.getFieldName()).regex(Pattern.compile(filterField.getValue1().toString(), Pattern.LITERAL & Pattern.CASE_INSENSITIVE));
 					}
 					break;
-				case StartsWith:
-					if(filterField.getValue1() != null && !filterField.getValue1().toString().trim().isEmpty()) {
-						Pattern pattern = Pattern.compile(filterField.getValue1().toString(), Pattern.LITERAL & Pattern.CASE_INSENSITIVE);
-						criteria.and(filterField.getFieldName()).regex("^" + pattern.toString());
-					}
-					break;
-				case EndsWith:
-					if(filterField.getValue1() != null && !filterField.getValue1().toString().trim().isEmpty()) {
-						Pattern pattern = Pattern.compile(filterField.getValue1().toString(), Pattern.LITERAL & Pattern.CASE_INSENSITIVE);
-						criteria.and(filterField.getFieldName()).regex(pattern.toString() + "$");
-					}
-					break;
 				case IsNull:
 					criteria.orOperator(
 							Criteria.where(filterField.getFieldName()).exists(false),
@@ -188,36 +180,6 @@ public abstract class AbstractMongoBaseDao {
 					if(filterField.getChildren() != null && !filterField.getChildren().isEmpty()) {
 						FilterField child = filterField.getChildren().get(0);
 						criteria.not().andOperator(buildCriterion(criteria, child));
-					}
-					break;
-				case ContainsIn:
-					if(filterField.getValues() != null && filterField.getValues().length > 0) {
-						List<Criteria> criterias = new ArrayList<>();
-						for(Object value : filterField.getValues()) {
-							if(value != null && !value.toString().trim().isEmpty()) {
-								criterias.add(new Criteria()
-										.andOperator(
-												Criteria.where(filterField.getFieldName()).regex(Pattern.compile(value.toString(), Pattern.LITERAL & Pattern.CASE_INSENSITIVE))
-										));
-							}
-						}
-
-						criteria.andOperator(criterias.toArray(new Criteria[]{}));
-					}
-					break;
-				case NotContainsIn:
-					if(filterField.getValues() != null && filterField.getValues().length > 0) {
-						List<Criteria> criterias = new ArrayList<>();
-						for(Object value : filterField.getValues()) {
-							if(value != null && !value.toString().trim().isEmpty()) {
-								criterias.add(new Criteria()
-										.andOperator(
-												Criteria.where(filterField.getFieldName()).regex(Pattern.compile(value.toString(), Pattern.LITERAL & Pattern.CASE_INSENSITIVE))
-										));
-							}
-						}
-
-						criteria.not().andOperator(criterias.toArray(new Criteria[]{}));
 					}
 					break;
 				case Noop:

@@ -106,22 +106,6 @@ fun FilterField.matches(target: Any): Boolean {
         FilterFieldOperation.Not -> {
             return children.none { it.matches(target) }
         }
-        FilterFieldOperation.ContainsIn -> {
-            throw UnsupportedOperationException("Cannot use ContainsIn in FilterField.matches")
-        }
-        FilterFieldOperation.NotContainsIn -> {
-            throw UnsupportedOperationException("Cannot use NotContainsIn in FilterField.matches")
-        }
-        FilterFieldOperation.StartsWith -> {
-            actualValue as String
-            val value = this.value1 as String
-            return actualValue.startsWith(value)
-        }
-        FilterFieldOperation.EndsWith -> {
-            actualValue as String
-            val value = this.value1 as String
-            return actualValue.endsWith(value)
-        }
         FilterFieldOperation.Noop -> return false
         null -> return false
     }
