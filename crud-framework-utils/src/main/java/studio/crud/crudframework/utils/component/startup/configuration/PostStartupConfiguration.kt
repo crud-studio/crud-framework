@@ -5,8 +5,7 @@ import org.springframework.context.annotation.Configuration
 import studio.crud.crudframework.utils.component.startup.PostStartupHandler
 
 @Configuration
-class PostStartupConfiguration {
-
+internal class PostStartupConfiguration {
     @Bean
     fun postStartupHandler(): PostStartupHandler {
         return PostStartupHandler()

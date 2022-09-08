@@ -5,4 +5,4 @@ import studio.crud.crudframework.utils.component.startup.configuration.PostStart
 
 @Target(AnnotationTarget.CLASS)
 @Import(PostStartupConfiguration::class)
-annotation class EnablePostStartup
+internal annotation class EnablePostStartup

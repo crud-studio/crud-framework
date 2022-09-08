@@ -19,9 +19,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-/**
- * Created by Shani on 27/12/2018.
- */
 public class PostStartupHandler implements ApplicationListener<ContextRefreshedEvent> {
 
 	private Logger log = LoggerFactory.getLogger(getClass());
