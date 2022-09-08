@@ -9,6 +9,7 @@ enum class ShowByMode {
      * Will throw a [studio.crud.crudframework.crud.exception.CrudReadException]
      */
     THROW_EXCEPTION,
+
     /**
      * Will return the first record
      */

@@ -23,7 +23,7 @@ class MongoCrudDaoImpl : CrudDao, AbstractMongoBaseDao() {
         mongoTemplate.updateFirst(
             buildQuery(
                 where<BaseCrudEntity<String>> {
-                     BaseCrudEntity<String>::id Equal id as String
+                    BaseCrudEntity<String>::id Equal id as String
                 }
             ),
             Update.update(deleteColumn, true),

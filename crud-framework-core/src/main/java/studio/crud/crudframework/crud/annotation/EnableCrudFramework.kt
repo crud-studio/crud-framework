@@ -3,7 +3,6 @@ package studio.crud.crudframework.crud.annotation
 import org.springframework.context.annotation.Import
 import studio.crud.crudframework.crud.configuration.CrudCacheConfiguration
 import studio.crud.crudframework.crud.configuration.CrudFrameworkConfiguration
-import studio.crud.crudframework.utils.component.componentmap.annotation.EnableComponentMap
 import studio.crud.crudframework.utils.component.startup.annotation.EnablePostStartup
 
 /**
@@ -13,6 +12,5 @@ import studio.crud.crudframework.utils.component.startup.annotation.EnablePostSt
  */
 @Target(AnnotationTarget.CLASS)
 @Import(CrudFrameworkConfiguration::class, CrudCacheConfiguration::class)
-@EnableComponentMap
 @EnablePostStartup
 annotation class EnableCrudFramework

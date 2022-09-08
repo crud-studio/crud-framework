@@ -42,6 +42,7 @@ class EntityMetadataDTOHookTest {
     @Test
     fun `two nested withHooks annotation should register with one on parent`() {
         @WithGenericPersistentHooks2 abstract class AbstractAnnotatedTestEntity : AbstractTestEntity()
+
         @WithGenericPersistentHooks class TestEntity : AbstractAnnotatedTestEntity()
 
         val metadata = EntityMetadataDTO(TestEntity::class.java)

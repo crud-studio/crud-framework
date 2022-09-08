@@ -17,6 +17,7 @@
     <properties>
         <jar-name>crud-framework-core</jar-name>
         <shapeshift.version>0.6.0</shapeshift.version>
+        <spring.componentmap.version>0.1.0</spring.componentmap.version>
     </properties>
 
     <dependencies>
@@ -65,6 +66,11 @@
             <groupId>dev.krud</groupId>
             <artifactId>spring-boot-starter-shapeshift</artifactId>
             <version>${shapeshift.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>dev.krud</groupId>
+            <artifactId>spring-componentmap</artifactId>
+            <version>${spring.componentmap.version}</version>
         </dependency>
     </dependencies>
 </project>

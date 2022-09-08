@@ -1,4 +1,5 @@
 @file:JvmName("DynamicModelFilterUtils")
+
 package studio.crud.crudframework.util
 
 import studio.crud.crudframework.modelfilter.DynamicModelFilter
