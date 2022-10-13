@@ -1,6 +1,6 @@
 package studio.crud.crudframework.jpa.model
 
-import dev.krud.shapeshift.annotation.MappedField
+import dev.krud.shapeshift.resolver.annotation.MappedField
 import studio.crud.crudframework.jpa.annotation.JpaCrudEntity
 import studio.crud.crudframework.jpa.ro.AbstractJpaCrudRO
 import studio.crud.crudframework.model.BaseCrudEntity

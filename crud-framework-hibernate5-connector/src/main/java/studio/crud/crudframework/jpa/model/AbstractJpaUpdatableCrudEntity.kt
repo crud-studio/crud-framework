@@ -1,6 +1,6 @@
 package studio.crud.crudframework.jpa.model
 
-import dev.krud.shapeshift.annotation.MappedField
+import dev.krud.shapeshift.resolver.annotation.MappedField
 import org.hibernate.annotations.CreationTimestamp
 import studio.crud.crudframework.jpa.ro.AbstractJpaUpdatableCrudRO
 import java.util.Date
