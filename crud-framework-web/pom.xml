@@ -43,5 +43,16 @@
             <artifactId>crud-framework-core</artifactId>
             <version>${revision}</version>
         </dependency>
+        <dependency>
+            <groupId>studio.crud.crudframework</groupId>
+            <artifactId>crud-framework-test</artifactId>
+            <version>${revision}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.reflections</groupId>
+            <artifactId>reflections</artifactId>
+            <version>0.10.2</version>
+        </dependency>
     </dependencies>
 </project>

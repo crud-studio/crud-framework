@@ -5,6 +5,19 @@ package studio.crud.crudframework.util
 import studio.crud.crudframework.modelfilter.DynamicModelFilter
 import studio.crud.crudframework.modelfilter.FilterField
 import studio.crud.crudframework.modelfilter.enums.FilterFieldOperation
+import java.lang.reflect.Field
+
+private fun Class<*>.getDeclaredFieldRecursive(name: String): Field {
+    var clazz: Class<*>? = this
+    while (clazz != null) {
+        try {
+            return clazz.getDeclaredField(name)
+        } catch (e: NoSuchFieldException) {
+            clazz = clazz.superclass
+        }
+    }
+    throw NoSuchFieldException(name)
+}
 
 private fun getPropertyValue(target: Any, string: String): Any? {
     var item: Any? = target
@@ -14,7 +27,7 @@ private fun getPropertyValue(target: Any, string: String): Any? {
             break
         }
         val clazz: Class<*> = item.javaClass
-        val field = clazz.getDeclaredField(part)
+        val field = clazz.getDeclaredFieldRecursive(part)
         field.isAccessible = true
         item = field.get(item)
     }
