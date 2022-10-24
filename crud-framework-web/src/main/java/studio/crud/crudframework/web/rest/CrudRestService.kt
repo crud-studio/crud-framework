@@ -8,4 +8,6 @@ interface CrudRestService {
     fun show(type: String, id: Serializable): Any?
     fun index(type: String, filter: DynamicModelFilter): PagingDTO<out Any>
     fun delete(type: String, id: Serializable): Any?
+    fun create(type: String, body: String): Any?
+    fun update(type: String, id: Serializable, body: String): Any?
 }

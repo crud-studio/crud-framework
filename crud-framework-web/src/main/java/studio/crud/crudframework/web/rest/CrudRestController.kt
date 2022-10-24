@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import studio.crud.crudframework.modelfilter.DynamicModelFilter
 import studio.crud.crudframework.web.controller.BaseController
@@ -30,6 +31,22 @@ abstract class CrudRestController : BaseController() {
     fun index(@PathVariable type: String, @RequestBody filter: DynamicModelFilter): ResponseEntity<*> {
         val result = wrapResult {
             crudRestService.index(type, filter)
+        }
+        return this.wrapResult(result)
+    }
+
+    @PostMapping("/{type}/create")
+    fun create(@PathVariable type: String, @RequestBody body: String): ResponseEntity<*> {
+        val result = wrapResult {
+            crudRestService.create(type, body)
+        }
+        return this.wrapResult(result)
+    }
+
+    @PutMapping("/{type}/{id}")
+    fun update(@PathVariable type: String, @PathVariable id: Serializable, @RequestBody body: String): ResponseEntity<*> {
+        val result = wrapResult {
+            crudRestService.update(type, id, body)
         }
         return this.wrapResult(result)
     }
