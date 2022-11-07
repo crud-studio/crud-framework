@@ -19,42 +19,66 @@ abstract class CrudRestController : BaseController() {
 
     open fun wrapResult(response: ResultRO<*>?): ResponseEntity<*> = ResponseEntity.ok(response)
 
-    @GetMapping("/{type}/{id}")
-    fun show(@PathVariable type: String, @PathVariable id: Serializable): ResponseEntity<*> {
+    @GetMapping("/{resourceName}/{id}")
+    fun show(@PathVariable resourceName: String, @PathVariable id: Serializable): ResponseEntity<*> {
         val result = wrapResult {
-            crudRestService.show(type, id)
+            crudRestService.show(resourceName, id)
         }
         return this.wrapResult(result)
     }
 
-    @PostMapping("/{type}/index")
-    fun index(@PathVariable type: String, @RequestBody filter: DynamicModelFilter): ResponseEntity<*> {
+    @PostMapping("/{resourceName}/index")
+    fun index(@PathVariable resourceName: String, @RequestBody filter: DynamicModelFilter): ResponseEntity<*> {
         val result = wrapResult {
-            crudRestService.index(type, filter)
+            crudRestService.index(resourceName, filter)
         }
         return this.wrapResult(result)
     }
 
-    @PostMapping("/{type}/create")
-    fun create(@PathVariable type: String, @RequestBody body: String): ResponseEntity<*> {
+    @PostMapping("/{resourceName}/index/count")
+    fun indexCount(@PathVariable resourceName: String, @RequestBody filter: DynamicModelFilter): ResponseEntity<*> {
         val result = wrapResult {
-            crudRestService.create(type, body)
+            crudRestService.indexCount(resourceName, filter)
         }
         return this.wrapResult(result)
     }
 
-    @PutMapping("/{type}/{id}")
-    fun update(@PathVariable type: String, @PathVariable id: Serializable, @RequestBody body: String): ResponseEntity<*> {
+    @PostMapping("/{resourceName}")
+    fun create(@PathVariable resourceName: String, @RequestBody body: String): ResponseEntity<*> {
         val result = wrapResult {
-            crudRestService.update(type, id, body)
+            crudRestService.create(resourceName, body)
         }
         return this.wrapResult(result)
     }
 
-    @DeleteMapping("/{type}/{id}")
-    fun delete(@PathVariable type: String, @PathVariable id: Serializable): ResponseEntity<*> {
+    @PostMapping("/{resourceName}/createMany")
+    fun createMany(@PathVariable resourceName: String, @RequestBody body: String): ResponseEntity<*> {
         val result = wrapResult {
-            crudRestService.delete(type, id)
+            crudRestService.createMany(resourceName, body)
+        }
+        return this.wrapResult(result)
+    }
+
+    @PutMapping("/{resourceName}/updateMany")
+    fun updateMany(@PathVariable resourceName: String, @RequestBody body: String): ResponseEntity<*> {
+        val result = wrapResult {
+            crudRestService.updateMany(resourceName, body)
+        }
+        return this.wrapResult(result)
+    }
+
+    @PutMapping("/{resourceName}/{id}")
+    fun update(@PathVariable resourceName: String, @PathVariable id: Serializable, @RequestBody body: String): ResponseEntity<*> {
+        val result = wrapResult {
+            crudRestService.update(resourceName, id, body)
+        }
+        return this.wrapResult(result)
+    }
+
+    @DeleteMapping("/{resourceName}/{id}")
+    fun delete(@PathVariable resourceName: String, @PathVariable id: Serializable): ResponseEntity<*> {
+        val result = wrapResult {
+            crudRestService.delete(resourceName, id)
         }
         return this.wrapResult(result)
     }

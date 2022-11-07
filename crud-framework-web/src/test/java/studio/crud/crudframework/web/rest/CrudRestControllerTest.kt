@@ -11,6 +11,8 @@ import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Import
 import org.springframework.test.annotation.DirtiesContext
 import org.springframework.test.context.junit.jupiter.SpringExtension
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RestController
 import strikt.api.expectThat
 import strikt.assertions.hasSize
 import strikt.assertions.isA
@@ -18,15 +20,17 @@ import strikt.assertions.isEmpty
 import strikt.assertions.isEqualTo
 import strikt.assertions.isFalse
 import strikt.assertions.isNull
-import strikt.assertions.isTrue
 import studio.crud.crudframework.crud.annotation.Deleteable
 import studio.crud.crudframework.modelfilter.dsl.where
 import studio.crud.crudframework.test.AbstractTestEntity
 import studio.crud.crudframework.test.AbstractTestRO
 import studio.crud.crudframework.test.EnableTestCrud
 import studio.crud.crudframework.test.TestCrudDaoImpl
+import studio.crud.crudframework.web.ro.ManyCrudResult
 import studio.crud.crudframework.web.ro.ResultRO
 
+@RestController
+@RequestMapping("/crud")
 class TestCrudRestController : CrudRestController()
 
 @ExtendWith(SpringExtension::class)
@@ -83,7 +87,7 @@ class CrudRestControllerTest {
         val response = testCrudRestController.show("nonexistent", 1L)
         val result = response.body as ResultRO<*>
         expectThat(result.isSuccess).isFalse()
-        expectThat(result.error).isEqualTo("Received exception IllegalArgumentException with message No crud controller definition found for type nonexistent")
+        expectThat(result.error).isEqualTo("Received exception IllegalArgumentException with message No crud controller definition found for resource nonexistent")
     }
 
     @Test
@@ -91,7 +95,7 @@ class CrudRestControllerTest {
         val response = testCrudRestController.show("test_all_disabled", 1L)
         val result = response.body as ResultRO<*>
         expectThat(result.isSuccess).isFalse()
-        expectThat(result.error).isEqualTo("Show action is not allowed for type test_all_disabled")
+        expectThat(result.error).isEqualTo("Show action is not allowed for resource test_all_disabled")
     }
 
     @Test
@@ -118,7 +122,7 @@ class CrudRestControllerTest {
         val response = testCrudRestController.delete("nonexistent", 1L)
         val result = response.body as ResultRO<TestEntitySplit>
         expectThat(result.isSuccess).isFalse()
-        expectThat(result.error).isEqualTo("Received exception IllegalArgumentException with message No crud controller definition found for type nonexistent")
+        expectThat(result.error).isEqualTo("Received exception IllegalArgumentException with message No crud controller definition found for resource nonexistent")
     }
 
     @Test
@@ -126,7 +130,7 @@ class CrudRestControllerTest {
         val response = testCrudRestController.delete("test_all_disabled", 1L)
         val result = response.body as ResultRO<TestEntitySplit>
         expectThat(result.isSuccess).isFalse()
-        expectThat(result.error).isEqualTo("Delete action is not allowed for type test_all_disabled")
+        expectThat(result.error).isEqualTo("Delete action is not allowed for resource test_all_disabled")
     }
 
     @Test
@@ -172,7 +176,7 @@ class CrudRestControllerTest {
         val response = testCrudRestController.index("nonexistent", where<TestEntitySplit> { TestEntitySplit::name Equal "test" })
         val result = response.body as ResultRO<*>
         expectThat(result.isSuccess).isFalse()
-        expectThat(result.error).isEqualTo("Received exception IllegalArgumentException with message No crud controller definition found for type nonexistent")
+        expectThat(result.error).isEqualTo("Received exception IllegalArgumentException with message No crud controller definition found for resource nonexistent")
     }
 
     @Test
@@ -180,7 +184,36 @@ class CrudRestControllerTest {
         val response = testCrudRestController.index("test_all_disabled", where<TestEntitySplit> { TestEntitySplit::name Equal "test" })
         val result = response.body as ResultRO<*>
         expectThat(result.isSuccess).isFalse()
-        expectThat(result.error).isEqualTo("Index action is not allowed for type test_all_disabled")
+        expectThat(result.error).isEqualTo("Index action is not allowed for resource test_all_disabled")
+    }
+
+    @Test
+    @DirtiesContext
+    internal fun `indexCount happy flow`() {
+        val subject = TestEntityMain(1L, "test")
+        val secondSubject = TestEntityMain(2L, "test2")
+        testCrudDao.entities += listOf(subject, secondSubject)
+        val response = testCrudRestController.indexCount("test_main", where<TestEntityMain> { })
+        val result = response.body as ResultRO<Long>
+        expectThat(result.error).isNull()
+        expectThat(result.result)
+                .isEqualTo(2)
+    }
+
+    @Test
+    fun `indexCount should throw if type is not registered`() {
+        val response = testCrudRestController.indexCount("nonexistent", where<TestEntitySplit> { TestEntitySplit::name Equal "test" })
+        val result = response.body as ResultRO<*>
+        expectThat(result.isSuccess).isFalse()
+        expectThat(result.error).isEqualTo("Received exception IllegalArgumentException with message No crud controller definition found for resource nonexistent")
+    }
+
+    @Test
+    fun `indexCount should throw if entity index is disabled`() {
+        val response = testCrudRestController.indexCount("test_all_disabled", where<TestEntitySplit> { TestEntitySplit::name Equal "test" })
+        val result = response.body as ResultRO<*>
+        expectThat(result.isSuccess).isFalse()
+        expectThat(result.error).isEqualTo("Index action is not allowed for resource test_all_disabled")
     }
 
     @Test
@@ -220,7 +253,7 @@ class CrudRestControllerTest {
         val response = testCrudRestController.create("nonexistent", "{}")
         val result = response.body as ResultRO<*>
         expectThat(result.isSuccess).isFalse()
-        expectThat(result.error).isEqualTo("Received exception IllegalArgumentException with message No crud controller definition found for type nonexistent")
+        expectThat(result.error).isEqualTo("Received exception IllegalArgumentException with message No crud controller definition found for resource nonexistent")
     }
 
     @Test
@@ -228,7 +261,7 @@ class CrudRestControllerTest {
         val response = testCrudRestController.create("test_all_disabled", "{}")
         val result = response.body as ResultRO<*>
         expectThat(result.isSuccess).isFalse()
-        expectThat(result.error).isEqualTo("Create action is not allowed for type test_all_disabled")
+        expectThat(result.error).isEqualTo("Create action is not allowed for resource test_all_disabled")
     }
 
     @Test
@@ -268,7 +301,7 @@ class CrudRestControllerTest {
         val response = testCrudRestController.update("nonexistent", 1L, "{}")
         val result = response.body as ResultRO<*>
         expectThat(result.isSuccess).isFalse()
-        expectThat(result.error).isEqualTo("Received exception IllegalArgumentException with message No crud controller definition found for type nonexistent")
+        expectThat(result.error).isEqualTo("Received exception IllegalArgumentException with message No crud controller definition found for resource nonexistent")
     }
 
     @Test
@@ -276,12 +309,35 @@ class CrudRestControllerTest {
         val response = testCrudRestController.update("test_all_disabled", 1L, "{}")
         val result = response.body as ResultRO<*>
         expectThat(result.isSuccess).isFalse()
-        expectThat(result.error).isEqualTo("Update action is not allowed for type test_all_disabled")
+        expectThat(result.error).isEqualTo("Update action is not allowed for resource test_all_disabled")
+    }
+
+    @Test
+    internal fun `updateMany happy flow with split ROs`() {
+        val subjects = listOf(
+            TestEntitySplit(1L, "test"),
+            TestEntitySplit(2L, "test2")
+        )
+        testCrudDao.entities += subjects
+        val ros = listOf(
+            TestEntitySplitUpdateRO("newTest").apply { id = 1L },
+            TestEntitySplitUpdateRO("newTest2").apply { id = 2L }
+        )
+        val gson = Gson()
+        val response = testCrudRestController.updateMany("test_split", gson.toJson(ros))
+        val result = response.body as ResultRO<ManyCrudResult<TestEntitySplitShowRO, TestEntitySplitUpdateRO>>
+        expectThat(result.error).isNull()
+        expectThat(result.result.successful)
+                .hasSize(2)
+        expectThat(result.result.successful.toList()[0].name)
+                .isEqualTo("newTest")
+        expectThat(result.result.successful.toList()[1].name)
+                .isEqualTo("newTest2")
     }
 }
 
 @CrudController(
-    type = "test_split",
+    resourceName = "test_split",
     roMapping = RoMapping(
         showRoClass = TestEntitySplitShowRO::class,
         indexRoClass = TestEntitySplitIndexRO::class,
@@ -305,7 +361,7 @@ class TestEntitySplitShowRO(@MappedField var name: String? = null) : AbstractTes
 class TestEntitySplitIndexRO(@MappedField var name: String? = null) : AbstractTestRO()
 
 @CrudController(
-    type = "test_main",
+    resourceName = "test_main",
     roMapping = RoMapping(
         mainRoClass = TestEntityMainRO::class
     )
@@ -318,7 +374,7 @@ class TestEntityMain(id: Long = 0L, @MappedField var name: String = "test") : Ab
 class TestEntityMainRO(@MappedField var name: String? = null) : AbstractTestRO()
 
 @CrudController(
-    type = "test_all_disabled",
+    resourceName = "test_all_disabled",
     CrudActions(
         show = false,
         index = false,
