@@ -48,7 +48,7 @@ class DynamicModelFilterUtilsTest {
             }
         }
         expectThat(
-            filter.matches(customer)
+            filter.filtersMatch(customer)
         ).isTrue()
     }
 
@@ -61,7 +61,7 @@ class DynamicModelFilterUtilsTest {
             }
         }
         expectThat(
-            filter.matches(customer)
+            filter.filtersMatch(customer)
         ).isFalse()
     }
 
@@ -74,7 +74,7 @@ class DynamicModelFilterUtilsTest {
             }
         }
         expectThat(
-            filter.matches(customer)
+            filter.filtersMatch(customer)
         ).isTrue()
     }
 
@@ -87,7 +87,7 @@ class DynamicModelFilterUtilsTest {
             }
         }
         expectThat(
-            filter.matches(customer)
+            filter.filtersMatch(customer)
         ).isFalse()
     }
 
@@ -98,7 +98,7 @@ class DynamicModelFilterUtilsTest {
             Customer::age GreaterThan 50
         }
         expectThat(
-            filter.matches(customer)
+            filter.filtersMatch(customer)
         ).isTrue()
     }
 
@@ -109,7 +109,7 @@ class DynamicModelFilterUtilsTest {
             Customer::age GreaterThan 56
         }
         expectThat(
-            filter.matches(customer)
+            filter.filtersMatch(customer)
         ).isFalse()
     }
 
@@ -120,7 +120,7 @@ class DynamicModelFilterUtilsTest {
             Customer::age GreaterOrEqual 55
         }
         expectThat(
-            filter.matches(customer)
+            filter.filtersMatch(customer)
         ).isTrue()
     }
 
@@ -131,7 +131,7 @@ class DynamicModelFilterUtilsTest {
             Customer::age GreaterOrEqual 56
         }
         expectThat(
-            filter.matches(customer)
+            filter.filtersMatch(customer)
         ).isFalse()
     }
 
@@ -142,7 +142,7 @@ class DynamicModelFilterUtilsTest {
             Customer::age LowerThan 60
         }
         expectThat(
-            filter.matches(customer)
+            filter.filtersMatch(customer)
         ).isTrue()
     }
 
@@ -153,7 +153,7 @@ class DynamicModelFilterUtilsTest {
             Customer::age LowerThan 54
         }
         expectThat(
-            filter.matches(customer)
+            filter.filtersMatch(customer)
         ).isFalse()
     }
 
@@ -164,7 +164,7 @@ class DynamicModelFilterUtilsTest {
             Customer::age LowerOrEqual 55
         }
         expectThat(
-            filter.matches(customer)
+            filter.filtersMatch(customer)
         ).isTrue()
     }
 
@@ -175,7 +175,7 @@ class DynamicModelFilterUtilsTest {
             Customer::age LowerOrEqual 54
         }
         expectThat(
-            filter.matches(customer)
+            filter.filtersMatch(customer)
         ).isFalse()
     }
 
@@ -186,7 +186,7 @@ class DynamicModelFilterUtilsTest {
             Customer::creationTime Between Date(0) And Date(2000)
         }
         expectThat(
-            filter.matches(customer)
+            filter.filtersMatch(customer)
         ).isTrue()
     }
 
@@ -197,7 +197,7 @@ class DynamicModelFilterUtilsTest {
             Customer::creationTime Between Date(1500) And Date(2000)
         }
         expectThat(
-            filter.matches(customer)
+            filter.filtersMatch(customer)
         ).isFalse()
     }
 
@@ -208,7 +208,7 @@ class DynamicModelFilterUtilsTest {
             Customer::name Contains "Te"
         }
         expectThat(
-            filter.matches(customer)
+            filter.filtersMatch(customer)
         ).isTrue()
     }
 
@@ -219,7 +219,7 @@ class DynamicModelFilterUtilsTest {
             Customer::name Contains "John"
         }
         expectThat(
-            filter.matches(customer)
+            filter.filtersMatch(customer)
         ).isFalse()
     }
 
@@ -230,7 +230,7 @@ class DynamicModelFilterUtilsTest {
             Customer::zodiacSign.isNull()
         }
         expectThat(
-            filter.matches(customer)
+            filter.filtersMatch(customer)
         ).isTrue()
     }
 
@@ -241,7 +241,7 @@ class DynamicModelFilterUtilsTest {
             Customer::name.isNull()
         }
         expectThat(
-            filter.matches(customer)
+            filter.filtersMatch(customer)
         ).isFalse()
     }
 
@@ -252,7 +252,7 @@ class DynamicModelFilterUtilsTest {
             Customer::name.isNotNull()
         }
         expectThat(
-            filter.matches(customer)
+            filter.filtersMatch(customer)
         ).isTrue()
     }
 
@@ -263,7 +263,7 @@ class DynamicModelFilterUtilsTest {
             Customer::zodiacSign.isNotNull()
         }
         expectThat(
-            filter.matches(customer)
+            filter.filtersMatch(customer)
         ).isFalse()
     }
 
@@ -278,7 +278,7 @@ class DynamicModelFilterUtilsTest {
             }
         }
         expectThat(
-            filter.matches(customer)
+            filter.filtersMatch(customer)
         ).isTrue()
     }
 
@@ -293,7 +293,7 @@ class DynamicModelFilterUtilsTest {
             }
         }
         expectThat(
-            filter.matches(customer)
+            filter.filtersMatch(customer)
         ).isFalse()
     }
 }

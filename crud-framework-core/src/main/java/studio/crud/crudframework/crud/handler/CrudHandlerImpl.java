@@ -271,6 +271,6 @@ public class CrudHandlerImpl implements CrudHandler {
 	public <ID extends Serializable, Entity extends BaseCrudEntity<ID>> boolean filterMatches(DynamicModelFilter filter, Entity entity) {
 		Objects.requireNonNull(entity, "'entity' cannot be null");
 		validateFilter(filter, entity.getClass());
-		return DynamicModelFilterUtils.matches(filter, entity);
+		return DynamicModelFilterUtils.filtersMatch(filter, entity);
 	}
 }
