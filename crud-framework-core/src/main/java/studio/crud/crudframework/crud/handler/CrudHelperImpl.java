@@ -1,7 +1,6 @@
 package studio.crud.crudframework.crud.handler;
 
 import dev.krud.shapeshift.ShapeShift;
-import dev.krud.spring.componentmap.ComponentMap;
 import org.springframework.aop.framework.Advised;
 import org.springframework.aop.support.AopUtils;
 import org.springframework.beans.BeansException;
@@ -12,8 +11,6 @@ import studio.crud.crudframework.crud.cache.CacheManagerAdapter;
 import studio.crud.crudframework.crud.cache.CacheUtils;
 import studio.crud.crudframework.crud.cache.CrudCache;
 import studio.crud.crudframework.crud.cache.CrudCacheOptions;
-import studio.crud.crudframework.crud.dataaccess.DataAccessManager;
-import studio.crud.crudframework.crud.dataaccess.model.DataAccessorDTO;
 import studio.crud.crudframework.crud.exception.CrudException;
 import studio.crud.crudframework.crud.exception.CrudInvalidStateException;
 import studio.crud.crudframework.crud.exception.CrudTransformationException;
@@ -52,9 +49,6 @@ import java.util.stream.Collectors;
 
 public class CrudHelperImpl implements CrudHelper {
     private Map<String, CrudCache> cacheMap = new HashMap<>();
-
-    @ComponentMap
-    private Map<String, DataAccessManager> dataAccessManagers;
 
     private static final Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
 
@@ -127,7 +121,7 @@ public class CrudHelperImpl implements CrudHelper {
     }
 
     @Override
-    public <ID extends Serializable, Entity extends BaseCrudEntity<ID>> void decorateFilter(DynamicModelFilter filter, Class<Entity> entityClazz, DataAccessorDTO accessorDTO, boolean forUpdate) {
+    public <ID extends Serializable, Entity extends BaseCrudEntity<ID>> void decorateFilter(DynamicModelFilter filter, Class<Entity> entityClazz, boolean forUpdate) {
         EntityMetadataDTO metadataDTO = getEntityMetadata(entityClazz);
         if (metadataDTO.getDeleteableType() == EntityMetadataDTO.DeleteableType.Soft) {
             Field deleteField = metadataDTO.getDeleteField();
@@ -136,16 +130,7 @@ public class CrudHelperImpl implements CrudHelper {
             }
         }
 
-        if (accessorDTO != null) {
-            DataAccessManager dataAccessManager = getAccessorManager(accessorDTO.getAccessorClazz(), entityClazz);
-            if (dataAccessManager != null) {
-                if (forUpdate) {
-                    dataAccessManager.decorateUpdateOperation(filter, accessorDTO.getAccessorId(), accessorDTO.getAccessorClazz());
-                } else {
-                    dataAccessManager.decorateViewOperation(filter, accessorDTO.getAccessorId(), accessorDTO.getAccessorClazz());
-                }
-            }
-        }
+        // todo: policy decoration
 
         validateAndFillFilterFieldMetadata(filter.getFilterFields(), entityClazz);
     }
@@ -220,9 +205,9 @@ public class CrudHelperImpl implements CrudHelper {
 
     /* transactional */
     @Override
-    public <ID extends Serializable, Entity extends BaseCrudEntity<ID>> List<Entity> getEntities(DynamicModelFilter filter, Class<Entity> entityClazz, DataAccessorDTO accessorDTO, Boolean persistCopy,
+    public <ID extends Serializable, Entity extends BaseCrudEntity<ID>> List<Entity> getEntities(DynamicModelFilter filter, Class<Entity> entityClazz, Boolean persistCopy,
                                                                                                  boolean forUpdate) {
-        decorateFilter(filter, entityClazz, accessorDTO, forUpdate);
+        decorateFilter(filter, entityClazz, forUpdate);
 
         if (persistCopy == null) {
             persistCopy = getEntityMetadata(entityClazz).getAlwaysPersistCopy();
@@ -238,20 +223,20 @@ public class CrudHelperImpl implements CrudHelper {
 
     /* transactional */
     @Override
-    public <ID extends Serializable, Entity extends BaseCrudEntity<ID>> long getEntitiesCount(DynamicModelFilter filter, Class<Entity> entityClazz, DataAccessorDTO accessorDTO, boolean forUpdate) {
-        decorateFilter(filter, entityClazz, accessorDTO, forUpdate);
+    public <ID extends Serializable, Entity extends BaseCrudEntity<ID>> long getEntitiesCount(DynamicModelFilter filter, Class<Entity> entityClazz, boolean forUpdate) {
+        decorateFilter(filter, entityClazz, forUpdate);
         return getCrudDaoForEntity(entityClazz).indexCount(filter, entityClazz);
     }
 
     /* transactional */
     @Override
-    public <ID extends Serializable, Entity extends BaseCrudEntity<ID>> Entity getEntityById(ID entityId, Class<Entity> entityClazz, Boolean persistCopy, DataAccessorDTO accessorDTO, boolean forUpdate) {
+    public <ID extends Serializable, Entity extends BaseCrudEntity<ID>> Entity getEntityById(ID entityId, Class<Entity> entityClazz, Boolean persistCopy, boolean forUpdate) {
         FilterFieldDataType entityIdDataType = FilterFieldDataType.get(entityId.getClass());
         Objects.requireNonNull(entityIdDataType, "Could not assert entityId type");
 
         DynamicModelFilter filter = new DynamicModelFilter()
                 .add(FilterFields.eq("id", entityIdDataType, entityId));
-        List<Entity> entities = getEntities(filter, entityClazz, accessorDTO, persistCopy, forUpdate);
+        List<Entity> entities = getEntities(filter, entityClazz, persistCopy, forUpdate);
         Entity entity = null;
         if (entities.size() > 0) {
             entity = entities.get(0);
@@ -262,21 +247,16 @@ public class CrudHelperImpl implements CrudHelper {
 
     /* transactional */
     @Override
-    public <ID extends Serializable, Entity extends BaseCrudEntity<ID>> long getEntityCountById(ID entityId, Class<Entity> entityClazz, DataAccessorDTO accessorDTO, boolean forUpdate) {
+    public <ID extends Serializable, Entity extends BaseCrudEntity<ID>> long getEntityCountById(ID entityId, Class<Entity> entityClazz, boolean forUpdate) {
         FilterFieldDataType entityIdDataType = FilterFieldDataType.get(entityId.getClass());
         Objects.requireNonNull(entityIdDataType, "Could not assert entityId type");
 
         DynamicModelFilter filter = new DynamicModelFilter()
                 .add(FilterFields.eq("id", entityIdDataType, entityId));
 
-        return getEntitiesCount(filter, entityClazz, accessorDTO, forUpdate);
+        return getEntitiesCount(filter, entityClazz, forUpdate);
     }
 
-
-    @Override
-    public <ID extends Serializable, Entity extends BaseCrudEntity<ID>> DataAccessManager getAccessorManager(Class<?> accessorClazz, Class<Entity> entityClazz) {
-        return dataAccessManagers.get(accessorClazz.getName() + "_" + entityClazz.getName());
-    }
 
     @Override
     public <ID extends Serializable, Entity extends BaseCrudEntity<ID>> void checkEntityImmutability(Class<Entity> clazz) {

@@ -2,7 +2,6 @@ package studio.crud.crudframework.crud.handler;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
-import studio.crud.crudframework.crud.dataaccess.model.DataAccessorDTO;
 import studio.crud.crudframework.crud.exception.CrudUpdateException;
 import studio.crud.crudframework.crud.hooks.HooksDTO;
 import studio.crud.crudframework.crud.hooks.interfaces.UpdateFromHooks;
@@ -35,10 +34,10 @@ public class CrudUpdateHandlerImpl implements CrudUpdateHandler {
 	@Override
 	@Transactional(readOnly = false)
 	public <ID extends Serializable, Entity extends BaseCrudEntity<ID>> List<Entity> updateManyTransactional(List<Entity> entities,
-			HooksDTO<CRUDPreUpdateHook<ID, Entity>, CRUDOnUpdateHook<ID, Entity>, CRUDPostUpdateHook<ID, Entity>> hooks, Boolean persistCopy, DataAccessorDTO accessorDTO) {
+			HooksDTO<CRUDPreUpdateHook<ID, Entity>, CRUDOnUpdateHook<ID, Entity>, CRUDPostUpdateHook<ID, Entity>> hooks, Boolean persistCopy) {
 		List<Entity> finalEntityList = new ArrayList<>();
 		for(Entity entity : entities) {
-			finalEntityList.add(crudUpdateHandlerProxy.updateInternal(entity, hooks, accessorDTO));
+			finalEntityList.add(crudUpdateHandlerProxy.updateInternal(entity, hooks));
 		}
 
 		return finalEntityList;
@@ -47,14 +46,13 @@ public class CrudUpdateHandlerImpl implements CrudUpdateHandler {
 	@Override
 	@Transactional(readOnly = false)
 	public <ID extends Serializable, Entity extends BaseCrudEntity<ID>> List<Entity> updateByFilterTransactional(DynamicModelFilter filter, Class<Entity> entityClazz,
-			HooksDTO<CRUDPreUpdateHook<ID, Entity>, CRUDOnUpdateHook<ID, Entity>, CRUDPostUpdateHook<ID, Entity>> hooks, Boolean persistCopy, DataAccessorDTO accessorDTO) {
-		List<Entity> entities = crudHelper.getEntities(filter, entityClazz, accessorDTO, persistCopy, true);
-		return crudUpdateHandlerProxy.updateManyTransactional(entities, hooks, persistCopy, accessorDTO);
+			HooksDTO<CRUDPreUpdateHook<ID, Entity>, CRUDOnUpdateHook<ID, Entity>, CRUDPostUpdateHook<ID, Entity>> hooks, Boolean persistCopy) {
+		List<Entity> entities = crudHelper.getEntities(filter, entityClazz, persistCopy, true);
+		return crudUpdateHandlerProxy.updateManyTransactional(entities, hooks, persistCopy);
 	}
 
 	@Override
-	public <ID extends Serializable, Entity extends BaseCrudEntity<ID>> Entity updateInternal(Entity entity, HooksDTO<CRUDPreUpdateHook<ID, Entity>, CRUDOnUpdateHook<ID, Entity>, CRUDPostUpdateHook<ID, Entity>> hooks,
-			DataAccessorDTO accessorDTO) {
+	public <ID extends Serializable, Entity extends BaseCrudEntity<ID>> Entity updateInternal(Entity entity, HooksDTO<CRUDPreUpdateHook<ID, Entity>, CRUDOnUpdateHook<ID, Entity>, CRUDPostUpdateHook<ID, Entity>> hooks) {
 		Objects.requireNonNull(entity, "Entity cannot be null");
 		crudHelper.checkEntityImmutability(entity.getClass());
 
@@ -72,7 +70,7 @@ public class CrudUpdateHandlerImpl implements CrudUpdateHandler {
 			preHook.run(entity);
 		}
 
-		entity = crudUpdateHandlerProxy.updateTransactional(entity, hooks.getOnHooks(), accessorDTO);
+		entity = crudUpdateHandlerProxy.updateTransactional(entity, hooks.getOnHooks());
 
 		crudHelper.evictEntityFromCache(entity);
 
@@ -85,9 +83,9 @@ public class CrudUpdateHandlerImpl implements CrudUpdateHandler {
 
 	@Override
 	@Transactional(readOnly = false)
-	public <ID extends Serializable, Entity extends BaseCrudEntity<ID>> Entity updateTransactional(Entity entity, List<CRUDOnUpdateHook<ID, Entity>> onHooks, DataAccessorDTO accessorDTO) {
+	public <ID extends Serializable, Entity extends BaseCrudEntity<ID>> Entity updateTransactional(Entity entity, List<CRUDOnUpdateHook<ID, Entity>> onHooks) {
 		// check id exists and has access to entity
-		if(!entity.exists() || crudHelper.getEntityCountById(entity.getId(), entity.getClass(), accessorDTO, true) == 0) {
+		if(!entity.exists() || crudHelper.getEntityCountById(entity.getId(), entity.getClass(), true) == 0) {
 			throw new CrudUpdateException("Entity of type [ " + entity.getClass().getSimpleName() + " ] does not exist or cannot be updated");
 		}
 
@@ -102,8 +100,7 @@ public class CrudUpdateHandlerImpl implements CrudUpdateHandler {
 
 	@Override
 	public <ID extends Serializable, Entity extends BaseCrudEntity<ID>> Entity updateFromInternal(ID id, Object object, Class<Entity> clazz,
-			HooksDTO<CRUDPreUpdateFromHook<ID, Entity>, CRUDOnUpdateFromHook<ID, Entity>, CRUDPostUpdateFromHook<ID, Entity>> hooks,
-			DataAccessorDTO accessorDTO) {
+			HooksDTO<CRUDPreUpdateFromHook<ID, Entity>, CRUDOnUpdateFromHook<ID, Entity>, CRUDPostUpdateFromHook<ID, Entity>> hooks) {
 		crudHelper.checkEntityImmutability(clazz);
 
 		List<UpdateFromHooks> updateFromHooksList = crudHelper.getHooks(UpdateFromHooks.class, clazz);
@@ -123,7 +120,7 @@ public class CrudUpdateHandlerImpl implements CrudUpdateHandler {
 
 		crudHelper.validate(object);
 
-		Entity entity = crudUpdateHandlerProxy.updateFromTransactional(id, object, clazz, hooks.getOnHooks(), accessorDTO);
+		Entity entity = crudUpdateHandlerProxy.updateFromTransactional(id, object, clazz, hooks.getOnHooks());
 
 		crudHelper.evictEntityFromCache(entity);
 
@@ -136,9 +133,8 @@ public class CrudUpdateHandlerImpl implements CrudUpdateHandler {
 
 	@Override
 	@Transactional(readOnly = false)
-	public <ID extends Serializable, Entity extends BaseCrudEntity<ID>> Entity updateFromTransactional(ID id, Object object, Class<Entity> clazz, List<CRUDOnUpdateFromHook<ID, Entity>> onHooks,
-			DataAccessorDTO accessorDTO) {
-		Entity entity = crudHelper.getEntityById(id, clazz, null, accessorDTO, true);
+	public <ID extends Serializable, Entity extends BaseCrudEntity<ID>> Entity updateFromTransactional(ID id, Object object, Class<Entity> clazz, List<CRUDOnUpdateFromHook<ID, Entity>> onHooks) {
+		Entity entity = crudHelper.getEntityById(id, clazz, null, true);
 
 		if(entity == null) {
 			throw new CrudUpdateException("Entity of type [ " + clazz.getSimpleName() + " ] does not exist or cannot be updated");

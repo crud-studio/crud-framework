@@ -1,6 +1,5 @@
 package studio.crud.crudframework.crud.model;
 
-import studio.crud.crudframework.crud.dataaccess.model.DataAccessorDTO;
 import studio.crud.crudframework.crud.hooks.base.CRUDHook;
 import studio.crud.crudframework.model.BaseCrudEntity;
 
@@ -24,8 +23,6 @@ public abstract class CRUDRequestBuilder<PreHook, OnHook, PostHook, EntityType> 
 	protected List<PostHook> postHooks = new ArrayList<>();
 
     protected boolean applyDefaultPolicies = false;
-
-	protected DataAccessorDTO accessorDTO;
 
 	/**
 	 * Runs the CRUD action
@@ -55,12 +52,12 @@ public abstract class CRUDRequestBuilder<PreHook, OnHook, PostHook, EntityType> 
 	}
 
 	public CRUDRequestBuilder<PreHook, OnHook, PostHook, EntityType> enforceAccess(BaseCrudEntity requester) {
-		accessorDTO = new DataAccessorDTO(requester.getClass(), requester.getId());
+        // TODO
 		return this;
 	}
 
 	public CRUDRequestBuilder<PreHook, OnHook, PostHook, EntityType> enforceAccess(Class<?> requesterType, Long requesterId) {
-		accessorDTO = new DataAccessorDTO(requesterType, requesterId);
+        // TODO
 		return this;
 	}
 
