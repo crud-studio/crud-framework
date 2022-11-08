@@ -6,10 +6,10 @@ import java.security.Principal
 
 class Policy<RootType : PersistentEntity>(
     val clazz: Class<RootType>,
-    private val canAccessVerbs: List<PolicyVerb<RootType>>,
-    private val canUpdateVerbs: List<PolicyVerb<RootType>>,
-    private val canDeleteVerbs: List<PolicyVerb<RootType>>,
-    private val canCreateVerbs: List<PolicyVerb<RootType>>
+    val canAccessVerbs: List<PolicyVerb<RootType>>,
+    val canUpdateVerbs: List<PolicyVerb<RootType>>,
+    val canDeleteVerbs: List<PolicyVerb<RootType>>,
+    val canCreateVerbs: List<PolicyVerb<RootType>>
 ) {
     fun matchesCanAccess(entity: RootType, principal: Principal?): Boolean {
         return canAccessVerbs.all { it.matches(entity, principal) }

@@ -1,5 +1,6 @@
 package studio.crud.crudframework.crud.policy
 
+import org.springframework.context.annotation.Configuration
 import studio.crud.crudframework.crud.handler.CrudHandlerImpl
 import studio.crud.crudframework.model.BaseCrudEntity
 import studio.crud.crudframework.modelfilter.FilterField
@@ -20,24 +21,10 @@ class TestEntity(var userId: Long? = null) : BaseCrudEntity<Long>() {
 fun main() {
     val matchPolicy = policy<TestEntity> {
         canAccess {
-            filter { principal ->
-                TestEntity::userId Equal principal.name.toLong()
-            }
-
-            condition { principal ->
-                true
-            }
-        }
-
-        canAccess {
-            filter { principal ->
-                TestEntity::userId Equal principal.name.toLong()
-            }
-        }
-
-        canCreate {
-            condition { principal ->
-                true
+            filter {
+                if (!it.hasRole('admin')) {
+                    TestEntity::userId = it?.name?.toLong()
+                }
             }
         }
     }
@@ -46,6 +33,7 @@ fun main() {
     val testEntity = TestEntity(1L)
     println("Match: " + matchPolicy.matchesCanAccess(testEntity, principal))
     println("Filter: " + matchPolicy.getCanAccessFilterFields(principal))
+    println("toString: " + matchPolicy.canAccessVerbs.first().policyConditions.first())
 
     val crudHandler = CrudHandlerImpl()
 }

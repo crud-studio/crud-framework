@@ -9,7 +9,7 @@ class PolicyVerbBuilder<RootType : PersistentEntity> {
     private var policyFilterFieldSuppliers = mutableListOf<PolicyFilterFieldSupplier>()
     private var policyConditions = mutableListOf<PolicyCondition>()
 
-    fun filter(block: FilterFieldsBuilder<RootType>.(Principal) -> Unit) {
+    fun filter(block: FilterFieldsBuilder<RootType>.(Principal?) -> Unit) {
         policyFilterFieldSuppliers += { principal ->
             val filterFieldsBuilder = FilterFieldsBuilder<RootType>()
             filterFieldsBuilder.block(principal)
