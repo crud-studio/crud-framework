@@ -46,12 +46,11 @@ fun main() {
             filter { principal ->
                 TestEntity::userId Equal principal.name.toLong()
             }
+        }
+
+        canCreate {
             condition { principal ->
-                when (principal) {
-                    is UserInfo ->
-                    is RiderInfo ->
-                }
-                false
+                true
             }
         }
     }
@@ -62,16 +61,5 @@ fun main() {
     println("Filter: " + matchPolicy.getCanAccessFilterFields(principal))
 
     val crudHandler = CrudHandlerImpl()
-
-    @Autowired lateinit var policies
-
-    crudHandler.index(where<TestEntity> { }, TestEntity::class.java).applyDefaultPolicies()
-
-    crudHandler.index(where<TestEntity> { }, TestEntity::class.java)
-            .applyDefaultPolicies()
-
-    CrudSecurityHelper
-            .applyDefaultPolicies(crudHandler.index(where<TestEntity> { }, TestEntity::class.java))
-            .execute()
 }
 

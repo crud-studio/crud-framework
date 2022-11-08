@@ -8,7 +8,8 @@ class Policy<RootType : PersistentEntity>(
     val clazz: Class<RootType>,
     val canAccessVerbs: List<PolicyVerb<RootType>>,
     val canUpdateVerbs: List<PolicyVerb<RootType>>,
-    val canDeleteVerbs: List<PolicyVerb<RootType>>
+    val canDeleteVerbs: List<PolicyVerb<RootType>>,
+    val canCreateVerbs: List<PolicyVerb<RootType>>
 ) {
     fun matchesCanAccess(entity: RootType, principal: Principal): Boolean {
         return canAccessVerbs.all { it.matches(entity, principal) }
@@ -32,6 +33,10 @@ class Policy<RootType : PersistentEntity>(
 
     fun getCanDeleteFilterFields(principal: Principal): List<FilterField> {
         return getCanAccessFilterFields(principal) + canDeleteVerbs.flatMap { it.getFilterFields(principal) }
+    }
+
+    fun matchesCanCreate(principal: Principal): Boolean {
+        return canCreateVerbs.all { it.conditionsMatch(principal) }
     }
 }
 
