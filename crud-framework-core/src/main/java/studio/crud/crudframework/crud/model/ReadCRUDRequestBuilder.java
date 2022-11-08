@@ -1,6 +1,5 @@
 package studio.crud.crudframework.crud.model;
 
-import studio.crud.crudframework.crud.dataaccess.model.DataAccessorDTO;
 import studio.crud.crudframework.crud.hooks.HooksDTO;
 
 /**
@@ -21,11 +20,11 @@ public class ReadCRUDRequestBuilder<PreHook, OnHook, PostHook, ReturnType> exten
 	 */
 	@Override
 	public ReturnType execute() {
-		return this.onExecute.execute(new HooksDTO<>(preHooks, onHooks, postHooks), fromCache, persistCopy, accessorDTO);
+		return this.onExecute.execute(new ReadRequestContext<>(new HooksDTO<>(preHooks, onHooks, postHooks), fromCache, persistCopy, accessorDTO, applyDefaultPolicies));
 	}
 
 	public long count() {
-		return this.onCount.execute(new HooksDTO<>(preHooks, onHooks, postHooks), fromCache, persistCopy, accessorDTO);
+		return this.onCount.execute(new ReadRequestContext<>(new HooksDTO<>(preHooks, onHooks, postHooks), fromCache, persistCopy, accessorDTO, applyDefaultPolicies));
 	}
 
 	public ReadCRUDRequestBuilder(ReadCRUDExecutor<PreHook, OnHook, PostHook, ReturnType> onExecute,
@@ -55,6 +54,6 @@ public class ReadCRUDRequestBuilder<PreHook, OnHook, PostHook, ReturnType> exten
 
 	public interface ReadCRUDExecutor<PreHook, OnHook, PostHook, EntityType> {
 
-		EntityType execute(HooksDTO<PreHook, OnHook, PostHook> hooksDTO, boolean fromCache, Boolean persistCopy, DataAccessorDTO accessorDTO);
+		EntityType execute(ReadRequestContext<PreHook, OnHook, PostHook, EntityType> context);
 	}
 }

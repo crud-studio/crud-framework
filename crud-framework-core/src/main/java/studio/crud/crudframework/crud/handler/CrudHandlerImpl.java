@@ -82,8 +82,8 @@ public class CrudHandlerImpl implements CrudHandler {
 	public <ID extends Serializable, Entity extends BaseCrudEntity<ID>> ReadCRUDRequestBuilder<CRUDPreIndexHook<ID, Entity>, CRUDOnIndexHook<ID, Entity>, CRUDPostIndexHook<ID, Entity>, PagingDTO<Entity>> index(
 			DynamicModelFilter filter, Class<Entity> clazz) {
 		return new ReadCRUDRequestBuilder<>(
-				(hooks, fromCache, persistCopy, accessorDTO) -> crudReadHandler.indexInternal(filter, clazz, hooks, fromCache, persistCopy, accessorDTO, false),
-				(hooks, fromCache, persistCopy, accessorDTO) -> crudReadHandler.indexInternal(filter, clazz, hooks, fromCache, persistCopy, accessorDTO, true).getPagingRO().getTotal()
+				(context) -> crudReadHandler.indexInternal(filter, clazz, context.getHooksDTO(), context.getFromCache(), context.getPersistCopy(), context.getAccessorDTO(), false),
+				(context) -> crudReadHandler.indexInternal(filter, clazz, context.getHooksDTO(), context.getFromCache(), context.getPersistCopy(), context.getAccessorDTO(), true).getPagingRO().getTotal()
 		);
 	}
 
@@ -91,18 +91,18 @@ public class CrudHandlerImpl implements CrudHandler {
 	public <ID extends Serializable, Entity extends BaseCrudEntity<ID>, RO> ReadCRUDRequestBuilder<CRUDPreIndexHook<ID, Entity>, CRUDOnIndexHook<ID, Entity>, CRUDPostIndexHook<ID, Entity>, PagingDTO<RO>> index(
 			DynamicModelFilter filter, Class<Entity> clazz, Class<RO> toClazz) {
 		return new ReadCRUDRequestBuilder<>(
-				(hooks, fromCache, persistCopy, accessorDTO) -> {
-					PagingDTO<Entity> resultDTO = crudReadHandler.indexInternal(filter, clazz, hooks, fromCache, persistCopy, accessorDTO, false);
+				(context) -> {
+					PagingDTO<Entity> resultDTO = crudReadHandler.indexInternal(filter, clazz, context.getHooksDTO(), context.getFromCache(), context.getPersistCopy(), context.getAccessorDTO(), false);
 					List<RO> mappedResults = crudHelper.fillMany(resultDTO.getData(), toClazz);
 					return new PagingDTO<>(resultDTO.getPagingRO(), mappedResults);
-				}, (hooks, fromCache, persistCopy, accessorDTO) -> crudReadHandler.indexInternal(filter, clazz, hooks, fromCache, persistCopy, accessorDTO, true).getPagingRO().getTotal());
+				}, (context) -> crudReadHandler.indexInternal(filter, clazz, context.getHooksDTO(), context.getFromCache(), context.getPersistCopy(), context.getAccessorDTO(), true).getPagingRO().getTotal());
 	}
 
 	@Override
 	public <ID extends Serializable, Entity extends BaseCrudEntity<ID>> UpdateCRUDRequestBuilder<CRUDPreDeleteHook<ID, Entity>, CRUDOnDeleteHook<ID, Entity>, CRUDPostDeleteHook<ID, Entity>, Void> delete(ID id,
 			Class<Entity> clazz) {
-		return new UpdateCRUDRequestBuilder<>((hooks, accessorDTO) -> {
-			crudDeleteHandler.deleteInternal(id, clazz, hooks, accessorDTO);
+		return new UpdateCRUDRequestBuilder<>((context) -> {
+			crudDeleteHandler.deleteInternal(id, clazz, context.getHooksDTO(), context.getAccessorDTO());
 			return null;
 		});
 	}
@@ -110,14 +110,14 @@ public class CrudHandlerImpl implements CrudHandler {
 	@Override
 	public <ID extends Serializable, Entity extends BaseCrudEntity<ID>> UpdateCRUDRequestBuilder<CRUDPreCreateFromHook<ID, Entity>, CRUDOnCreateFromHook<ID, Entity>, CRUDPostCreateFromHook<ID, Entity>, Entity> createFrom(
 			Object object, Class<Entity> clazz) {
-		return new UpdateCRUDRequestBuilder<>((hooks, accessorDTO) -> crudCreateHandler.createFromInternal(object, clazz, hooks, accessorDTO));
+		return new UpdateCRUDRequestBuilder<>((context) -> crudCreateHandler.createFromInternal(object, clazz, context.getHooksDTO(), context.getAccessorDTO()));
 	}
 
 	@Override
 	public <ID extends Serializable, Entity extends BaseCrudEntity<ID>, RO> UpdateCRUDRequestBuilder<CRUDPreCreateFromHook<ID, Entity>, CRUDOnCreateFromHook<ID, Entity>, CRUDPostCreateFromHook<ID, Entity>, RO> createFrom(
 			Object object, Class<Entity> clazz, Class<RO> toClazz) {
-		return new UpdateCRUDRequestBuilder<>((hooks, accessorDTO) -> {
-			Entity result = crudCreateHandler.createFromInternal(object, clazz, hooks, accessorDTO);
+		return new UpdateCRUDRequestBuilder<>((context) -> {
+			Entity result = crudCreateHandler.createFromInternal(object, clazz, context.getHooksDTO(), context.getAccessorDTO());
 			return crudHelper.fill(result, toClazz);
 		});
 	}
@@ -125,14 +125,14 @@ public class CrudHandlerImpl implements CrudHandler {
 	@Override
 	public <ID extends Serializable, Entity extends BaseCrudEntity<ID>> UpdateCRUDRequestBuilder<CRUDPreCreateHook<ID, Entity>, CRUDOnCreateHook<ID, Entity>, CRUDPostCreateHook<ID, Entity>, Entity> create(
 			Entity entity) {
-		return new UpdateCRUDRequestBuilder<>((hooks, accessorDTO) -> crudCreateHandler.createInternal(entity, hooks, accessorDTO));
+		return new UpdateCRUDRequestBuilder<>((context) -> crudCreateHandler.createInternal(entity, context.getHooksDTO(), context.getAccessorDTO()));
 	}
 
 	@Override
 	public <ID extends Serializable, Entity extends BaseCrudEntity<ID>, RO> UpdateCRUDRequestBuilder<CRUDPreCreateHook<ID, Entity>, CRUDOnCreateHook<ID, Entity>, CRUDPostCreateHook<ID, Entity>, RO> create(Entity entity,
 			Class<RO> toClazz) {
-		return new UpdateCRUDRequestBuilder<>((hooks, accessorDTO) -> {
-			Entity result = crudCreateHandler.createInternal(entity, hooks, accessorDTO);
+		return new UpdateCRUDRequestBuilder<>((context) -> {
+			Entity result = crudCreateHandler.createInternal(entity, context.getHooksDTO(), context.getAccessorDTO());
 			return crudHelper.fill(result, toClazz);
 		});
 	}
@@ -141,14 +141,14 @@ public class CrudHandlerImpl implements CrudHandler {
 	@Override
 	public <ID extends Serializable, Entity extends BaseCrudEntity<ID>> UpdateCRUDRequestBuilder<CRUDPreUpdateFromHook<ID, Entity>, CRUDOnUpdateFromHook<ID, Entity>, CRUDPostUpdateFromHook<ID, Entity>, Entity> updateFrom(
 			ID id, Object object, Class<Entity> clazz) {
-		return new UpdateCRUDRequestBuilder<>((hooks, accessorDTO) -> crudUpdateHandler.updateFromInternal(id, object, clazz, hooks, accessorDTO));
+		return new UpdateCRUDRequestBuilder<>((context) -> crudUpdateHandler.updateFromInternal(id, object, clazz, context.getHooksDTO(), context.getAccessorDTO()));
 	}
 
 	@Override
 	public <ID extends Serializable, Entity extends BaseCrudEntity<ID>, RO> UpdateCRUDRequestBuilder<CRUDPreUpdateFromHook<ID, Entity>, CRUDOnUpdateFromHook<ID, Entity>, CRUDPostUpdateFromHook<ID, Entity>, RO> updateFrom(
 			ID id, Object object, Class<Entity> clazz, Class<RO> toClazz) {
-		return new UpdateCRUDRequestBuilder<>((hooks, accessorDTO) -> {
-			Entity result = crudUpdateHandler.updateFromInternal(id, object, clazz, hooks, accessorDTO);
+		return new UpdateCRUDRequestBuilder<>((context) -> {
+			Entity result = crudUpdateHandler.updateFromInternal(id, object, clazz, context.getHooksDTO(), context.getAccessorDTO());
 			return crudHelper.fill(result, toClazz);
 		});
 	}
@@ -156,14 +156,14 @@ public class CrudHandlerImpl implements CrudHandler {
 	@Override
 	public <ID extends Serializable, Entity extends BaseCrudEntity<ID>> UpdateCRUDRequestBuilder<CRUDPreUpdateHook<ID, Entity>, CRUDOnUpdateHook<ID, Entity>, CRUDPostUpdateHook<ID, Entity>, Entity> update(
 			Entity entity) {
-		return new UpdateCRUDRequestBuilder<>((hooks, accessorDTO) -> crudUpdateHandler.updateInternal(entity, hooks, accessorDTO));
+		return new UpdateCRUDRequestBuilder<>((context) -> crudUpdateHandler.updateInternal(entity, context.getHooksDTO(), context.getAccessorDTO()));
 	}
 
 	@Override
 	public <ID extends Serializable, Entity extends BaseCrudEntity<ID>, RO> UpdateCRUDRequestBuilder<CRUDPreUpdateHook<ID, Entity>, CRUDOnUpdateHook<ID, Entity>, CRUDPostUpdateHook<ID, Entity>, RO> update(Entity entity,
 			Class<RO> toClazz) {
-		return new UpdateCRUDRequestBuilder<>((hooks, accessorDTO) -> {
-			Entity result = crudUpdateHandler.updateInternal(entity, hooks, accessorDTO);
+		return new UpdateCRUDRequestBuilder<>((context) -> {
+			Entity result = crudUpdateHandler.updateInternal(entity, context.getHooksDTO(), context.getAccessorDTO());
 			return crudHelper.fill(result, toClazz);
 		});
 	}
@@ -171,14 +171,14 @@ public class CrudHandlerImpl implements CrudHandler {
 	@Override
 	public <ID extends Serializable, Entity extends BaseCrudEntity<ID>> MassUpdateCRUDRequestBuilder<CRUDPreUpdateHook<ID, Entity>, CRUDOnUpdateHook<ID, Entity>, CRUDPostUpdateHook<ID, Entity>, List<Entity>> update(
 			List<Entity> entities) {
-		return new MassUpdateCRUDRequestBuilder<>((hooks, persistCopy, accessorDTO) -> crudUpdateHandler.updateManyTransactional(entities, hooks, persistCopy, accessorDTO));
+		return new MassUpdateCRUDRequestBuilder<>((context) -> crudUpdateHandler.updateManyTransactional(entities, context.getHooksDTO(), context.getPersistCopy(), context.getAccessorDTO()));
 	}
 
 	@Override
 	public <ID extends Serializable, Entity extends BaseCrudEntity<ID>, RO> MassUpdateCRUDRequestBuilder<CRUDPreUpdateHook<ID, Entity>, CRUDOnUpdateHook<ID, Entity>, CRUDPostUpdateHook<ID, Entity>, List<RO>> update(
 			List<Entity> entities, Class<RO> toClazz) {
-		return new MassUpdateCRUDRequestBuilder<>((hooks, persistCopy, accessorDTO) -> {
-			List<Entity> result = crudUpdateHandler.updateManyTransactional(entities, hooks, persistCopy, accessorDTO);
+		return new MassUpdateCRUDRequestBuilder<>((context) -> {
+			List<Entity> result = crudUpdateHandler.updateManyTransactional(entities, context.getHooksDTO(), context.getPersistCopy(), context.getAccessorDTO());
 			return crudHelper.fillMany(result, toClazz);
 		});
 	}
@@ -186,14 +186,14 @@ public class CrudHandlerImpl implements CrudHandler {
 	@Override
 	public <ID extends Serializable, Entity extends BaseCrudEntity<ID>> MassUpdateCRUDRequestBuilder<CRUDPreUpdateHook<ID, Entity>, CRUDOnUpdateHook<ID, Entity>, CRUDPostUpdateHook<ID, Entity>, List<Entity>> updateByFilter(
 			DynamicModelFilter filter, Class<Entity> entityClazz) {
-		return new MassUpdateCRUDRequestBuilder<>((hooks, persistCopy, accessorDTO) -> crudUpdateHandler.updateByFilterTransactional(filter, entityClazz, hooks, persistCopy, accessorDTO));
+		return new MassUpdateCRUDRequestBuilder<>((context) -> crudUpdateHandler.updateByFilterTransactional(filter, entityClazz, context.getHooksDTO(), context.getPersistCopy(), context.getAccessorDTO()));
 	}
 
 	@Override
 	public <ID extends Serializable, Entity extends BaseCrudEntity<ID>, RO> MassUpdateCRUDRequestBuilder<CRUDPreUpdateHook<ID, Entity>, CRUDOnUpdateHook<ID, Entity>, CRUDPostUpdateHook<ID, Entity>, List<RO>> updateByFilter(
 			DynamicModelFilter filter, Class<Entity> entityClazz, Class<RO> toClazz) {
-		return new MassUpdateCRUDRequestBuilder<>((hooks, persistCopy, accessorDTO) -> {
-			List<Entity> result = crudUpdateHandler.updateByFilterTransactional(filter, entityClazz, hooks, persistCopy, accessorDTO);
+		return new MassUpdateCRUDRequestBuilder<>((context) -> {
+			List<Entity> result = crudUpdateHandler.updateByFilterTransactional(filter, entityClazz, context.getHooksDTO(), context.getPersistCopy(), context.getAccessorDTO());
 			return crudHelper.fillMany(result, toClazz);
 		});
 	}
@@ -208,8 +208,8 @@ public class CrudHandlerImpl implements CrudHandler {
 	public <ID extends Serializable, Entity extends BaseCrudEntity<ID>> ReadCRUDRequestBuilder<CRUDPreShowByHook<ID, Entity>, CRUDOnShowByHook<ID, Entity>, CRUDPostShowByHook<ID, Entity>, Entity> showBy(
 			DynamicModelFilter filter, Class<Entity> clazz, ShowByMode mode) {
 		return new ReadCRUDRequestBuilder<>(
-				(hooks, fromCache, persistCopy, accessorDTO) -> crudReadHandler.showByInternal(filter, clazz, hooks, fromCache, persistCopy, mode, accessorDTO),
-				(hooks, fromCache, persistCopy, accessorDTO) -> crudReadHandler.showByInternal(filter, clazz, hooks, fromCache, persistCopy, mode, accessorDTO) != null ? 1L : 0L
+				(context) -> crudReadHandler.showByInternal(filter, clazz, context.getHooksDTO(), context.getFromCache(), context.getPersistCopy(), mode, context.getAccessorDTO()),
+				(context) -> crudReadHandler.showByInternal(filter, clazz, context.getHooksDTO(), context.getFromCache(), context.getPersistCopy(), mode, context.getAccessorDTO()) != null ? 1L : 0L
 		);
 	}
 
@@ -223,14 +223,14 @@ public class CrudHandlerImpl implements CrudHandler {
 	public <ID extends Serializable, Entity extends BaseCrudEntity<ID>, RO> ReadCRUDRequestBuilder<CRUDPreShowByHook<ID, Entity>, CRUDOnShowByHook<ID, Entity>, CRUDPostShowByHook<ID, Entity>, RO> showBy(
 			DynamicModelFilter filter, Class<Entity> clazz, Class<RO> toClazz, ShowByMode mode) {
 		return new ReadCRUDRequestBuilder<>(
-				(hooks, fromCache, persistCopy, accessorDTO) -> {
-					Entity result = crudReadHandler.showByInternal(filter, clazz, hooks, fromCache, persistCopy, mode, accessorDTO);
+				(context) -> {
+					Entity result = crudReadHandler.showByInternal(filter, clazz, context.getHooksDTO(), context.getFromCache(), context.getPersistCopy(), mode, context.getAccessorDTO());
 					if(result == null) {
 						return null;
 					}
 
 					return crudHelper.fill(result, toClazz);
-				}, (hooks, fromCache, persistCopy, accessorDTO) -> crudReadHandler.showByInternal(filter, clazz, hooks, fromCache, persistCopy, mode, accessorDTO) != null ? 1L : 0L
+				}, (context) -> crudReadHandler.showByInternal(filter, clazz, context.getHooksDTO(), context.getFromCache(), context.getPersistCopy(), mode, context.getAccessorDTO()) != null ? 1L : 0L
 		);
 	}
 
@@ -238,22 +238,22 @@ public class CrudHandlerImpl implements CrudHandler {
 	public <ID extends Serializable, Entity extends BaseCrudEntity<ID>> ReadCRUDRequestBuilder<CRUDPreShowHook<ID, Entity>, CRUDOnShowHook<ID, Entity>, CRUDPostShowHook<ID, Entity>, Entity> show(ID id,
 			Class<Entity> clazz) {
 		return new ReadCRUDRequestBuilder<>(
-				(hooks, fromCache, persistCopy, accessorDTO) -> crudReadHandler.showInternal(id, clazz, hooks, fromCache, persistCopy, accessorDTO),
-				(hooks, fromCache, persistCopy, accessorDTO) -> crudReadHandler.showInternal(id, clazz, hooks, fromCache, persistCopy, accessorDTO) != null ? 1L : 0L
+				(context) -> crudReadHandler.showInternal(id, clazz, context.getHooksDTO(), context.getFromCache(), context.getPersistCopy(), context.getAccessorDTO()),
+				(context) -> crudReadHandler.showInternal(id, clazz, context.getHooksDTO(), context.getFromCache(), context.getPersistCopy(), context.getAccessorDTO()) != null ? 1L : 0L
 		);
 	}
 
 	@Override
 	public <ID extends Serializable, Entity extends BaseCrudEntity<ID>, RO> ReadCRUDRequestBuilder<CRUDPreShowHook<ID, Entity>, CRUDOnShowHook<ID, Entity>, CRUDPostShowHook<ID, Entity>, RO> show(ID id,
 			Class<Entity> clazz, Class<RO> toClazz) {
-		return new ReadCRUDRequestBuilder<>((hooks, fromCache, persistCopy, accessorDTO) -> {
-			Entity result = crudReadHandler.showInternal(id, clazz, hooks, fromCache, persistCopy, accessorDTO);
+		return new ReadCRUDRequestBuilder<>((context) -> {
+			Entity result = crudReadHandler.showInternal(id, clazz, context.getHooksDTO(), context.getFromCache(), context.getPersistCopy(), context.getAccessorDTO());
 			if(result == null) {
 				return null;
 			}
 
 			return crudHelper.fill(result, toClazz);
-		}, (hooks, fromCache, persistCopy, accessorDTO) -> crudReadHandler.showInternal(id, clazz, hooks, fromCache, persistCopy, accessorDTO) != null ? 1L : 0L
+		}, (context) -> crudReadHandler.showInternal(id, clazz, context.getHooksDTO(), context.getFromCache(), context.getPersistCopy(), context.getAccessorDTO()) != null ? 1L : 0L
 		);
 	}
 

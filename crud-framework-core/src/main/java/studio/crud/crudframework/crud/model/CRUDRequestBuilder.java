@@ -23,6 +23,8 @@ public abstract class CRUDRequestBuilder<PreHook, OnHook, PostHook, EntityType> 
 
 	protected List<PostHook> postHooks = new ArrayList<>();
 
+    protected boolean applyDefaultPolicies = false;
+
 	protected DataAccessorDTO accessorDTO;
 
 	/**
@@ -71,5 +73,13 @@ public abstract class CRUDRequestBuilder<PreHook, OnHook, PostHook, EntityType> 
 		postHooks.add(postHook);
 		return this;
 	}
+
+    /**
+     * Applies default policies to the request
+     */
+    public final CRUDRequestBuilder<PreHook, OnHook, PostHook, EntityType> applyDefaultPolicies() {
+        applyDefaultPolicies = true;
+        return this;
+    }
 
 }

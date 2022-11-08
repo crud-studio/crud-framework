@@ -10,19 +10,19 @@ class PolicyVerb<RootType : PersistentEntity>(
         val policyFilterFieldSuppliers: List<PolicyFilterFieldSupplier>,
         val policyConditions: List<PolicyCondition>
 ) {
-    fun matches(entity: RootType, principal: Principal): Boolean {
+    fun matches(entity: RootType, principal: Principal?): Boolean {
         return filtersMatch(entity, principal) && conditionsMatch(principal)
     }
 
-    fun filtersMatch(entity: RootType, principal: Principal): Boolean {
+    fun filtersMatch(entity: RootType, principal: Principal?): Boolean {
         return getFilterFields(principal).all { it.filtersMatch(entity) }
     }
 
-    fun conditionsMatch(principal: Principal): Boolean {
+    fun conditionsMatch(principal: Principal?): Boolean {
         return policyConditions.all { it(principal) }
     }
 
-    fun getFilterFields(principal: Principal): List<FilterField> {
+    fun getFilterFields(principal: Principal?): List<FilterField> {
         if (!conditionsMatch(principal)) {
             return listOf(
                 and<RootType> { noop() }

@@ -1,6 +1,5 @@
 package studio.crud.crudframework.crud.model;
 
-import studio.crud.crudframework.crud.dataaccess.model.DataAccessorDTO;
 import studio.crud.crudframework.crud.hooks.HooksDTO;
 
 /**
@@ -19,11 +18,11 @@ public class UpdateCRUDRequestBuilder<PreHook, OnHook, PostHook, ReturnType> ext
 	 */
 	@Override
 	public ReturnType execute() {
-		return this.onExecute.execute(new HooksDTO<>(preHooks, onHooks, postHooks), accessorDTO);
+		return this.onExecute.execute(new UpdateRequestContext<>(new HooksDTO<>(preHooks, onHooks, postHooks), accessorDTO, applyDefaultPolicies));
 	}
 
 	public interface UpdateCRUDExecutor<PreHook, OnHook, PostHook, EntityType> {
 
-		EntityType execute(HooksDTO<PreHook, OnHook, PostHook> hooksDTO, DataAccessorDTO accessorDTO);
+		EntityType execute(UpdateRequestContext<PreHook, OnHook, PostHook, EntityType> context);
 	}
 }

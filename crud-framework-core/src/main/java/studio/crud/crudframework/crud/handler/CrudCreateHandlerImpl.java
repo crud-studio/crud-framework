@@ -15,6 +15,7 @@ import studio.crud.crudframework.crud.hooks.create.from.CRUDPostCreateFromHook;
 import studio.crud.crudframework.crud.hooks.create.from.CRUDPreCreateFromHook;
 import studio.crud.crudframework.crud.hooks.interfaces.CreateFromHooks;
 import studio.crud.crudframework.crud.hooks.interfaces.CreateHooks;
+import studio.crud.crudframework.crud.policy.Policy;
 import studio.crud.crudframework.exception.WrapException;
 import studio.crud.crudframework.model.BaseCrudEntity;
 
@@ -29,6 +30,9 @@ public class CrudCreateHandlerImpl implements CrudCreateHandler {
 	@Autowired
 	private CrudHelper crudHelper;
 
+    @Autowired
+    private CrudSecurityHandler crudSecurityHandler;
+
 	@Resource(name = "crudCreateHandler")
 	private CrudCreateHandler crudCreateHandlerProxy;
 
@@ -36,7 +40,7 @@ public class CrudCreateHandlerImpl implements CrudCreateHandler {
 	public <ID extends Serializable, Entity extends BaseCrudEntity<ID>> Entity createInternal(Entity entity, HooksDTO<CRUDPreCreateHook<ID, Entity>, CRUDOnCreateHook<ID, Entity>, CRUDPostCreateHook<ID, Entity>> hooks,
 			DataAccessorDTO accessorDTO) {
 		Objects.requireNonNull(entity, "Entity cannot be null");
-
+        crudSecurityHandler.matchesCanCreate(entity.getClass());
 		List<CreateHooks> createHooksList = crudHelper.getHooks(CreateHooks.class, entity.getClass());
 
 		if(createHooksList != null && !createHooksList.isEmpty()) {
