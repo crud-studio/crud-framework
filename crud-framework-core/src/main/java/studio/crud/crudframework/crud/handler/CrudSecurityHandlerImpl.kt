@@ -25,32 +25,16 @@ internal class CrudSecurityHandlerImpl(
         return policyMap[clazz] ?: emptyList()
     }
 
-    override fun matchesCanAccess(entity: PersistentEntity, clazz: Class<*>): Boolean {
-        return getPolicies(clazz).all { it.matchesCanAccess(entity, getPrincipal()) }
-    }
-
     override fun getCanAccessFilterFields(clazz: Class<*>): List<FilterField> {
         return getPolicies(clazz).flatMap { it.getCanAccessFilterFields(getPrincipal()) }
-    }
-
-    override fun matchesCanUpdate(entity: PersistentEntity, clazz: Class<*>): Boolean {
-        return getPolicies(clazz).all { it.matchesCanUpdate(entity, getPrincipal()) }
     }
 
     override fun getCanUpdateFilterFields(clazz: Class<*>): List<FilterField> {
         return getPolicies(clazz).flatMap { it.getCanUpdateFilterFields(getPrincipal()) }
     }
 
-    override fun matchesCanDelete(entity: PersistentEntity, clazz: Class<*>): Boolean {
-        return getPolicies(clazz).all { it.matchesCanDelete(entity, getPrincipal()) }
-    }
-
     override fun getDeleteFilterFields(clazz: Class<*>): List<FilterField> {
         return getPolicies(clazz).flatMap { it.getCanDeleteFilterFields(getPrincipal()) }
-    }
-
-    override fun matchesCanCreate(clazz: Class<*>): Boolean {
-        return getPolicies(clazz).all { it.matchesCanCreate(getPrincipal()) }
     }
 
     private fun getPrincipal(): Principal? {

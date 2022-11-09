@@ -1,5 +1,8 @@
 package studio.crud.crudframework.modelfilter
 
+import studio.crud.crudframework.crud.policy.TestEntity
+import studio.crud.crudframework.modelfilter.dsl.ModelFilterBuilder
+
 class DynamicModelFilter(
     var start: Int? = null,
     var limit: Int? = null,
@@ -11,6 +14,16 @@ class DynamicModelFilter(
     constructor() : this(null, null, mutableSetOf(), mutableListOf())
 
     constructor(filterFields: MutableList<FilterField>) : this(null, null, mutableSetOf(), filterFields)
+
+    constructor(block: ModelFilterBuilder<TestEntity>.() -> Unit) : this() {
+        val builder = ModelFilterBuilder<TestEntity>()
+        builder.block()
+        this.filterFields.addAll(builder.filterFields)
+        this.orders.addAll(builder.orders)
+        this.start = builder.start
+        this.limit = builder.limit
+
+    }
 
     fun add(filterField: FilterField): DynamicModelFilter {
         filterFields.add(filterField)

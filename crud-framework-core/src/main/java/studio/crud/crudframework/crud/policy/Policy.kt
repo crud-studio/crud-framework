@@ -1,77 +1,120 @@
 package studio.crud.crudframework.crud.policy
 
+import com.github.tomaslanger.chalk.Chalk
+import studio.crud.crudframework.crud.policy.PolicyElementLocation.Companion.toPolicyElementLocation
 import studio.crud.crudframework.model.PersistentEntity
 import studio.crud.crudframework.modelfilter.FilterField
 import java.security.Principal
 
 class Policy<RootType : PersistentEntity>(
+    val name: String,
+    val location: PolicyElementLocation,
     val clazz: Class<RootType>,
-    val canAccessVerbs: List<PolicyVerb<RootType>>,
-    val canUpdateVerbs: List<PolicyVerb<RootType>>,
-    val canDeleteVerbs: List<PolicyVerb<RootType>>,
-    val canCreateVerbs: List<PolicyVerb<RootType>>
+    private val canAccessRules: List<PolicyRule<RootType>>,
+    private val canUpdateRules: List<PolicyRule<RootType>>,
+    private val canDeleteRules: List<PolicyRule<RootType>>,
+    private val canCreateRules: List<PolicyRule<RootType>>
 ) {
-    fun matchesCanAccess(entity: RootType, principal: Principal?): Boolean {
-        return canAccessVerbs.all { it.matches(entity, principal) }
-    }
-
     fun getCanAccessFilterFields(principal: Principal?): List<FilterField> {
-        return canAccessVerbs.flatMap { it.getFilterFields(principal) }
-    }
-
-    fun matchesCanUpdate(entity: RootType, principal: Principal?): Boolean {
-        return matchesCanAccess(entity, principal) && canUpdateVerbs.all { it.matches(entity, principal) }
+        return canAccessRules.flatMap { it.getFilterFields(principal) }
     }
 
     fun getCanUpdateFilterFields(principal: Principal?): List<FilterField> {
-        return getCanAccessFilterFields(principal) + canUpdateVerbs.flatMap { it.getFilterFields(principal) }
-    }
-
-    fun matchesCanDelete(entity: RootType, principal: Principal?): Boolean {
-        return matchesCanAccess(entity, principal) && canDeleteVerbs.all { it.matches(entity, principal) }
+        return getCanAccessFilterFields(principal) + canUpdateRules.flatMap { it.getFilterFields(principal) }
     }
 
     fun getCanDeleteFilterFields(principal: Principal?): List<FilterField> {
-        return getCanAccessFilterFields(principal) + canDeleteVerbs.flatMap { it.getFilterFields(principal) }
+        return getCanAccessFilterFields(principal) + canDeleteRules.flatMap { it.getFilterFields(principal) }
     }
 
-    fun matchesCanCreate(principal: Principal?): Boolean {
-        return canCreateVerbs.all { it.conditionsMatch(principal) }
+    fun evaluateCanAccess(principal: Principal?): Result<RootType> {
+        val result = canAccessRules.map { it.evaluateConditions(principal) }
+        return Result(
+            result.all { it.success },
+            this,
+            result
+        )
     }
 
-    companion object {
-        fun <RootType : PersistentEntity> Collection<Policy<RootType>>.matchesCanAccess(entity: RootType, principal: Principal?): Boolean {
-            return this.all { it.matchesCanAccess(entity, principal) }
+    fun evaluateCanCreate(principal: Principal?): Result<RootType> {
+        val result = canCreateRules.map { it.evaluateConditions(principal) }
+        return evaluateCanAccess(principal) + Result(
+            result.all { it.success },
+            this,
+            result
+        )
+    }
+
+    fun evaluateCanUpdate(principal: Principal?): Result<RootType> {
+        val result = canUpdateRules.map { it.evaluateConditions(principal) }
+        return evaluateCanAccess(principal) + Result(
+            result.all { it.success },
+            this,
+            result
+        )
+    }
+
+    fun evaluateCanDelete(principal: Principal?): Result<RootType> {
+        val result = canDeleteRules.map { it.evaluateConditions(principal) }
+        return evaluateCanAccess(principal) + Result(
+            result.all { it.success },
+            this,
+            result
+        )
+    }
+
+    data class Result<RootType : PersistentEntity>(
+        val success: Boolean,
+        val policy: Policy<RootType>,
+        val ruleResults: List<PolicyRule.Result<RootType>>
+    ) {
+        operator fun plus(other: Result<RootType>): Result<RootType> {
+            return Result(
+                success && other.success,
+                policy,
+                ruleResults + other.ruleResults
+            )
         }
 
-        fun <RootType : PersistentEntity> Collection<Policy<RootType>>.getCanAccessFilterFields(principal: Principal?): List<FilterField> {
-            return this.flatMap { it.getCanAccessFilterFields(principal) }
+        fun outputFullOutcome(): String {
+            val sb = StringBuilder()
+            sb.appendLine("${Chalk.on(policy.name).bold()} at ${policy.location} - ${appendSuccess(success)}")
+            ruleResults.forEachIndexed { ruleIndex, ruleResult ->
+                sb.appendLine("\t${ruleIndex + 1}. ${Chalk.on(ruleResult.rule.name).bold()} at ${ruleResult.rule.location} - ${appendSuccess(ruleResult.success)}")
+                ruleResult.conditionResults.forEachIndexed { conditionIndex, conditionResult ->
+                    sb.appendLine("\t\t${conditionIndex + 1}. ${Chalk.on(conditionResult.condition.name).bold()} at ${conditionResult.condition.location} - ${appendSuccess(conditionResult.success)}")
+                }
+            }
+            return sb.toString()
         }
 
-        fun <RootType : PersistentEntity> Collection<Policy<RootType>>.matchesCanUpdate(entity: RootType, principal: Principal?): Boolean {
-            return this.all { it.matchesCanUpdate(entity, principal) }
+        fun outputShortOutcome(): String {
+            val sb = StringBuilder()
+            sb.appendLine("${Chalk.on(policy.name).bold()} - ${appendSuccess(success)}")
+            ruleResults.forEachIndexed { ruleIndex, ruleResult ->
+                sb.appendLine("\t${ruleIndex + 1}. ${Chalk.on(ruleResult.rule.name).bold()} - ${appendSuccess(ruleResult.success)}")
+                ruleResult.conditionResults.forEachIndexed { conditionIndex, conditionResult ->
+                    sb.appendLine("\t\t${conditionIndex + 1}. ${Chalk.on(conditionResult.condition.name).bold()} - ${appendSuccess(conditionResult.success)}")
+                }
+            }
+            return sb.toString()
         }
 
-        fun <RootType : PersistentEntity> Collection<Policy<RootType>>.getCanUpdateFilterFields(principal: Principal?): List<FilterField> {
-            return this.flatMap { it.getCanUpdateFilterFields(principal) }
-        }
-
-        fun <RootType : PersistentEntity> Collection<Policy<RootType>>.matchesCanDelete(entity: RootType, principal: Principal?): Boolean {
-            return this.all { it.matchesCanDelete(entity, principal) }
-        }
-
-        fun <RootType : PersistentEntity> Collection<Policy<RootType>>.getCanDeleteFilterFields(principal: Principal?): List<FilterField> {
-            return this.flatMap { it.getCanDeleteFilterFields(principal) }
-        }
-
-        fun <RootType : PersistentEntity> Collection<Policy<RootType>>.matchesCanCreate(principal: Principal?): Boolean {
-            return this.all { it.matchesCanCreate(principal) }
+        private fun appendSuccess(success: Boolean): String {
+            return if(success) {
+                Chalk.on("PASSED").bold().green().toString()
+            } else {
+                Chalk.on("FAILED").bold().red().toString()
+            }
         }
     }
 }
 
-inline fun <reified RootType : PersistentEntity> policy(block: PolicyBuilder<RootType>.() -> Unit): Policy<RootType> {
-    val policyBuilder = PolicyBuilder(RootType::class.java)
+inline fun <reified RootType : PersistentEntity> policy(
+    name: String? = null,
+    block: PolicyBuilder<RootType>.() -> Unit
+): Policy<RootType> {
+    val policyBuilder = PolicyBuilder(name, Thread.currentThread().stackTrace[1].toPolicyElementLocation(), RootType::class.java)
     policyBuilder.block()
     return policyBuilder.build()
 }
