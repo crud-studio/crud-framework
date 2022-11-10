@@ -27,8 +27,8 @@ class Policy<RootType : PersistentEntity>(
         return getCanAccessFilterFields(principal) + canDeleteRules.flatMap { it.getFilterFields(principal) }
     }
 
-    fun evaluateCanAccess(principal: Principal?): Result<RootType> {
-        val result = canAccessRules.map { it.evaluateConditions(principal) }
+    fun evaluatePreCanAccess(principal: Principal?): Result<RootType> {
+        val result = canAccessRules.map { it.evaluatePreConditions(principal) }
         return Result(
             result.all { it.success },
             this,
@@ -36,27 +36,63 @@ class Policy<RootType : PersistentEntity>(
         )
     }
 
-    fun evaluateCanCreate(principal: Principal?): Result<RootType> {
-        val result = canCreateRules.map { it.evaluateConditions(principal) }
-        return evaluateCanAccess(principal) + Result(
+    fun evaluatePreCanCreate(principal: Principal?): Result<RootType> {
+        val result = canCreateRules.map { it.evaluatePreConditions(principal) }
+        return evaluatePreCanAccess(principal) + Result(
             result.all { it.success },
             this,
             result
         )
     }
 
-    fun evaluateCanUpdate(principal: Principal?): Result<RootType> {
-        val result = canUpdateRules.map { it.evaluateConditions(principal) }
-        return evaluateCanAccess(principal) + Result(
+    fun evaluatePreCanUpdate(principal: Principal?): Result<RootType> {
+        val result = canUpdateRules.map { it.evaluatePreConditions(principal) }
+        return evaluatePreCanAccess(principal) + Result(
             result.all { it.success },
             this,
             result
         )
     }
 
-    fun evaluateCanDelete(principal: Principal?): Result<RootType> {
-        val result = canDeleteRules.map { it.evaluateConditions(principal) }
-        return evaluateCanAccess(principal) + Result(
+    fun evaluatePreCanDelete(principal: Principal?): Result<RootType> {
+        val result = canDeleteRules.map { it.evaluatePreConditions(principal) }
+        return evaluatePreCanAccess(principal) + Result(
+            result.all { it.success },
+            this,
+            result
+        )
+    }
+
+    fun evaluatePostCanAccess(entity: RootType, principal: Principal?): Result<RootType> {
+        val result = canAccessRules.map { it.evaluatePostConditions(entity, principal) }
+        return Result(
+            result.all { it.success },
+            this,
+            result
+        )
+    }
+
+    fun evaluatePostCanCreate(entity: RootType, principal: Principal?): Result<RootType> {
+        val result = canCreateRules.map { it.evaluatePostConditions(entity, principal) }
+        return evaluatePostCanAccess(entity, principal) + Result(
+            result.all { it.success },
+            this,
+            result
+        )
+    }
+
+    fun evaluatePostCanUpdate(entity: RootType, principal: Principal?): Result<RootType> {
+        val result = canUpdateRules.map { it.evaluatePostConditions(entity, principal) }
+        return evaluatePostCanAccess(entity, principal) + Result(
+            result.all { it.success },
+            this,
+            result
+        )
+    }
+
+    fun evaluatePostCanDelete(entity: RootType, principal: Principal?): Result<RootType> {
+        val result = canDeleteRules.map { it.evaluatePostConditions(entity, principal) }
+        return evaluatePostCanAccess(entity, principal) + Result(
             result.all { it.success },
             this,
             result
@@ -76,24 +112,15 @@ class Policy<RootType : PersistentEntity>(
             )
         }
 
-        fun outputFullOutcome(): String {
-            val sb = StringBuilder()
-            sb.appendLine("${Chalk.on(policy.name).bold()} at ${policy.location} - ${appendSuccess(success)}")
-            ruleResults.forEachIndexed { ruleIndex, ruleResult ->
-                sb.appendLine("\t${ruleIndex + 1}. ${Chalk.on(ruleResult.rule.name).bold()} at ${ruleResult.rule.location} - ${appendSuccess(ruleResult.success)}")
-                ruleResult.conditionResults.forEachIndexed { conditionIndex, conditionResult ->
-                    sb.appendLine("\t\t${conditionIndex + 1}. ${Chalk.on(conditionResult.condition.name).bold()} at ${conditionResult.condition.location} - ${appendSuccess(conditionResult.success)}")
-                }
-            }
-            return sb.toString()
-        }
-
         fun outputShortOutcome(): String {
             val sb = StringBuilder()
             sb.appendLine("${Chalk.on(policy.name).bold()} - ${appendSuccess(success)}")
             ruleResults.forEachIndexed { ruleIndex, ruleResult ->
                 sb.appendLine("\t${ruleIndex + 1}. ${Chalk.on(ruleResult.rule.name).bold()} - ${appendSuccess(ruleResult.success)}")
-                ruleResult.conditionResults.forEachIndexed { conditionIndex, conditionResult ->
+                ruleResult.preConditionResults.forEachIndexed { conditionIndex, conditionResult ->
+                    sb.appendLine("\t\t${conditionIndex + 1}. ${Chalk.on(conditionResult.condition.name).bold()} - ${appendSuccess(conditionResult.success)}")
+                }
+                ruleResult.postConditionResults.forEachIndexed { conditionIndex, conditionResult ->
                     sb.appendLine("\t\t${conditionIndex + 1}. ${Chalk.on(conditionResult.condition.name).bold()} - ${appendSuccess(conditionResult.success)}")
                 }
             }

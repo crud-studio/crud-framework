@@ -15,28 +15,18 @@ class TestEntity(override var id: Long = 1L, var name: String = "") : BaseCrudEn
 
 fun main() {
     val p = policy<TestEntity>("main test entity checks") {
-        canAccess("standard checks") {
-            condition("is admin") {
-                it?.name == "admin"
-            }
-        }
-        canCreate {
-            condition {
+        canUpdate("Can update") {
+            preCondition("user is john") {
                 it?.name == "john"
             }
-        }
-
-        canUpdate {
-            preCondition {
-                principal.hasPermission("update_test_entity")
-            }
-            postCondition { entity, principal ->
-                entity.managerId = principal.name
+            postCondition("target is anne") { entity, principal ->
+                entity.name == "anne"
             }
         }
     }
 
-    val y = p.evaluateCanCreate(Principal { "john" })
-    println(y.outputFullOutcome())
+    val y = p.evaluatePreCanUpdate(Principal { "john" })
+    val z = p.evaluatePostCanUpdate(TestEntity(1L, "anne"), Principal { "john" })
     println(y.outputShortOutcome())
+    println(z.outputShortOutcome())
 }

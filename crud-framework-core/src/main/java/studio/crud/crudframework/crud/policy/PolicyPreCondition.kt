@@ -2,15 +2,15 @@ package studio.crud.crudframework.crud.policy
 
 import java.security.Principal
 
-typealias PolicyConditionSupplier = (Principal?) -> Boolean
+typealias PolicyPreConditionSupplier = (Principal?) -> Boolean
 
-data class PolicyCondition(
+data class PolicyPreCondition(
     val name: String,
     val location: PolicyElementLocation,
-    val supplier: PolicyConditionSupplier
+    val supplier: PolicyPreConditionSupplier
 ) {
     data class Result(
         val success: Boolean,
-        val condition: PolicyCondition
+        val condition: PolicyPreCondition
     )
 }
