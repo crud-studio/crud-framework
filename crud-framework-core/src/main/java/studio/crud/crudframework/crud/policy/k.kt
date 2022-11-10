@@ -1,10 +1,7 @@
 package studio.crud.crudframework.crud.policy
 
 import studio.crud.crudframework.model.BaseCrudEntity
-import studio.crud.crudframework.modelfilter.FilterField
 import java.security.Principal
-
-typealias PolicyFilterFieldSupplier = (Principal?) -> List<FilterField>
 
 class TestEntity(override var id: Long = 1L, var name: String = "") : BaseCrudEntity<Long>() {
     override fun exists(): Boolean {
@@ -15,8 +12,19 @@ class TestEntity(override var id: Long = 1L, var name: String = "") : BaseCrudEn
 
 fun main() {
     val p = policy<TestEntity>("main test entity checks") {
+        filter { principal ->
+
+        }
+        canAccess("permission check") {
+            preCondition {
+                false // principal.hasPermission("read_test_entity")
+            }
+            postCondition("fail always") { _, _ ->
+                false
+            }
+        }
         canUpdate("Can update") {
-            preCondition("user is john") {
+            preCondition {
                 it?.name == "john"
             }
             postCondition("target is anne") { entity, principal ->

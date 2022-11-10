@@ -9,14 +9,9 @@ import java.security.Principal
 class PolicyRule<RootType : PersistentEntity>(
     val name: String,
     val location: PolicyElementLocation,
-    val policyFilterFieldSuppliers: List<PolicyFilterFieldSupplier>,
     val preConditions: List<PolicyPreCondition>,
     val postConditions: List<PolicyPostCondition<RootType>>
 ) {
-    fun filtersMatch(entity: RootType, principal: Principal?): Boolean {
-        return getFilterFields(principal).all { it.filtersMatch(entity) }
-    }
-
     fun evaluatePreConditions(principal: Principal?): Result<RootType> {
         val conditionResults = preConditions.map {
             val result = it.supplier(principal)
@@ -40,15 +35,6 @@ class PolicyRule<RootType : PersistentEntity>(
             emptyList(),
             postConditionResults
         )
-    }
-
-    fun getFilterFields(principal: Principal?): List<FilterField> {
-        if (!evaluatePreConditions(principal).success) {
-            return listOf(
-                and<RootType> { noop() }
-            )
-        }
-        return policyFilterFieldSuppliers.flatMap { it(principal) }
     }
 
     data class Result<RootType : PersistentEntity>(

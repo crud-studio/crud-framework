@@ -4,27 +4,25 @@ import com.github.tomaslanger.chalk.Chalk
 import studio.crud.crudframework.crud.policy.PolicyElementLocation.Companion.toPolicyElementLocation
 import studio.crud.crudframework.model.PersistentEntity
 import studio.crud.crudframework.modelfilter.FilterField
+import studio.crud.crudframework.util.filtersMatch
 import java.security.Principal
 
 class Policy<RootType : PersistentEntity>(
     val name: String,
     val location: PolicyElementLocation,
     val clazz: Class<RootType>,
+    private val filterFields: List<PolicyFilterFields>,
     private val canAccessRules: List<PolicyRule<RootType>>,
     private val canUpdateRules: List<PolicyRule<RootType>>,
     private val canDeleteRules: List<PolicyRule<RootType>>,
-    private val canCreateRules: List<PolicyRule<RootType>>
+    private val canCreateRules: List<PolicyRule<RootType>>,
 ) {
-    fun getCanAccessFilterFields(principal: Principal?): List<FilterField> {
-        return canAccessRules.flatMap { it.getFilterFields(principal) }
+    fun filtersMatch(entity: RootType, principal: Principal?): Boolean {
+        return getFilterFields(principal).all { it.filtersMatch(entity) }
     }
 
-    fun getCanUpdateFilterFields(principal: Principal?): List<FilterField> {
-        return getCanAccessFilterFields(principal) + canUpdateRules.flatMap { it.getFilterFields(principal) }
-    }
-
-    fun getCanDeleteFilterFields(principal: Principal?): List<FilterField> {
-        return getCanAccessFilterFields(principal) + canDeleteRules.flatMap { it.getFilterFields(principal) }
+    fun getFilterFields(principal: Principal?): List<FilterField> {
+        return filterFields.flatMap { it.supplier(principal) }
     }
 
     fun evaluatePreCanAccess(principal: Principal?): Result<RootType> {
