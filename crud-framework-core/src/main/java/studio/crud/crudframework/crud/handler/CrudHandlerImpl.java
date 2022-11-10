@@ -82,8 +82,8 @@ public class CrudHandlerImpl implements CrudHandler {
 	public <ID extends Serializable, Entity extends BaseCrudEntity<ID>> ReadCRUDRequestBuilder<CRUDPreIndexHook<ID, Entity>, CRUDOnIndexHook<ID, Entity>, CRUDPostIndexHook<ID, Entity>, PagingDTO<Entity>> index(
 			DynamicModelFilter filter, Class<Entity> clazz) {
 		return new ReadCRUDRequestBuilder<>(
-				(context) -> crudReadHandler.indexInternal(filter, clazz, context.getHooksDTO(), context.getFromCache(), context.getPersistCopy(), false),
-				(context) -> crudReadHandler.indexInternal(filter, clazz, context.getHooksDTO(), context.getFromCache(), context.getPersistCopy(), true).getPagingRO().getTotal()
+				(context) -> crudReadHandler.indexInternal(filter, clazz, context.getHooksDTO(), context.getFromCache(), context.getPersistCopy(), context.getApplyDefaultPolicies(), false),
+				(context) -> crudReadHandler.indexInternal(filter, clazz, context.getHooksDTO(), context.getFromCache(), context.getPersistCopy(), context.getApplyDefaultPolicies(), true).getPagingRO().getTotal()
 		);
 	}
 
@@ -92,10 +92,10 @@ public class CrudHandlerImpl implements CrudHandler {
 			DynamicModelFilter filter, Class<Entity> clazz, Class<RO> toClazz) {
 		return new ReadCRUDRequestBuilder<>(
 				(context) -> {
-					PagingDTO<Entity> resultDTO = crudReadHandler.indexInternal(filter, clazz, context.getHooksDTO(), context.getFromCache(), context.getPersistCopy(), false);
+					PagingDTO<Entity> resultDTO = crudReadHandler.indexInternal(filter, clazz, context.getHooksDTO(), context.getFromCache(), context.getPersistCopy(), context.getApplyDefaultPolicies(), false);
 					List<RO> mappedResults = crudHelper.fillMany(resultDTO.getData(), toClazz);
 					return new PagingDTO<>(resultDTO.getPagingRO(), mappedResults);
-				}, (context) -> crudReadHandler.indexInternal(filter, clazz, context.getHooksDTO(), context.getFromCache(), context.getPersistCopy(), true).getPagingRO().getTotal());
+				}, (context) -> crudReadHandler.indexInternal(filter, clazz, context.getHooksDTO(), context.getFromCache(), context.getPersistCopy(), context.getApplyDefaultPolicies(), true).getPagingRO().getTotal());
 	}
 
 	@Override

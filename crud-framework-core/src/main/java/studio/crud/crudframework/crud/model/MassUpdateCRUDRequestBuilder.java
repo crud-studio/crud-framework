@@ -9,7 +9,7 @@ public class MassUpdateCRUDRequestBuilder<PreHook, OnHook, PostHook, ReturnType>
 
 	private MassUpdateCRUDExecutor<PreHook, OnHook, PostHook, ReturnType> onExecute;
 
-	private Boolean persistCopy = null;
+	private boolean persistCopy = false;
 
 	/**
 	 * {@inheritDoc}

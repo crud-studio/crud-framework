@@ -39,17 +39,27 @@ public class CrudReadHandlerImpl implements CrudReadHandler {
 	@Resource(name = "crudReadHandler")
 	private CrudReadHandler crudReadHandlerProxy;
 
+	@Autowired
+	private CrudSecurityHandler crudSecurityHandler;
+
 	private static Random random = new Random();
 
 	@Override
 	public <ID extends Serializable, Entity extends BaseCrudEntity<ID>> PagingDTO<Entity> indexInternal(DynamicModelFilter filter, Class<Entity> clazz,
-                                                                                                        HooksDTO<CRUDPreIndexHook<ID, Entity>, CRUDOnIndexHook<ID, Entity>, CRUDPostIndexHook<ID, Entity>> hooks,
-                                                                                                        boolean fromCache, Boolean persistCopy, boolean count) {
+																										HooksDTO<CRUDPreIndexHook<ID, Entity>, CRUDOnIndexHook<ID, Entity>, CRUDPostIndexHook<ID, Entity>> hooks,
+																										boolean fromCache, Boolean persistCopy, boolean applyDefaultPolicies, boolean count) {
 		if(filter == null) {
 			filter = new DynamicModelFilter();
 		}
 
+		if (applyDefaultPolicies) {
+			MultiPolicyResult policyResult = crudSecurityHandler.evaluatePreCanAccess(clazz);
+			policyResult.throwIfFailed();
+			filter.getFilterFields().addAll(crudSecurityHandler.getFilterFields(clazz));
+		}
+
 		crudHelper.validateAndFillFilterFieldMetadata(filter.getFilterFields(), clazz);
+
 		List<IndexHooks> indexHooksList = crudHelper.getHooks(IndexHooks.class, clazz);
 
 		if(indexHooksList != null && !indexHooksList.isEmpty()) {
@@ -77,7 +87,7 @@ public class CrudReadHandlerImpl implements CrudReadHandler {
 
 
 		DynamicModelFilter finalFilter = filter;
-		PagingDTO<Entity> result = (PagingDTO<Entity>) CacheUtils.getObjectAndCache(() -> crudReadHandlerProxy.indexTransactional(finalFilter, clazz, hooks.getOnHooks(), persistCopy, count), cacheKey, cache);
+		PagingDTO<Entity> result = (PagingDTO<Entity>) CacheUtils.getObjectAndCache(() -> crudReadHandlerProxy.indexTransactional(finalFilter, clazz, hooks.getOnHooks(), persistCopy, applyDefaultPolicies, count), cacheKey, cache);
 
 		for(CRUDPostIndexHook<ID, Entity> postHook : hooks.getPostHooks()) {
 			postHook.run(filter, result);
@@ -89,8 +99,8 @@ public class CrudReadHandlerImpl implements CrudReadHandler {
 	@Override
 	@Transactional(readOnly = true)
 	public <ID extends Serializable, Entity extends BaseCrudEntity<ID>> PagingDTO<Entity> indexTransactional(DynamicModelFilter filter, Class<Entity> clazz,
-                                                                                                             List<CRUDOnIndexHook<ID, Entity>> onHooks,
-                                                                                                             Boolean persistCopy, boolean count) {
+																											 List<CRUDOnIndexHook<ID, Entity>> onHooks,
+																											 Boolean persistCopy, boolean applyDefaultPolicies, boolean count) {
 		PagingDTO<Entity> result;
 		if(!count) {
 			long total;
@@ -100,6 +110,12 @@ public class CrudReadHandlerImpl implements CrudReadHandler {
 			if(filter.getLimit() != null) {
 				filter.setLimit(filter.getLimit() + 1);
 				data = crudHelper.getEntities(filter, clazz, persistCopy, false);
+				if (applyDefaultPolicies) {
+					for (Entity entity : data) {
+						MultiPolicyResult policyResult = crudSecurityHandler.evaluatePostCanAccess(entity, clazz);
+						policyResult.throwIfFailed();
+					}
+				}
 				hasMore = data.size() == filter.getLimit();
 				filter.setLimit(filter.getLimit() - 1);
 				int start = filter.getStart() == null ? 0 : filter.getStart();

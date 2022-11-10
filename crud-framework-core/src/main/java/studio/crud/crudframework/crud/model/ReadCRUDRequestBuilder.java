@@ -13,7 +13,7 @@ public class ReadCRUDRequestBuilder<PreHook, OnHook, PostHook, ReturnType> exten
 
 	private ReadCRUDExecutor<PreHook, OnHook, PostHook, Long> onCount;
 
-	private Boolean persistCopy = null;
+	private boolean persistCopy = false;
 
 	/**
 	 * {@inheritDoc}

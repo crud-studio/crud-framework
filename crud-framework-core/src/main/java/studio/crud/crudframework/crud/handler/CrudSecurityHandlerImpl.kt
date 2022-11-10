@@ -7,6 +7,7 @@ import studio.crud.crudframework.crud.security.PrincipalProvider
 import studio.crud.crudframework.model.PersistentEntity
 import studio.crud.crudframework.modelfilter.FilterField
 import java.security.Principal
+import java.util.concurrent.ConcurrentHashMap
 
 internal class CrudSecurityHandlerImpl(
         private val policies: ObjectProvider<Policy<PersistentEntity>>,
@@ -25,16 +26,22 @@ internal class CrudSecurityHandlerImpl(
         return policyMap[clazz] ?: emptyList()
     }
 
-    override fun getCanAccessFilterFields(clazz: Class<*>): List<FilterField> {
-        return getPolicies(clazz).flatMap { it.getCanAccessFilterFields(getPrincipal()) }
+    override fun getFilterFields(clazz: Class<*>): List<FilterField> {
+        return getPolicies(clazz).flatMap { it.getFilterFields(principalProvider.getObject().getPrincipal()) }
     }
 
-    override fun getCanUpdateFilterFields(clazz: Class<*>): List<FilterField> {
-        return getPolicies(clazz).flatMap { it.getCanUpdateFilterFields(getPrincipal()) }
+    override fun evaluatePostCanAccess(entity: PersistentEntity, clazz: Class<*>): MultiPolicyResult {
+        val results = getPolicies(clazz).map { it.evaluatePostCanAccess(entity, principalProvider.getObject().getPrincipal()) }
+        return MultiPolicyResult(results.all { it.success }, results)
     }
 
-    override fun getDeleteFilterFields(clazz: Class<*>): List<FilterField> {
-        return getPolicies(clazz).flatMap { it.getCanDeleteFilterFields(getPrincipal()) }
+    override fun evaluatePreCanAccess(clazz: Class<*>): MultiPolicyResult {
+        val policies = getPolicies(clazz)
+        val results = policies.map { it.evaluatePreCanAccess(principalProvider.ifAvailable?.getPrincipal()) }
+        return MultiPolicyResult(
+            results.all { it.success },
+            results
+        )
     }
 
     private fun getPrincipal(): Principal? {

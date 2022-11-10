@@ -56,6 +56,7 @@ class TestCrudHandler(
             anyOrNull(),
             anyOrNull(),
             anyOrNull(),
+            anyOrNull(),
             anyOrNull()
         ))
     }
@@ -137,6 +138,7 @@ class TestCrudHandler(
         verify(mockCrudReadHandler, verificationMode).indexInternal(
             filterCaptor.capture(),
             eq(EntityType::class.java),
+            anyOrNull(),
             anyOrNull(),
             anyOrNull(),
             anyOrNull(),

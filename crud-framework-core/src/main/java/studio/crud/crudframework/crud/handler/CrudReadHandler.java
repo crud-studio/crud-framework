@@ -22,11 +22,11 @@ public interface CrudReadHandler {
 
     <ID extends Serializable, Entity extends BaseCrudEntity<ID>> PagingDTO<Entity> indexInternal(DynamicModelFilter filter, Class<Entity> clazz,
                                                                                                  HooksDTO<CRUDPreIndexHook<ID, Entity>, CRUDOnIndexHook<ID, Entity>, CRUDPostIndexHook<ID, Entity>> hooks,
-                                                                                                 boolean fromCache, Boolean persistCopy, boolean count);
+                                                                                                 boolean fromCache, Boolean persistCopy, boolean applyDefaultPolicies, boolean count);
 
     <ID extends Serializable, Entity extends BaseCrudEntity<ID>> PagingDTO<Entity> indexTransactional(DynamicModelFilter filter, Class<Entity> clazz,
                                                                                                       List<CRUDOnIndexHook<ID, Entity>> onHooks,
-                                                                                                      Boolean persistCopy, boolean count);
+                                                                                                      Boolean persistCopy, boolean applyDefaultPolicies, boolean count);
 
     <ID extends Serializable, Entity extends BaseCrudEntity<ID>> Entity showByInternal(DynamicModelFilter filter, Class<Entity> clazz,
                                                                                        HooksDTO<CRUDPreShowByHook<ID, Entity>, CRUDOnShowByHook<ID, Entity>, CRUDPostShowByHook<ID, Entity>> hooks, boolean fromCache, Boolean persistCopy, ShowByMode mode);
