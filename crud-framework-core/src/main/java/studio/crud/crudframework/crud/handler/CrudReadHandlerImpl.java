@@ -19,6 +19,7 @@ import studio.crud.crudframework.crud.hooks.show.CRUDPreShowHook;
 import studio.crud.crudframework.crud.hooks.show.by.CRUDOnShowByHook;
 import studio.crud.crudframework.crud.hooks.show.by.CRUDPostShowByHook;
 import studio.crud.crudframework.crud.hooks.show.by.CRUDPreShowByHook;
+import studio.crud.crudframework.crud.policy.PolicyRuleType;
 import studio.crud.crudframework.exception.WrapException;
 import studio.crud.crudframework.model.BaseCrudEntity;
 import studio.crud.crudframework.modelfilter.DynamicModelFilter;
@@ -53,7 +54,7 @@ public class CrudReadHandlerImpl implements CrudReadHandler {
 		}
 
 		if (applyDefaultPolicies) {
-			MultiPolicyResult policyResult = crudSecurityHandler.evaluatePreCanAccess(clazz);
+			MultiPolicyResult policyResult = crudSecurityHandler.evaluatePreRules(PolicyRuleType.CAN_ACCESS, clazz);
 			policyResult.throwIfFailed();
 			filter.getFilterFields().addAll(crudSecurityHandler.getFilterFields(clazz));
 		}
@@ -112,7 +113,7 @@ public class CrudReadHandlerImpl implements CrudReadHandler {
 				data = crudHelper.getEntities(filter, clazz, persistCopy, false);
 				if (applyDefaultPolicies) {
 					for (Entity entity : data) {
-						MultiPolicyResult policyResult = crudSecurityHandler.evaluatePostCanAccess(entity, clazz);
+						MultiPolicyResult policyResult = crudSecurityHandler.evaluatePostRules(entity, PolicyRuleType.CAN_ACCESS , clazz);
 						policyResult.throwIfFailed();
 					}
 				}

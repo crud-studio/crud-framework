@@ -1,7 +1,6 @@
 package studio.crud.crudframework.crud.policy
 
 import studio.crud.crudframework.model.BaseCrudEntity
-import java.security.Principal
 
 class TestEntity(override var id: Long = 1L, var name: String = "") : BaseCrudEntity<Long>() {
     override fun exists(): Boolean {
@@ -32,9 +31,4 @@ fun main() {
             }
         }
     }
-
-    val y = p.evaluatePreCanUpdate(Principal { "john" })
-    val z = p.evaluatePostCanUpdate(TestEntity(1L, "anne"), Principal { "john" })
-    println(y.outputShortOutcome())
-    println(z.outputShortOutcome())
 }

@@ -1,9 +1,6 @@
 package studio.crud.crudframework.crud.policy
 
 import studio.crud.crudframework.model.PersistentEntity
-import studio.crud.crudframework.modelfilter.FilterField
-import studio.crud.crudframework.modelfilter.dsl.and
-import studio.crud.crudframework.util.filtersMatch
 import java.security.Principal
 
 class PolicyRule<RootType : PersistentEntity>(
@@ -44,4 +41,17 @@ class PolicyRule<RootType : PersistentEntity>(
         val preConditionResults: List<PolicyPreCondition.Result>,
         val postConditionResults: List<PolicyPostCondition.Result<RootType>> = listOf()
     )
+
+    companion object {
+        fun <RootType : PersistentEntity> Collection<PolicyRule<RootType>>.evaluatePreConditions(principal: Principal?): List<PolicyRule.Result<RootType>> {
+            return this.map { it.evaluatePreConditions(principal) }
+        }
+
+        fun <RootType : PersistentEntity> Collection<PolicyRule<RootType>>.evaluatePostConditions(
+            entity: RootType,
+            principal: Principal?
+        ): List<PolicyRule.Result<RootType>> {
+            return this.map { it.evaluatePostConditions(entity, principal) }
+        }
+    }
 }

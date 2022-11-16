@@ -2,9 +2,10 @@ package studio.crud.crudframework.crud.policy
 
 import com.github.tomaslanger.chalk.Chalk
 import studio.crud.crudframework.crud.policy.PolicyElementLocation.Companion.toPolicyElementLocation
+import studio.crud.crudframework.crud.policy.PolicyRule.Companion.evaluatePostConditions
+import studio.crud.crudframework.crud.policy.PolicyRule.Companion.evaluatePreConditions
 import studio.crud.crudframework.model.PersistentEntity
 import studio.crud.crudframework.modelfilter.FilterField
-import studio.crud.crudframework.util.filtersMatch
 import java.security.Principal
 
 class Policy<RootType : PersistentEntity>(
@@ -12,85 +13,57 @@ class Policy<RootType : PersistentEntity>(
     val location: PolicyElementLocation,
     val clazz: Class<RootType>,
     private val filterFields: List<PolicyFilterFields>,
-    private val canAccessRules: List<PolicyRule<RootType>>,
-    private val canUpdateRules: List<PolicyRule<RootType>>,
-    private val canDeleteRules: List<PolicyRule<RootType>>,
-    private val canCreateRules: List<PolicyRule<RootType>>,
+    private val rules: List<PolicyRule<RootType>>
 ) {
-    fun filtersMatch(entity: RootType, principal: Principal?): Boolean {
-        return getFilterFields(principal).all { it.filtersMatch(entity) }
+    private val canAccessRules: List<PolicyRule<RootType>> by lazy {
+        rules.filter { it.type == PolicyRuleType.CAN_ACCESS }
+    }
+    private val canUpdateRules: List<PolicyRule<RootType>> by lazy {
+        rules.filter { it.type == PolicyRuleType.CAN_UPDATE }
+    }
+    private val canDeleteRules: List<PolicyRule<RootType>> by lazy {
+        rules.filter { it.type == PolicyRuleType.CAN_DELETE }
+    }
+    private val canCreateRules: List<PolicyRule<RootType>> by lazy {
+        rules.filter { it.type == PolicyRuleType.CAN_CREATE }
     }
 
     fun getFilterFields(principal: Principal?): List<FilterField> {
         return filterFields.flatMap { it.supplier(principal) }
     }
 
+    fun evaluatePreRules(type: PolicyRuleType, principal: Principal?): Result<RootType> {
+        val ruleResults = when (type) {
+            PolicyRuleType.CAN_ACCESS -> canAccessRules.evaluatePreConditions(principal)
+            PolicyRuleType.CAN_CREATE -> canAccessRules.evaluatePreConditions(principal) + canCreateRules.evaluatePreConditions(principal)
+            PolicyRuleType.CAN_UPDATE -> canAccessRules.evaluatePreConditions(principal) + canUpdateRules.evaluatePreConditions(principal)
+            PolicyRuleType.CAN_DELETE -> canAccessRules.evaluatePreConditions(principal) + canDeleteRules.evaluatePreConditions(principal)
+        }
+        return Result(
+            ruleResults.all { it.success },
+            this,
+            ruleResults
+        )
+    }
+
+    fun evaluatePostRules(entity: RootType, type: PolicyRuleType, principal: Principal?): Result<RootType> {
+        val ruleResults = when (type) {
+            PolicyRuleType.CAN_ACCESS -> canAccessRules.evaluatePostConditions(entity, principal)
+            PolicyRuleType.CAN_CREATE -> canAccessRules.evaluatePostConditions(entity, principal) + canCreateRules.evaluatePostConditions(entity, principal)
+            PolicyRuleType.CAN_UPDATE -> canAccessRules.evaluatePostConditions(entity, principal) + canUpdateRules.evaluatePostConditions(entity, principal)
+            PolicyRuleType.CAN_DELETE -> canAccessRules.evaluatePostConditions(entity, principal) + canDeleteRules.evaluatePostConditions(entity, principal)
+        }
+        return Result(
+            ruleResults.all { it.success },
+            this,
+            ruleResults
+        )
+    }
+
+
     fun evaluatePreCanAccess(principal: Principal?): Result<RootType> {
         val result = canAccessRules.map { it.evaluatePreConditions(principal) }
         return Result(
-            result.all { it.success },
-            this,
-            result
-        )
-    }
-
-    fun evaluatePreCanCreate(principal: Principal?): Result<RootType> {
-        val result = canCreateRules.map { it.evaluatePreConditions(principal) }
-        return evaluatePreCanAccess(principal) + Result(
-            result.all { it.success },
-            this,
-            result
-        )
-    }
-
-    fun evaluatePreCanUpdate(principal: Principal?): Result<RootType> {
-        val result = canUpdateRules.map { it.evaluatePreConditions(principal) }
-        return evaluatePreCanAccess(principal) + Result(
-            result.all { it.success },
-            this,
-            result
-        )
-    }
-
-    fun evaluatePreCanDelete(principal: Principal?): Result<RootType> {
-        val result = canDeleteRules.map { it.evaluatePreConditions(principal) }
-        return evaluatePreCanAccess(principal) + Result(
-            result.all { it.success },
-            this,
-            result
-        )
-    }
-
-    fun evaluatePostCanAccess(entity: RootType, principal: Principal?): Result<RootType> {
-        val result = canAccessRules.map { it.evaluatePostConditions(entity, principal) }
-        return Result(
-            result.all { it.success },
-            this,
-            result
-        )
-    }
-
-    fun evaluatePostCanCreate(entity: RootType, principal: Principal?): Result<RootType> {
-        val result = canCreateRules.map { it.evaluatePostConditions(entity, principal) }
-        return evaluatePostCanAccess(entity, principal) + Result(
-            result.all { it.success },
-            this,
-            result
-        )
-    }
-
-    fun evaluatePostCanUpdate(entity: RootType, principal: Principal?): Result<RootType> {
-        val result = canUpdateRules.map { it.evaluatePostConditions(entity, principal) }
-        return evaluatePostCanAccess(entity, principal) + Result(
-            result.all { it.success },
-            this,
-            result
-        )
-    }
-
-    fun evaluatePostCanDelete(entity: RootType, principal: Principal?): Result<RootType> {
-        val result = canDeleteRules.map { it.evaluatePostConditions(entity, principal) }
-        return evaluatePostCanAccess(entity, principal) + Result(
             result.all { it.success },
             this,
             result
