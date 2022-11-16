@@ -132,6 +132,18 @@ class Policy<RootType : PersistentEntity>(
                 Chalk.on("FAILED").bold().red().toString()
             }
         }
+
+        companion object {
+            @JvmName("policyListDistinctRuleTypes")
+            fun Collection<Policy.Result<out PersistentEntity>>.distinctRuleTypes(): Set<PolicyRuleType> {
+                return this.flatMap { it.ruleResults.distinctRuleTypes() }.toSet()
+            }
+
+            @JvmName("policyRuleListDistinctRuleTypes")
+            fun Collection<PolicyRule.Result<*>>.distinctRuleTypes(): Set<PolicyRuleType> {
+                return this.map { it.rule.type }.toSet()
+            }
+        }
     }
 }
 

@@ -22,23 +22,24 @@ internal class CrudSecurityHandlerImpl(
         }
     }
 
-    override fun getPolicies(clazz: Class<*>): List<Policy<PersistentEntity>> {
+    override fun getPolicies(clazz: Class<out PersistentEntity>): List<Policy<PersistentEntity>> {
         return policyMap[clazz] ?: emptyList()
     }
 
-    override fun getFilterFields(clazz: Class<*>): List<FilterField> {
+    override fun getFilterFields(clazz: Class<out PersistentEntity>): List<FilterField> {
         return getPolicies(clazz).flatMap { it.getFilterFields(principalProvider.getObject().getPrincipal()) }
     }
 
-    override fun evaluatePostCanAccess(entity: PersistentEntity, clazz: Class<*>): MultiPolicyResult {
+    override fun evaluatePostCanAccess(entity: PersistentEntity, clazz: Class<out PersistentEntity>): MultiPolicyResult {
         val results = getPolicies(clazz).map { it.evaluatePostCanAccess(entity, principalProvider.getObject().getPrincipal()) }
-        return MultiPolicyResult(results.all { it.success }, results)
+        return MultiPolicyResult(clazz, results.all { it.success }, results)
     }
 
-    override fun evaluatePreCanAccess(clazz: Class<*>): MultiPolicyResult {
+    override fun evaluatePreCanAccess(clazz: Class<out PersistentEntity>): MultiPolicyResult {
         val policies = getPolicies(clazz)
         val results = policies.map { it.evaluatePreCanAccess(principalProvider.ifAvailable?.getPrincipal()) }
         return MultiPolicyResult(
+            clazz,
             results.all { it.success },
             results
         )

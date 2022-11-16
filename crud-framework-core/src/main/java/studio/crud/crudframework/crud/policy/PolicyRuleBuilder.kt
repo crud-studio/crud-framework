@@ -5,7 +5,7 @@ import studio.crud.crudframework.model.PersistentEntity
 import studio.crud.crudframework.modelfilter.dsl.FilterFieldsBuilder
 import java.security.Principal
 
-class PolicyRuleBuilder<RootType : PersistentEntity>(private val name: String?, private val location: PolicyElementLocation) {
+class PolicyRuleBuilder<RootType : PersistentEntity>(private val name: String?, private val type: PolicyRuleType, private val location: PolicyElementLocation) {
     private val preConditions = mutableListOf<PolicyPreCondition>()
     private val postConditions = mutableListOf<PolicyPostCondition<RootType>>()
 
@@ -18,7 +18,7 @@ class PolicyRuleBuilder<RootType : PersistentEntity>(private val name: String?, 
     }
 
     fun build(): PolicyRule<RootType> {
-        return PolicyRule(name ?: DEFAULT_RULE_NAME, location, preConditions, postConditions)
+        return PolicyRule(name ?: DEFAULT_RULE_NAME, location, type, preConditions, postConditions)
     }
 
     companion object {

@@ -9,6 +9,7 @@ import java.security.Principal
 class PolicyRule<RootType : PersistentEntity>(
     val name: String,
     val location: PolicyElementLocation,
+    val type: PolicyRuleType,
     val preConditions: List<PolicyPreCondition>,
     val postConditions: List<PolicyPostCondition<RootType>>
 ) {

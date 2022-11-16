@@ -46,9 +46,9 @@ class PolicyTest {
         @Bean
         fun canAccessPolicy(): Policy<*> = policy<TestEntityMain> {
             canAccess {
-//                preCondition("principal is admin") {
-//                    it?.name == "admin"
-//                }
+                preCondition("principal is admin") {
+                    it?.name == "admin"
+                }
                 filter {
                     TestEntityMain::name Equal "john"
                 }

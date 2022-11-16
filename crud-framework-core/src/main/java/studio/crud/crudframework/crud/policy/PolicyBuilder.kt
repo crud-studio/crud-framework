@@ -23,28 +23,28 @@ class PolicyBuilder<RootType : PersistentEntity>(private val name: String?, priv
     }
 
     fun canAccess(name: String? = null, block: PolicyRuleBuilder<RootType>.() -> Unit) {
-        val policyRuleBuilder = PolicyRuleBuilder<RootType>(name, Thread.currentThread().stackTrace[2].toPolicyElementLocation())
+        val policyRuleBuilder = PolicyRuleBuilder<RootType>(name, PolicyRuleType.CAN_ACCESS, Thread.currentThread().stackTrace[2].toPolicyElementLocation())
         policyRuleBuilder.block()
         val action = policyRuleBuilder.build()
         canAccessRules.add(action)
     }
 
     fun canUpdate(name: String? = null, block: PolicyRuleBuilder<RootType>.() -> Unit) {
-        val policyRuleBuilder = PolicyRuleBuilder<RootType>(name, Thread.currentThread().stackTrace[2].toPolicyElementLocation())
+        val policyRuleBuilder = PolicyRuleBuilder<RootType>(name, PolicyRuleType.CAN_UPDATE, Thread.currentThread().stackTrace[2].toPolicyElementLocation())
         policyRuleBuilder.block()
         val action = policyRuleBuilder.build()
         canUpdateRules.add(action)
     }
 
     fun canDelete(name: String? = null, block: PolicyRuleBuilder<RootType>.() -> Unit) {
-        val policyRuleBuilder = PolicyRuleBuilder<RootType>(name, Thread.currentThread().stackTrace[2].toPolicyElementLocation())
+        val policyRuleBuilder = PolicyRuleBuilder<RootType>(name, PolicyRuleType.CAN_DELETE, Thread.currentThread().stackTrace[2].toPolicyElementLocation())
         policyRuleBuilder.block()
         val action = policyRuleBuilder.build()
         canDeleteRules.add(action)
     }
 
     fun canCreate(name: String? = null, block: PolicyRuleBuilder<RootType>.() -> Unit) {
-        val policyRuleBuilder = PolicyRuleBuilder<RootType>(name, Thread.currentThread().stackTrace[2].toPolicyElementLocation())
+        val policyRuleBuilder = PolicyRuleBuilder<RootType>(name, PolicyRuleType.CAN_CREATE, Thread.currentThread().stackTrace[2].toPolicyElementLocation())
         policyRuleBuilder.block()
         val action = policyRuleBuilder.build()
         canCreateRules.add(action)
