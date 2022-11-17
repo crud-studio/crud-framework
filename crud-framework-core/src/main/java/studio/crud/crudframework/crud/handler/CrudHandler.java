@@ -2,7 +2,6 @@ package studio.crud.crudframework.crud.handler;
 
 import studio.crud.crudframework.crud.annotation.DeleteColumn;
 import studio.crud.crudframework.crud.annotation.Deleteable;
-import studio.crud.crudframework.crud.enums.ShowByMode;
 import studio.crud.crudframework.crud.hooks.create.CRUDOnCreateHook;
 import studio.crud.crudframework.crud.hooks.create.CRUDPostCreateHook;
 import studio.crud.crudframework.crud.hooks.create.CRUDPreCreateHook;
@@ -185,14 +184,8 @@ public interface CrudHandler {
     <ID extends Serializable, Entity extends BaseCrudEntity<ID>> ReadCRUDRequestBuilder<CRUDPreShowByHook<ID, Entity>, CRUDOnShowByHook<ID, Entity>, CRUDPostShowByHook<ID, Entity>, Entity> showBy(
             DynamicModelFilter filter, Class<Entity> clazz);
 
-    <ID extends Serializable, Entity extends BaseCrudEntity<ID>> ReadCRUDRequestBuilder<CRUDPreShowByHook<ID, Entity>, CRUDOnShowByHook<ID, Entity>, CRUDPostShowByHook<ID, Entity>, Entity> showBy(
-            DynamicModelFilter filter, Class<Entity> clazz, ShowByMode mode);
-
     <ID extends Serializable, Entity extends BaseCrudEntity<ID>, RO> ReadCRUDRequestBuilder<CRUDPreShowByHook<ID, Entity>, CRUDOnShowByHook<ID, Entity>, CRUDPostShowByHook<ID, Entity>, RO> showBy(
             DynamicModelFilter filter, Class<Entity> clazz, Class<RO> toClazz);
-
-    <ID extends Serializable, Entity extends BaseCrudEntity<ID>, RO> ReadCRUDRequestBuilder<CRUDPreShowByHook<ID, Entity>, CRUDOnShowByHook<ID, Entity>, CRUDPostShowByHook<ID, Entity>, RO> showBy(
-            DynamicModelFilter filter, Class<Entity> clazz, Class<RO> toClazz, ShowByMode mode);
 
     /**
      * Show request, returns a single {@code T} entity according with the given {@code id}

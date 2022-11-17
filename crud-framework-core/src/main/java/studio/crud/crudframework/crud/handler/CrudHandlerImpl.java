@@ -1,7 +1,6 @@
 package studio.crud.crudframework.crud.handler;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import studio.crud.crudframework.crud.enums.ShowByMode;
 import studio.crud.crudframework.crud.exception.CrudException;
 import studio.crud.crudframework.crud.hooks.create.CRUDOnCreateHook;
 import studio.crud.crudframework.crud.hooks.create.CRUDPostCreateHook;
@@ -201,36 +200,24 @@ public class CrudHandlerImpl implements CrudHandler {
 	@Override
 	public <ID extends Serializable, Entity extends BaseCrudEntity<ID>> ReadCRUDRequestBuilder<CRUDPreShowByHook<ID, Entity>, CRUDOnShowByHook<ID, Entity>, CRUDPostShowByHook<ID, Entity>, Entity> showBy(
 			DynamicModelFilter filter, Class<Entity> clazz) {
-		return showBy(filter, clazz, ShowByMode.THROW_EXCEPTION);
-	}
-
-	@Override
-	public <ID extends Serializable, Entity extends BaseCrudEntity<ID>> ReadCRUDRequestBuilder<CRUDPreShowByHook<ID, Entity>, CRUDOnShowByHook<ID, Entity>, CRUDPostShowByHook<ID, Entity>, Entity> showBy(
-			DynamicModelFilter filter, Class<Entity> clazz, ShowByMode mode) {
 		return new ReadCRUDRequestBuilder<>(
-				(hooks, fromCache, persistCopy, accessorDTO) -> crudReadHandler.showByInternal(filter, clazz, hooks, fromCache, persistCopy, mode, accessorDTO),
-				(hooks, fromCache, persistCopy, accessorDTO) -> crudReadHandler.showByInternal(filter, clazz, hooks, fromCache, persistCopy, mode, accessorDTO) != null ? 1L : 0L
+				(hooks, fromCache, persistCopy, accessorDTO) -> crudReadHandler.showByInternal(filter, clazz, hooks, fromCache, persistCopy, accessorDTO),
+				(hooks, fromCache, persistCopy, accessorDTO) -> crudReadHandler.showByInternal(filter, clazz, hooks, fromCache, persistCopy, accessorDTO) != null ? 1L : 0L
 		);
 	}
 
 	@Override
 	public <ID extends Serializable, Entity extends BaseCrudEntity<ID>, RO> ReadCRUDRequestBuilder<CRUDPreShowByHook<ID, Entity>, CRUDOnShowByHook<ID, Entity>, CRUDPostShowByHook<ID, Entity>, RO> showBy(
 			DynamicModelFilter filter, Class<Entity> clazz, Class<RO> toClazz) {
-		return showBy(filter, clazz, toClazz, ShowByMode.THROW_EXCEPTION);
-	}
-
-	@Override
-	public <ID extends Serializable, Entity extends BaseCrudEntity<ID>, RO> ReadCRUDRequestBuilder<CRUDPreShowByHook<ID, Entity>, CRUDOnShowByHook<ID, Entity>, CRUDPostShowByHook<ID, Entity>, RO> showBy(
-			DynamicModelFilter filter, Class<Entity> clazz, Class<RO> toClazz, ShowByMode mode) {
 		return new ReadCRUDRequestBuilder<>(
 				(hooks, fromCache, persistCopy, accessorDTO) -> {
-					Entity result = crudReadHandler.showByInternal(filter, clazz, hooks, fromCache, persistCopy, mode, accessorDTO);
+					Entity result = crudReadHandler.showByInternal(filter, clazz, hooks, fromCache, persistCopy, accessorDTO);
 					if(result == null) {
 						return null;
 					}
 
 					return crudHelper.fill(result, toClazz);
-				}, (hooks, fromCache, persistCopy, accessorDTO) -> crudReadHandler.showByInternal(filter, clazz, hooks, fromCache, persistCopy, mode, accessorDTO) != null ? 1L : 0L
+				}, (hooks, fromCache, persistCopy, accessorDTO) -> crudReadHandler.showByInternal(filter, clazz, hooks, fromCache, persistCopy, accessorDTO) != null ? 1L : 0L
 		);
 	}
 

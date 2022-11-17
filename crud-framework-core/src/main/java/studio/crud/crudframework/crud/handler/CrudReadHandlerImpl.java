@@ -5,7 +5,6 @@ import org.springframework.transaction.annotation.Transactional;
 import studio.crud.crudframework.crud.cache.CacheUtils;
 import studio.crud.crudframework.crud.cache.CrudCache;
 import studio.crud.crudframework.crud.dataaccess.model.DataAccessorDTO;
-import studio.crud.crudframework.crud.enums.ShowByMode;
 import studio.crud.crudframework.crud.exception.CrudReadException;
 import studio.crud.crudframework.crud.hooks.HooksDTO;
 import studio.crud.crudframework.crud.hooks.index.CRUDOnIndexHook;
@@ -141,7 +140,7 @@ public class CrudReadHandlerImpl implements CrudReadHandler {
 
 	@Override
 	public <ID extends Serializable, Entity extends BaseCrudEntity<ID>> Entity showByInternal(DynamicModelFilter filter, Class<Entity> clazz,
-			HooksDTO<CRUDPreShowByHook<ID, Entity>, CRUDOnShowByHook<ID, Entity>, CRUDPostShowByHook<ID, Entity>> hooks, boolean fromCache, Boolean persistCopy, ShowByMode mode, DataAccessorDTO accessorDTO) {
+			HooksDTO<CRUDPreShowByHook<ID, Entity>, CRUDOnShowByHook<ID, Entity>, CRUDPostShowByHook<ID, Entity>> hooks, boolean fromCache, Boolean persistCopy, DataAccessorDTO accessorDTO) {
 
 		if(filter == null) {
 			filter = new DynamicModelFilter();
@@ -168,7 +167,7 @@ public class CrudReadHandlerImpl implements CrudReadHandler {
 		}
 
 		DynamicModelFilter finalFilter = filter;
-		Entity entity = (Entity) CacheUtils.getObjectAndCache(() -> crudReadHandlerProxy.showByTransactional(finalFilter, clazz, hooks.getOnHooks(), persistCopy, mode, accessorDTO), "showBy_" + filter.hashCode(), cache);
+		Entity entity = (Entity) CacheUtils.getObjectAndCache(() -> crudReadHandlerProxy.showByTransactional(finalFilter, clazz, hooks.getOnHooks(), persistCopy, accessorDTO), "showBy_" + filter.hashCode(), cache);
 
 		for(CRUDPostShowByHook<ID, Entity> postHook : hooks.getPostHooks()) {
 			postHook.run(entity);
@@ -181,29 +180,11 @@ public class CrudReadHandlerImpl implements CrudReadHandler {
 	@Transactional(readOnly = true)
 	public <ID extends Serializable, Entity extends BaseCrudEntity<ID>> Entity showByTransactional(DynamicModelFilter filter, Class<Entity> clazz, List<CRUDOnShowByHook<ID, Entity>> onHooks,
 			Boolean persistCopy,
-			ShowByMode mode,
 			DataAccessorDTO accessorDTO) {
 		List<Entity> entities = crudHelper.getEntities(filter, clazz, accessorDTO, persistCopy, false);
 		Entity entity = null;
-		switch(mode) {
-			case THROW_EXCEPTION:
-				if(entities.size() > 1) {
-					throw new CrudReadException("Received a non unique result");
-				}
-				entity = entities.size() > 0 ? entities.get(0) : null;
-
-				break;
-			case RETURN_FIRST:
-				if(entities.size() > 0) {
-					entity = entities.get(0);
-				}
-				break;
-			case RETURN_RANDOM:
-				if(entities.size() > 0) {
-					entity = entities.get(random.nextInt(entities.size()));
-				}
-
-				break;
+		if(entities.size() > 0) {
+			entity = entities.get(0);
 		}
 
 		for(CRUDOnShowByHook<ID, Entity> onHook : onHooks) {
