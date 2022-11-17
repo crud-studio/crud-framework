@@ -1,8 +1,6 @@
 package studio.crud.crudframework.crud.handler
 
 import studio.crud.crudframework.crud.cache.CrudCache
-import studio.crud.crudframework.crud.dataaccess.DataAccessManager
-import studio.crud.crudframework.crud.dataaccess.model.DataAccessorDTO
 import studio.crud.crudframework.crud.hooks.interfaces.CRUDHooks
 import studio.crud.crudframework.crud.model.EntityMetadataDTO
 import studio.crud.crudframework.model.BaseCrudEntity
@@ -19,7 +17,11 @@ abstract class AbstractCrudHelper : CrudHelper {
         throw UnsupportedOperationException()
     }
 
-    override fun <ID : Serializable?, Entity : BaseCrudEntity<ID>?> decorateFilter(filter: DynamicModelFilter?, entityClazz: Class<Entity>?, accessorDTO: DataAccessorDTO?, forUpdate: Boolean) {
+    override fun <ID : Serializable?, Entity : BaseCrudEntity<ID>?> decorateFilter(
+        filter: DynamicModelFilter?,
+        entityClazz: Class<Entity>?,
+        forUpdate: Boolean
+    ) {
         throw UnsupportedOperationException()
     }
 
@@ -33,26 +35,34 @@ abstract class AbstractCrudHelper : CrudHelper {
     override fun <ID : Serializable?, Entity : BaseCrudEntity<ID>?> getEntities(
         filter: DynamicModelFilter?,
         entityClazz: Class<Entity>?,
-        accessorDTO: DataAccessorDTO?,
         persistCopy: Boolean?,
         forUpdate: Boolean
     ): MutableList<Entity> {
         throw UnsupportedOperationException()
     }
 
-    override fun <ID : Serializable?, Entity : BaseCrudEntity<ID>?> getEntitiesCount(filter: DynamicModelFilter?, entityClazz: Class<Entity>?, accessorDTO: DataAccessorDTO?, forUpdate: Boolean): Long {
+    override fun <ID : Serializable?, Entity : BaseCrudEntity<ID>?> getEntitiesCount(
+        filter: DynamicModelFilter?,
+        entityClazz: Class<Entity>?,
+        forUpdate: Boolean
+    ): Long {
         throw UnsupportedOperationException()
     }
 
-    override fun <ID : Serializable?, Entity : BaseCrudEntity<ID>?> getEntityById(entityId: ID, entityClazz: Class<Entity>?, persistCopy: Boolean?, accessorDTO: DataAccessorDTO?, forUpdate: Boolean): Entity {
+    override fun <ID : Serializable?, Entity : BaseCrudEntity<ID>?> getEntityById(
+        entityId: ID,
+        entityClazz: Class<Entity>?,
+        persistCopy: Boolean?,
+        forUpdate: Boolean
+    ): Entity {
         throw UnsupportedOperationException()
     }
 
-    override fun <ID : Serializable?, Entity : BaseCrudEntity<ID>?> getEntityCountById(entityId: ID, entityClazz: Class<Entity>?, accessorDTO: DataAccessorDTO?, forUpdate: Boolean): Long {
-        throw UnsupportedOperationException()
-    }
-
-    override fun <ID : Serializable?, Entity : BaseCrudEntity<ID>?> getAccessorManager(accessorClazz: Class<*>?, entityClazz: Class<Entity>?): DataAccessManager<*, *, *> {
+    override fun <ID : Serializable?, Entity : BaseCrudEntity<ID>?> getEntityCountById(
+        entityId: ID,
+        entityClazz: Class<Entity>?,
+        forUpdate: Boolean
+    ): Long {
         throw UnsupportedOperationException()
     }
 

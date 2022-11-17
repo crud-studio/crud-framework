@@ -2,8 +2,6 @@ package studio.crud.crudframework.crud.handler;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
-import studio.crud.crudframework.crud.dataaccess.DataAccessManager;
-import studio.crud.crudframework.crud.dataaccess.model.DataAccessorDTO;
 import studio.crud.crudframework.crud.exception.CrudCreateException;
 import studio.crud.crudframework.crud.exception.CrudDeleteException;
 import studio.crud.crudframework.crud.hooks.HooksDTO;
@@ -33,8 +31,7 @@ public class CrudCreateHandlerImpl implements CrudCreateHandler {
 	private CrudCreateHandler crudCreateHandlerProxy;
 
 	@Override
-	public <ID extends Serializable, Entity extends BaseCrudEntity<ID>> Entity createInternal(Entity entity, HooksDTO<CRUDPreCreateHook<ID, Entity>, CRUDOnCreateHook<ID, Entity>, CRUDPostCreateHook<ID, Entity>> hooks,
-			DataAccessorDTO accessorDTO) {
+	public <ID extends Serializable, Entity extends BaseCrudEntity<ID>> Entity createInternal(Entity entity, HooksDTO<CRUDPreCreateHook<ID, Entity>, CRUDOnCreateHook<ID, Entity>, CRUDPostCreateHook<ID, Entity>> hooks) {
 		Objects.requireNonNull(entity, "Entity cannot be null");
 
 		List<CreateHooks> createHooksList = crudHelper.getHooks(CreateHooks.class, entity.getClass());
@@ -51,7 +48,7 @@ public class CrudCreateHandlerImpl implements CrudCreateHandler {
 			preHook.run(entity);
 		}
 
-			entity = crudCreateHandlerProxy.createTransactional(entity, hooks.getOnHooks(), accessorDTO);
+			entity = crudCreateHandlerProxy.createTransactional(entity, hooks.getOnHooks());
 		for(CRUDPostCreateHook<ID, Entity> postHook : hooks.getPostHooks()) {
 			postHook.run(entity);
 		}
@@ -61,14 +58,7 @@ public class CrudCreateHandlerImpl implements CrudCreateHandler {
 
 	@Override
 	@Transactional(readOnly = false)
-	public <ID extends Serializable, Entity extends BaseCrudEntity<ID>> Entity createTransactional(Entity entity, List<CRUDOnCreateHook<ID, Entity>> onHooks, DataAccessorDTO accessorDTO) {
-
-		if(accessorDTO != null) {
-			DataAccessManager dataAccessManager = crudHelper.getAccessorManager(accessorDTO.getAccessorClazz(), entity.getClass());
-			if(dataAccessManager != null) {
-				dataAccessManager.decorateCreateOperation(entity, accessorDTO.getAccessorId(), accessorDTO.getAccessorClazz());
-			}
-		}
+	public <ID extends Serializable, Entity extends BaseCrudEntity<ID>> Entity createTransactional(Entity entity, List<CRUDOnCreateHook<ID, Entity>> onHooks) {
 
 		for(CRUDOnCreateHook<ID, Entity> onHook : onHooks) {
 			onHook.run(entity);
@@ -81,8 +71,7 @@ public class CrudCreateHandlerImpl implements CrudCreateHandler {
 
 	@Override
 	public <ID extends Serializable, Entity extends BaseCrudEntity<ID>> Entity createFromInternal(Object object, Class<Entity> clazz,
-			HooksDTO<CRUDPreCreateFromHook<ID, Entity>, CRUDOnCreateFromHook<ID, Entity>, CRUDPostCreateFromHook<ID, Entity>> hooks,
-			DataAccessorDTO accessorDTO) {
+			HooksDTO<CRUDPreCreateFromHook<ID, Entity>, CRUDOnCreateFromHook<ID, Entity>, CRUDPostCreateFromHook<ID, Entity>> hooks) {
 		Objects.requireNonNull(object, "Object cannot be null");
 
 		List<CreateFromHooks> createFromHooksList = crudHelper.getHooks(CreateFromHooks.class, clazz);
@@ -101,7 +90,7 @@ public class CrudCreateHandlerImpl implements CrudCreateHandler {
 
 		crudHelper.validate(object);
 
-		Entity entity = crudCreateHandlerProxy.createFromTransactional(object, clazz, hooks.getOnHooks(), accessorDTO);
+		Entity entity = crudCreateHandlerProxy.createFromTransactional(object, clazz, hooks.getOnHooks());
 		for(CRUDPostCreateFromHook<ID, Entity> postHook : hooks.getPostHooks()) {
 			postHook.run(entity);
 		}
@@ -110,18 +99,11 @@ public class CrudCreateHandlerImpl implements CrudCreateHandler {
 
 	@Override
 	@Transactional(readOnly = false)
-	public <ID extends Serializable, Entity extends BaseCrudEntity<ID>> Entity createFromTransactional(Object object, Class<Entity> clazz, List<CRUDOnCreateFromHook<ID, Entity>> onHooks, DataAccessorDTO accessorDTO) {
+	public <ID extends Serializable, Entity extends BaseCrudEntity<ID>> Entity createFromTransactional(Object object, Class<Entity> clazz, List<CRUDOnCreateFromHook<ID, Entity>> onHooks) {
 		Entity entity = crudHelper.fill(object, clazz);
 
 		if(entity.exists()) {
 			throw new CrudDeleteException("Entity of type [ " + clazz.getSimpleName() + " ] with ID [ " + entity.getId() + " ] already exists and cannot be created");
-		}
-
-		if(accessorDTO != null) {
-			DataAccessManager dataAccessManager = crudHelper.getAccessorManager(accessorDTO.getAccessorClazz(), clazz);
-			if(dataAccessManager != null) {
-				dataAccessManager.decorateCreateOperation(entity, accessorDTO.getAccessorId(), accessorDTO.getAccessorClazz());
-			}
 		}
 
 		for(CRUDOnCreateFromHook<ID, Entity> onHook : onHooks) {

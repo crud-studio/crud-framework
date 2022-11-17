@@ -1,6 +1,5 @@
 package studio.crud.crudframework.crud.model;
 
-import studio.crud.crudframework.crud.dataaccess.model.DataAccessorDTO;
 import studio.crud.crudframework.crud.hooks.HooksDTO;
 
 /**
@@ -17,7 +16,7 @@ public class MassUpdateCRUDRequestBuilder<PreHook, OnHook, PostHook, ReturnType>
 	 */
 	@Override
 	public ReturnType execute() {
-		return this.onExecute.execute(new HooksDTO<>(preHooks, onHooks, postHooks), persistCopy, accessorDTO);
+		return this.onExecute.execute(new HooksDTO<>(preHooks, onHooks, postHooks), persistCopy);
 	}
 
 	public MassUpdateCRUDRequestBuilder(MassUpdateCRUDExecutor<PreHook, OnHook, PostHook, ReturnType> onExecute) {
@@ -31,6 +30,6 @@ public class MassUpdateCRUDRequestBuilder<PreHook, OnHook, PostHook, ReturnType>
 
 	public interface MassUpdateCRUDExecutor<PreHook, OnHook, PostHook, EntityType> {
 
-		EntityType execute(HooksDTO<PreHook, OnHook, PostHook> hooksDTO, Boolean persistCopy, DataAccessorDTO accessorDTO);
+		EntityType execute(HooksDTO<PreHook, OnHook, PostHook> hooksDTO, Boolean persistCopy);
 	}
 }
