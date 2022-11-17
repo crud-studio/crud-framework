@@ -115,7 +115,12 @@ class TestCrudHandler(
      * @param id ID argument
      */
     inline fun <reified EntityType : BaseCrudEntity<ID>, reified ID : Serializable> onDelete(id: ID? = null): OngoingStubbing<Unit> {
-        return whenever(mockCrudDeleteHandler.deleteInternal(eqOrAny(id), eq(EntityType::class.java), anyOrNull()))
+        return whenever(mockCrudDeleteHandler.deleteInternal(
+            eqOrAny(id),
+            eq(EntityType::class.java),
+            anyOrNull(),
+            context.getApplyDefaultPolicies()
+        ))
     }
 
     /**
@@ -228,7 +233,12 @@ class TestCrudHandler(
      */
     inline fun <reified EntityType : BaseCrudEntity<ID>, reified ID : Serializable> verifyDelete(verificationMode: VerificationMode = times(1)): ID {
         val idCaptor = argumentCaptor<ID>()
-        verify(mockCrudDeleteHandler, verificationMode).deleteInternal(idCaptor.capture(), eq(EntityType::class.java), anyOrNull())
+        verify(mockCrudDeleteHandler, verificationMode).deleteInternal(
+            idCaptor.capture(),
+            eq(EntityType::class.java),
+            anyOrNull(),
+            context.getApplyDefaultPolicies()
+        )
         return idCaptor.lastValue
     }
 

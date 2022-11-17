@@ -201,8 +201,7 @@ public class CrudReadHandlerImpl implements CrudReadHandler {
 	@Override
 	@Transactional(readOnly = true)
 	public <ID extends Serializable, Entity extends BaseCrudEntity<ID>> Entity showByTransactional(DynamicModelFilter filter, Class<Entity> clazz, List<CRUDOnShowByHook<ID, Entity>> onHooks,
-																								   Boolean persistCopy,
-																								   ShowByMode mode, boolean applyDefaultPolicies) {
+																								   Boolean persistCopy, ShowByMode mode, boolean applyDefaultPolicies) {
 		filter.setLimit(1);
 		List<Entity> entities = crudHelper.getEntities(filter, clazz, persistCopy);
 		if (applyDefaultPolicies) {
@@ -276,14 +275,12 @@ public class CrudReadHandlerImpl implements CrudReadHandler {
 	@Override
 	@Transactional(readOnly = true)
 	public <ID extends Serializable, Entity extends BaseCrudEntity<ID>> Entity showTransactional(ID id, Class<Entity> clazz, List<CRUDOnShowHook<ID, Entity>> onHooks, Boolean persistCopy, boolean applyDefaultPolicies) {
-		FilterFieldDataType entityIdDataType = FilterFieldDataType.get(id.getClass());
-		DynamicModelFilter filter = new DynamicModelFilter()
-				.add(FilterFields.eq("id", entityIdDataType));
+		DynamicModelFilter filter = crudHelper.getIdFilter(id);
 		if (applyDefaultPolicies) {
 			filter.getFilterFields().addAll(crudSecurityHandler.getFilterFields(clazz));
 		}
-		Entity entity = crudHelper.getEntityById(id, clazz, persistCopy);
-		if (applyDefaultPolicies) {
+		Entity entity = crudHelper.getEntities(filter, clazz, persistCopy).stream().findFirst().orElse(null);
+		if (applyDefaultPolicies && entity != null) {
 			crudSecurityHandler.evaluatePostRulesAndThrow(entity, PolicyRuleType.CAN_ACCESS, clazz);
 		}
 

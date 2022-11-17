@@ -203,6 +203,15 @@ public class CrudHelperImpl implements CrudHelper {
         return FilterFieldDataType.Object;
     }
 
+    @Override
+    public <ID extends Serializable> DynamicModelFilter getIdFilter(ID id) {
+        FilterFieldDataType entityIdDataType = FilterFieldDataType.get(id.getClass());
+        DynamicModelFilter filter = new DynamicModelFilter()
+                .add(FilterFields.eq("id", entityIdDataType));
+        filter.setLimit(1);
+        return filter;
+    }
+
     /* transactional */
     @Override
     public <ID extends Serializable, Entity extends BaseCrudEntity<ID>> List<Entity> getEntities(DynamicModelFilter filter, Class<Entity> entityClazz, Boolean persistCopy) {

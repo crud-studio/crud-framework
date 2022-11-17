@@ -102,7 +102,7 @@ public class CrudHandlerImpl implements CrudHandler {
 	public <ID extends Serializable, Entity extends BaseCrudEntity<ID>> UpdateCRUDRequestBuilder<CRUDPreDeleteHook<ID, Entity>, CRUDOnDeleteHook<ID, Entity>, CRUDPostDeleteHook<ID, Entity>, Void> delete(ID id,
 			Class<Entity> clazz) {
 		return new UpdateCRUDRequestBuilder<>((context) -> {
-			crudDeleteHandler.deleteInternal(id, clazz, context.getHooksDTO());
+			crudDeleteHandler.deleteInternal(id, clazz, context.getHooksDTO(), context.getApplyDefaultPolicies());
 			return null;
 		});
 	}

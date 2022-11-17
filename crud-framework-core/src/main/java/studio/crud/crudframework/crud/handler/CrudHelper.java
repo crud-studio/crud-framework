@@ -20,6 +20,8 @@ public interface CrudHelper {
 
     <ID extends Serializable, Entity extends BaseCrudEntity<ID>> void validateAndFillFilterFieldMetadata(List<FilterField> filterFields, Class<Entity> entityClazz);
 
+    <ID extends Serializable> DynamicModelFilter getIdFilter(ID id);
+
     /* transactional */
     <ID extends Serializable, Entity extends BaseCrudEntity<ID>> List<Entity> getEntities(DynamicModelFilter filter, Class<Entity> entityClazz, Boolean persistCopy);
 

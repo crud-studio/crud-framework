@@ -13,6 +13,10 @@ abstract class AbstractCrudHelper : CrudHelper {
         throw UnsupportedOperationException()
     }
 
+    override fun <ID : Serializable?> getIdFilter(id: ID): DynamicModelFilter {
+        throw UnsupportedOperationException()
+    }
+
     override fun <ID : Serializable?, Entity : BaseCrudEntity<ID>?> isEntityDeleted(entity: Entity): Boolean {
         throw UnsupportedOperationException()
     }
