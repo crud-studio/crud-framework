@@ -2,6 +2,8 @@ package studio.crud.crudframework.crud.handler
 
 import org.springframework.beans.factory.InitializingBean
 import org.springframework.beans.factory.ObjectProvider
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.context.ApplicationContext
 import studio.crud.crudframework.crud.policy.Policy
 import studio.crud.crudframework.crud.policy.PolicyRuleType
 import studio.crud.crudframework.crud.security.PrincipalProvider
@@ -15,6 +17,8 @@ internal class CrudSecurityHandlerImpl(
         private val principalProvider: ObjectProvider<PrincipalProvider>
 ) : CrudSecurityHandler, InitializingBean {
     private val policyMap = mutableMapOf<Class<*>, MutableList<Policy<PersistentEntity>>>()
+    @Autowired
+    private lateinit var applicationContext: ApplicationContext
 
     override fun afterPropertiesSet() {
         for (policy in policies.orderedStream()) {
@@ -24,7 +28,7 @@ internal class CrudSecurityHandlerImpl(
     }
 
     override fun getPolicies(clazz: Class<out PersistentEntity>): List<Policy<PersistentEntity>> {
-        return policyMap[clazz] ?: emptyList()
+        return applicationContext.getBeansOfType(Policy::class.java).values.toList() as List<Policy<PersistentEntity>>
     }
 
     override fun decorateFilter(clazz: Class<out PersistentEntity>, filter: DynamicModelFilter) {

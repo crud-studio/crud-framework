@@ -11,8 +11,6 @@ public interface CrudDao {
 
 	<ID extends Serializable, Entity extends BaseCrudEntity<ID>, E extends DynamicModelFilter> long indexCount(E filter, Class<Entity> clazz);
 
-	<ID extends Serializable, Entity extends BaseCrudEntity<ID>> void softDeleteById(ID id, String deleteColumn, Class<Entity> clazz);
-
 	<ID extends Serializable, Entity extends BaseCrudEntity<ID>> void hardDeleteById(ID id, Class<Entity> clazz);
 
 	<ID extends Serializable, Entity extends BaseCrudEntity<ID>> Entity saveOrUpdate(Entity entity);

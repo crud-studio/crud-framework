@@ -3,6 +3,7 @@ package studio.crud.crudframework.web.controller;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import studio.crud.crudframework.crud.exception.CrudException;
 import studio.crud.crudframework.ro.PagingDTO;
 import studio.crud.crudframework.web.ro.ResultRO;
 
@@ -27,18 +28,26 @@ public class BaseController {
 	protected ResultRO wrapResult(ResultRunnable runnable) {
 		ResultRO resultRO = new ResultRO();
 		try {
-			Object data = runnable.run();
-			if(data instanceof ResultRO) {
-				return (ResultRO) data;
-			}
-			if(data instanceof PagingDTO) {
-				resultRO.setPaging(((PagingDTO) data).getPagingRO());
-				resultRO.setResult(((PagingDTO) data).getData());
-			} else {
-				resultRO.setResult(data);
-			}
+            Object data = runnable.run();
+            if (data instanceof ResultRO) {
+                return (ResultRO) data;
+            }
+            if (data instanceof PagingDTO) {
+                resultRO.setPaging(((PagingDTO) data).getPagingRO());
+                resultRO.setResult(((PagingDTO) data).getData());
+            } else {
+                resultRO.setResult(data);
+            }
+        } catch (CrudException e) {
+            resultRO.setError(e.getMessage());
+            resultRO.setSuccess(false);
+            ErrorHandler errorHandler = getErrorHandlerForClass(e.getClass());
+            if(errorHandler != null) {
+                return errorHandler.run(resultRO, e);
+            }
+            log.error(e.getMessage(), e);
 		} catch(Exception e) {
-			resultRO.setError(e.getMessage());
+			resultRO.setError("Received exception " + e.getClass().getSimpleName() + " with message " + e.getMessage());
 			resultRO.setSuccess(false);
 			ErrorHandler errorHandler = getErrorHandlerForClass(e.getClass());
 			if(errorHandler != null) {

@@ -14,10 +14,6 @@ class TestCrudDao : CrudDao {
         TODO("Not yet implemented")
     }
 
-    override fun <ID : Serializable?, Entity : BaseCrudEntity<ID>?> softDeleteById(id: ID, deleteColumn: String?, clazz: Class<Entity>?) {
-        TODO("Not yet implemented")
-    }
-
     override fun <ID : Serializable?, Entity : BaseCrudEntity<ID>?> hardDeleteById(id: ID, clazz: Class<Entity>?) {
         TODO("Not yet implemented")
     }

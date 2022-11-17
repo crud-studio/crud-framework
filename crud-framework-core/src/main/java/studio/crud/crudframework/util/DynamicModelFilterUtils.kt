@@ -5,6 +5,19 @@ package studio.crud.crudframework.util
 import studio.crud.crudframework.modelfilter.DynamicModelFilter
 import studio.crud.crudframework.modelfilter.FilterField
 import studio.crud.crudframework.modelfilter.enums.FilterFieldOperation
+import java.lang.reflect.Field
+
+private fun Class<*>.getDeclaredFieldRecursive(name: String): Field {
+    var clazz: Class<*>? = this
+    while (clazz != null) {
+        try {
+            return clazz.getDeclaredField(name)
+        } catch (e: NoSuchFieldException) {
+            clazz = clazz.superclass
+        }
+    }
+    throw NoSuchFieldException(name)
+}
 
 private fun getPropertyValue(target: Any, string: String): Any? {
     var item: Any? = target
@@ -14,7 +27,7 @@ private fun getPropertyValue(target: Any, string: String): Any? {
             break
         }
         val clazz: Class<*> = item.javaClass
-        val field = clazz.getDeclaredField(part)
+        val field = clazz.getDeclaredFieldRecursive(part)
         field.isAccessible = true
         item = field.get(item)
     }
@@ -26,14 +39,18 @@ private fun getPropertyValue(target: Any, string: String): Any? {
  */
 fun DynamicModelFilter.filtersMatch(target: Any): Boolean {
     return this.filterFields.all { filterField ->
-        return@all filterField.matches(target)
+        return@all filterField.filtersMatch(target)
     }
 }
 
 /**
  * Check if [target] matches the given filter field
  */
-fun FilterField.matches(target: Any): Boolean {
+fun FilterField.filtersMatch(target: Any): Boolean {
+    if (this.operation == FilterFieldOperation.Noop) {
+        return false
+    }
+
     val actualValue: Any? = if (this.operation.junction) {
         null
     } else {
@@ -98,13 +115,13 @@ fun FilterField.matches(target: Any): Boolean {
             return value.isNotEmpty()
         }
         FilterFieldOperation.And -> {
-            return children.all { it.matches(target) }
+            return children.all { it.filtersMatch(target) }
         }
         FilterFieldOperation.Or -> {
-            return children.any { it.matches(target) }
+            return children.any { it.filtersMatch(target) }
         }
         FilterFieldOperation.Not -> {
-            return children.none { it.matches(target) }
+            return children.none { it.filtersMatch(target) }
         }
         FilterFieldOperation.Noop -> return false
         null -> return false

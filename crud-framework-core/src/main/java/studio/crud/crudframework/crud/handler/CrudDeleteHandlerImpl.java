@@ -18,7 +18,9 @@ import studio.crud.crudframework.modelfilter.enums.FilterFieldDataType;
 
 import javax.annotation.Resource;
 import java.io.Serializable;
+import java.lang.reflect.Field;
 import java.util.List;
+import java.util.Objects;
 
 @WrapException(CrudDeleteException.class)
 public class CrudDeleteHandlerImpl implements CrudDeleteHandler {
@@ -67,7 +69,7 @@ public class CrudDeleteHandlerImpl implements CrudDeleteHandler {
 		if(metadataDTO.getDeleteableType() == EntityMetadataDTO.DeleteableType.Hard) {
 			entity = crudDeleteHandlerProxy.deleteHardTransactional(filter, clazz, hooks.getOnHooks(), applyPolicies);
 		} else {
-			entity = crudDeleteHandlerProxy.deleteSoftTransactional(filter, metadataDTO.getDeleteField().getName(), clazz, hooks.getOnHooks(), applyPolicies);
+			entity = crudDeleteHandlerProxy.deleteSoftTransactional(filter, metadataDTO.getDeleteField(), clazz, hooks.getOnHooks(), applyPolicies);
 		}
 
 		crudHelper.evictEntityFromCache(entity);
@@ -92,13 +94,20 @@ public class CrudDeleteHandlerImpl implements CrudDeleteHandler {
 
 	@Override
 	@Transactional(readOnly = false)
-	public <ID extends Serializable, Entity extends BaseCrudEntity<ID>> Entity deleteSoftTransactional(DynamicModelFilter filter, String deleteField, Class<Entity> clazz, List<CRUDOnDeleteHook<ID, Entity>> onHooks, boolean applyPolicies) {
+	public <ID extends Serializable, Entity extends BaseCrudEntity<ID>> Entity deleteSoftTransactional(DynamicModelFilter filter, Field deleteField, Class<Entity> clazz, List<CRUDOnDeleteHook<ID, Entity>> onHooks, boolean applyPolicies) {
 		Entity entity = getEntityForDeletion(filter, clazz, applyPolicies);
 
 		for(CRUDOnDeleteHook<ID, Entity> onHook : onHooks) {
 			onHook.run(entity);
 		}
-		crudHelper.getCrudDaoForEntity(clazz).softDeleteById(entity.getId(), deleteField, clazz);
+		try {
+			deleteField.setAccessible(true);
+			deleteField.set(entity, true);
+		} catch	(IllegalAccessException e) {
+			CrudDeleteException exception = new CrudDeleteException("Error deleting entity " + clazz.getName());
+			exception.initCause(e);
+			throw exception;
+		}
 
 		return entity;
 	}

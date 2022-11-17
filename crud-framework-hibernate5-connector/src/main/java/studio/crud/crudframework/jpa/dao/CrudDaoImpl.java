@@ -25,13 +25,6 @@ public class CrudDaoImpl extends AbstractBaseDao implements CrudDao {
 	}
 
 	@Override
-	public <ID extends Serializable, Entity extends BaseCrudEntity<ID>> void softDeleteById(ID id, String deleteColumn, Class<Entity> clazz) {
-		getCurrentSession().createQuery("UPDATE " + clazz.getSimpleName() + " SET " + deleteColumn + " = true where id = :id")
-				.setParameter("id", id)
-				.executeUpdate();
-	}
-
-	@Override
 	public <ID extends Serializable, Entity extends BaseCrudEntity<ID>> void hardDeleteById(ID id, Class<Entity> clazz) {
 		deleteObject(clazz, id);
 	}

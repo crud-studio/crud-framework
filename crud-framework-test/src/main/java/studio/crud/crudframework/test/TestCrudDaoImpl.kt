@@ -20,12 +20,6 @@ class TestCrudDaoImpl : CrudDao {
         }.size.toLong()
     }
 
-    override fun <ID : Serializable, Entity : BaseCrudEntity<ID>> softDeleteById(id: ID, deleteColumn: String?, clazz: Class<Entity>?) {
-        entities.removeIf {
-            it.id == id
-        }
-    }
-
     override fun <ID : Serializable, Entity : BaseCrudEntity<ID>> hardDeleteById(id: ID, clazz: Class<Entity>?) {
         entities.removeIf {
             it.id == id

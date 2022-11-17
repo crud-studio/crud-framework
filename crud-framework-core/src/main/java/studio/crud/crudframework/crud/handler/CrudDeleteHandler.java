@@ -8,6 +8,7 @@ import studio.crud.crudframework.model.BaseCrudEntity;
 import studio.crud.crudframework.modelfilter.DynamicModelFilter;
 
 import java.io.Serializable;
+import java.lang.reflect.Field;
 import java.util.List;
 
 public interface CrudDeleteHandler {
@@ -17,5 +18,5 @@ public interface CrudDeleteHandler {
 
 	<ID extends Serializable, Entity extends BaseCrudEntity<ID>> Entity deleteHardTransactional(DynamicModelFilter filter, Class<Entity> clazz, List<CRUDOnDeleteHook<ID, Entity>> onHooks, boolean applyPolicies);
 
-	<ID extends Serializable, Entity extends BaseCrudEntity<ID>> Entity deleteSoftTransactional(DynamicModelFilter filter, String deleteField, Class<Entity> clazz, List<CRUDOnDeleteHook<ID, Entity>> onHooks, boolean applyPolicies);
+	<ID extends Serializable, Entity extends BaseCrudEntity<ID>> Entity deleteSoftTransactional(DynamicModelFilter filter, Field deleteField, Class<Entity> clazz, List<CRUDOnDeleteHook<ID, Entity>> onHooks, boolean applyPolicies);
 }
