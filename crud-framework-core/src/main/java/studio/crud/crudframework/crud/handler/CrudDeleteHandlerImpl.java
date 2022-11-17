@@ -67,7 +67,7 @@ public class CrudDeleteHandlerImpl implements CrudDeleteHandler {
 	@Override
 	@Transactional(readOnly = false)
 	public <ID extends Serializable, Entity extends BaseCrudEntity<ID>> Entity deleteHardTransactional(ID id, Class<Entity> clazz, List<CRUDOnDeleteHook<ID, Entity>> onHooks) {
-		Entity entity = crudHelper.getEntityById(id, clazz, null, true);
+		Entity entity = crudHelper.getEntityById(id, clazz, null);
 		if(crudHelper.isEntityDeleted(entity)) {
 			throw new CrudDeleteException("Entity of type [ " + clazz.getSimpleName() + " ] does not exist or cannot be deleted");
 		}
@@ -83,7 +83,7 @@ public class CrudDeleteHandlerImpl implements CrudDeleteHandler {
 	@Override
 	@Transactional(readOnly = false)
 	public <ID extends Serializable, Entity extends BaseCrudEntity<ID>> Entity deleteSoftTransactional(ID id, String deleteField, Class<Entity> clazz, List<CRUDOnDeleteHook<ID, Entity>> onHooks) {
-		Entity entity = crudHelper.getEntityById(id, clazz, null, true);
+		Entity entity = crudHelper.getEntityById(id, clazz, null);
 
 		if(crudHelper.isEntityDeleted(entity)) {
 			throw new CrudDeleteException("Entity of type [ " + clazz.getSimpleName() + " ] does not exist or cannot be deleted");

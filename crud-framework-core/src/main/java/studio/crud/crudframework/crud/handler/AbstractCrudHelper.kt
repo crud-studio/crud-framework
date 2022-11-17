@@ -17,7 +17,10 @@ abstract class AbstractCrudHelper : CrudHelper {
         throw UnsupportedOperationException()
     }
 
-    override fun <ID : Serializable?, Entity : BaseCrudEntity<ID>?> decorateFilter(filter: DynamicModelFilter?, entityClazz: Class<Entity>?, forUpdate: Boolean) {
+    override fun <ID : Serializable?, Entity : BaseCrudEntity<ID>?> decorateFilter(
+        filter: DynamicModelFilter?,
+        entityClazz: Class<Entity>?
+    ) {
         throw UnsupportedOperationException()
     }
 
@@ -29,19 +32,32 @@ abstract class AbstractCrudHelper : CrudHelper {
     }
 
     override fun <ID : Serializable?, Entity : BaseCrudEntity<ID>?> getEntities(
-            filter: DynamicModelFilter?, entityClazz: Class<Entity>?, persistCopy: Boolean?, forUpdate: Boolean): MutableList<Entity> {
+        filter: DynamicModelFilter?,
+        entityClazz: Class<Entity>?,
+        persistCopy: Boolean?
+    ): MutableList<Entity> {
         throw UnsupportedOperationException()
     }
 
-    override fun <ID : Serializable?, Entity : BaseCrudEntity<ID>?> getEntitiesCount(filter: DynamicModelFilter?, entityClazz: Class<Entity>?, forUpdate: Boolean): Long {
+    override fun <ID : Serializable?, Entity : BaseCrudEntity<ID>?> getEntitiesCount(
+        filter: DynamicModelFilter?,
+        entityClazz: Class<Entity>?
+    ): Long {
         throw UnsupportedOperationException()
     }
 
-    override fun <ID : Serializable?, Entity : BaseCrudEntity<ID>?> getEntityById(entityId: ID, entityClazz: Class<Entity>?, persistCopy: Boolean?, forUpdate: Boolean): Entity {
+    override fun <ID : Serializable?, Entity : BaseCrudEntity<ID>?> getEntityById(
+        entityId: ID,
+        entityClazz: Class<Entity>?,
+        persistCopy: Boolean?
+    ): Entity {
         throw UnsupportedOperationException()
     }
 
-    override fun <ID : Serializable?, Entity : BaseCrudEntity<ID>?> getEntityCountById(entityId: ID, entityClazz: Class<Entity>?, forUpdate: Boolean): Long {
+    override fun <ID : Serializable?, Entity : BaseCrudEntity<ID>?> getEntityCountById(
+        entityId: ID,
+        entityClazz: Class<Entity>?
+    ): Long {
         throw UnsupportedOperationException()
     }
 

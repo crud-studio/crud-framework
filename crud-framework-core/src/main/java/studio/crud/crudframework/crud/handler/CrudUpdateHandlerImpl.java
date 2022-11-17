@@ -47,7 +47,7 @@ public class CrudUpdateHandlerImpl implements CrudUpdateHandler {
 	@Transactional(readOnly = false)
 	public <ID extends Serializable, Entity extends BaseCrudEntity<ID>> List<Entity> updateByFilterTransactional(DynamicModelFilter filter, Class<Entity> entityClazz,
 			HooksDTO<CRUDPreUpdateHook<ID, Entity>, CRUDOnUpdateHook<ID, Entity>, CRUDPostUpdateHook<ID, Entity>> hooks, Boolean persistCopy) {
-		List<Entity> entities = crudHelper.getEntities(filter, entityClazz, persistCopy, true);
+		List<Entity> entities = crudHelper.getEntities(filter, entityClazz, persistCopy);
 		return crudUpdateHandlerProxy.updateManyTransactional(entities, hooks, persistCopy);
 	}
 
@@ -85,7 +85,7 @@ public class CrudUpdateHandlerImpl implements CrudUpdateHandler {
 	@Transactional(readOnly = false)
 	public <ID extends Serializable, Entity extends BaseCrudEntity<ID>> Entity updateTransactional(Entity entity, List<CRUDOnUpdateHook<ID, Entity>> onHooks) {
 		// check id exists and has access to entity
-		if(!entity.exists() || crudHelper.getEntityCountById(entity.getId(), entity.getClass(), true) == 0) {
+		if(!entity.exists() || crudHelper.getEntityCountById(entity.getId(), entity.getClass()) == 0) {
 			throw new CrudUpdateException("Entity of type [ " + entity.getClass().getSimpleName() + " ] does not exist or cannot be updated");
 		}
 
@@ -134,7 +134,7 @@ public class CrudUpdateHandlerImpl implements CrudUpdateHandler {
 	@Override
 	@Transactional(readOnly = false)
 	public <ID extends Serializable, Entity extends BaseCrudEntity<ID>> Entity updateFromTransactional(ID id, Object object, Class<Entity> clazz, List<CRUDOnUpdateFromHook<ID, Entity>> onHooks) {
-		Entity entity = crudHelper.getEntityById(id, clazz, null, true);
+		Entity entity = crudHelper.getEntityById(id, clazz, null);
 
 		if(entity == null) {
 			throw new CrudUpdateException("Entity of type [ " + clazz.getSimpleName() + " ] does not exist or cannot be updated");

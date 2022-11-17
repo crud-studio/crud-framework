@@ -42,7 +42,14 @@ class TestCrudHandler(
      * @param filter Filter argument
      */
     inline fun <reified EntityType : BaseCrudEntity<ID>, reified ID : Serializable> onShowBy(filter: DynamicModelFilter? = null): OngoingStubbing<EntityType?> {
-        return whenever(mockCrudReadHandler.showByInternal(eqOrAny(filter), eq(EntityType::class.java), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull()))
+        return whenever(mockCrudReadHandler.showByInternal(
+            eqOrAny(filter),
+            eq(EntityType::class.java),
+            anyOrNull(),
+            anyOrNull(),
+            anyOrNull(),
+            anyOrNull(),
+        ))
     }
 
     /**
@@ -125,7 +132,14 @@ class TestCrudHandler(
      */
     inline fun <reified EntityType : BaseCrudEntity<ID>, reified ID : Serializable> verifyShowBy(verificationMode: VerificationMode = times(1)): DynamicModelFilter? {
         val filterCaptor = argumentCaptor<DynamicModelFilter>()
-        verify(mockCrudReadHandler, verificationMode).showByInternal(filterCaptor.capture(), eq(EntityType::class.java), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull())
+        verify(mockCrudReadHandler, verificationMode).showByInternal(
+            filterCaptor.capture(),
+            eq(EntityType::class.java),
+            anyOrNull(),
+            anyOrNull(),
+            anyOrNull(),
+            anyOrNull(),
+        )
         return filterCaptor.allValues.lastOrNull()
     }
 

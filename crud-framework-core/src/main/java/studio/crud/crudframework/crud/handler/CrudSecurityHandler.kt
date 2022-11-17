@@ -9,5 +9,7 @@ interface CrudSecurityHandler {
     fun getPolicies(clazz: Class<out PersistentEntity>): List<Policy<out PersistentEntity>>
     fun getFilterFields(clazz: Class<out PersistentEntity>): List<FilterField>
     fun evaluatePreRules(type: PolicyRuleType, clazz: Class<out PersistentEntity>): MultiPolicyResult
+    fun evaluatePreRulesAndThrow(type: PolicyRuleType, clazz: Class<out PersistentEntity>) = evaluatePreRules(type, clazz).throwIfFailed()
     fun evaluatePostRules(entity: PersistentEntity, type: PolicyRuleType, clazz: Class<out PersistentEntity>): MultiPolicyResult
+    fun evaluatePostRulesAndThrow(entity: PersistentEntity, type: PolicyRuleType, clazz: Class<out PersistentEntity>) = evaluatePostRules(entity, type, clazz).throwIfFailed()
 }

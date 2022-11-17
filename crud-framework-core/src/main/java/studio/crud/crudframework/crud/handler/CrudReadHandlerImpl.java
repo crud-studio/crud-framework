@@ -110,7 +110,7 @@ public class CrudReadHandlerImpl implements CrudReadHandler {
 
 			if(filter.getLimit() != null) {
 				filter.setLimit(filter.getLimit() + 1);
-				data = crudHelper.getEntities(filter, clazz, persistCopy, false);
+				data = crudHelper.getEntities(filter, clazz, persistCopy);
 				if (applyDefaultPolicies) {
 					for (Entity entity : data) {
 						MultiPolicyResult policyResult = crudSecurityHandler.evaluatePostRules(entity, PolicyRuleType.CAN_ACCESS , clazz);
@@ -134,7 +134,7 @@ public class CrudReadHandlerImpl implements CrudReadHandler {
 					total = data.size() + start;
 				}
 			} else {
-				data = crudHelper.getEntities(filter, clazz, persistCopy, false);
+				data = crudHelper.getEntities(filter, clazz, persistCopy);
 				hasMore = false;
 				total = data.size();
 				crudHelper.setTotalToPagingCache(clazz, filter, total);
@@ -143,7 +143,7 @@ public class CrudReadHandlerImpl implements CrudReadHandler {
 
 			result = new PagingDTO<>(new PagingRO(filter.getStart(), filter.getLimit(), total, hasMore), data);
 		} else {
-			long total = crudHelper.getEntitiesCount(filter, clazz, false);
+			long total = crudHelper.getEntitiesCount(filter, clazz);
 			result = new PagingDTO<>(new PagingRO(0, 0, total), null);
 			crudHelper.setTotalToPagingCache(clazz, filter, total);
 		}
@@ -198,7 +198,7 @@ public class CrudReadHandlerImpl implements CrudReadHandler {
 	public <ID extends Serializable, Entity extends BaseCrudEntity<ID>> Entity showByTransactional(DynamicModelFilter filter, Class<Entity> clazz, List<CRUDOnShowByHook<ID, Entity>> onHooks,
 			Boolean persistCopy,
 			ShowByMode mode) {
-		List<Entity> entities = crudHelper.getEntities(filter, clazz, persistCopy, false);
+		List<Entity> entities = crudHelper.getEntities(filter, clazz, persistCopy);
 		Entity entity = null;
 		switch(mode) {
 			case THROW_EXCEPTION:
@@ -263,7 +263,7 @@ public class CrudReadHandlerImpl implements CrudReadHandler {
 	@Override
 	@Transactional(readOnly = true)
 	public <ID extends Serializable, Entity extends BaseCrudEntity<ID>> Entity showTransactional(ID id, Class<Entity> clazz, List<CRUDOnShowHook<ID, Entity>> onHooks, Boolean persistCopy) {
-		Entity entity = crudHelper.getEntityById(id, clazz, persistCopy, false);
+		Entity entity = crudHelper.getEntityById(id, clazz, persistCopy);
 
 		for(CRUDOnShowHook<ID, Entity> onHook : onHooks) {
 			onHook.run(entity);
