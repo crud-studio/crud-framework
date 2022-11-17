@@ -208,8 +208,8 @@ public class CrudHandlerImpl implements CrudHandler {
 	public <ID extends Serializable, Entity extends BaseCrudEntity<ID>> ReadCRUDRequestBuilder<CRUDPreShowByHook<ID, Entity>, CRUDOnShowByHook<ID, Entity>, CRUDPostShowByHook<ID, Entity>, Entity> showBy(
 			DynamicModelFilter filter, Class<Entity> clazz, ShowByMode mode) {
 		return new ReadCRUDRequestBuilder<>(
-				(context) -> crudReadHandler.showByInternal(filter, clazz, context.getHooksDTO(), context.getFromCache(), context.getPersistCopy(), mode),
-				(context) -> crudReadHandler.showByInternal(filter, clazz, context.getHooksDTO(), context.getFromCache(), context.getPersistCopy(), mode) != null ? 1L : 0L
+				(context) -> crudReadHandler.showByInternal(filter, clazz, context.getHooksDTO(), context.getFromCache(), context.getPersistCopy(), mode, context.getApplyDefaultPolicies()),
+				(context) -> crudReadHandler.showByInternal(filter, clazz, context.getHooksDTO(), context.getFromCache(), context.getPersistCopy(), mode, context.getApplyDefaultPolicies()) != null ? 1L : 0L
 		);
 	}
 
@@ -224,13 +224,13 @@ public class CrudHandlerImpl implements CrudHandler {
 			DynamicModelFilter filter, Class<Entity> clazz, Class<RO> toClazz, ShowByMode mode) {
 		return new ReadCRUDRequestBuilder<>(
 				(context) -> {
-					Entity result = crudReadHandler.showByInternal(filter, clazz, context.getHooksDTO(), context.getFromCache(), context.getPersistCopy(), mode);
+					Entity result = crudReadHandler.showByInternal(filter, clazz, context.getHooksDTO(), context.getFromCache(), context.getPersistCopy(), mode, context.getApplyDefaultPolicies());
 					if(result == null) {
 						return null;
 					}
 
 					return crudHelper.fill(result, toClazz);
-				}, (context) -> crudReadHandler.showByInternal(filter, clazz, context.getHooksDTO(), context.getFromCache(), context.getPersistCopy(), mode) != null ? 1L : 0L
+				}, (context) -> crudReadHandler.showByInternal(filter, clazz, context.getHooksDTO(), context.getFromCache(), context.getPersistCopy(), mode, context.getApplyDefaultPolicies()) != null ? 1L : 0L
 		);
 	}
 
@@ -238,8 +238,8 @@ public class CrudHandlerImpl implements CrudHandler {
 	public <ID extends Serializable, Entity extends BaseCrudEntity<ID>> ReadCRUDRequestBuilder<CRUDPreShowHook<ID, Entity>, CRUDOnShowHook<ID, Entity>, CRUDPostShowHook<ID, Entity>, Entity> show(ID id,
 			Class<Entity> clazz) {
 		return new ReadCRUDRequestBuilder<>(
-				(context) -> crudReadHandler.showInternal(id, clazz, context.getHooksDTO(), context.getFromCache(), context.getPersistCopy()),
-				(context) -> crudReadHandler.showInternal(id, clazz, context.getHooksDTO(), context.getFromCache(), context.getPersistCopy()) != null ? 1L : 0L
+				(context) -> crudReadHandler.showInternal(id, clazz, context.getHooksDTO(), context.getFromCache(), context.getPersistCopy(), context.getApplyDefaultPolicies()),
+				(context) -> crudReadHandler.showInternal(id, clazz, context.getHooksDTO(), context.getFromCache(), context.getPersistCopy(), context.getApplyDefaultPolicies()) != null ? 1L : 0L
 		);
 	}
 
@@ -247,13 +247,13 @@ public class CrudHandlerImpl implements CrudHandler {
 	public <ID extends Serializable, Entity extends BaseCrudEntity<ID>, RO> ReadCRUDRequestBuilder<CRUDPreShowHook<ID, Entity>, CRUDOnShowHook<ID, Entity>, CRUDPostShowHook<ID, Entity>, RO> show(ID id,
 			Class<Entity> clazz, Class<RO> toClazz) {
 		return new ReadCRUDRequestBuilder<>((context) -> {
-			Entity result = crudReadHandler.showInternal(id, clazz, context.getHooksDTO(), context.getFromCache(), context.getPersistCopy());
+			Entity result = crudReadHandler.showInternal(id, clazz, context.getHooksDTO(), context.getFromCache(), context.getPersistCopy(), context.getApplyDefaultPolicies());
 			if(result == null) {
 				return null;
 			}
 
 			return crudHelper.fill(result, toClazz);
-		}, (context) -> crudReadHandler.showInternal(id, clazz, context.getHooksDTO(), context.getFromCache(), context.getPersistCopy()) != null ? 1L : 0L
+		}, (context) -> crudReadHandler.showInternal(id, clazz, context.getHooksDTO(), context.getFromCache(), context.getPersistCopy(), context.getApplyDefaultPolicies()) != null ? 1L : 0L
 		);
 	}
 

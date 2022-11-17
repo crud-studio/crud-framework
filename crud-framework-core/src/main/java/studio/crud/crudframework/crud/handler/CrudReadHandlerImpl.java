@@ -23,6 +23,8 @@ import studio.crud.crudframework.crud.policy.PolicyRuleType;
 import studio.crud.crudframework.exception.WrapException;
 import studio.crud.crudframework.model.BaseCrudEntity;
 import studio.crud.crudframework.modelfilter.DynamicModelFilter;
+import studio.crud.crudframework.modelfilter.FilterFields;
+import studio.crud.crudframework.modelfilter.enums.FilterFieldDataType;
 import studio.crud.crudframework.ro.PagingDTO;
 import studio.crud.crudframework.ro.PagingRO;
 
@@ -54,8 +56,7 @@ public class CrudReadHandlerImpl implements CrudReadHandler {
 		}
 
 		if (applyDefaultPolicies) {
-			MultiPolicyResult policyResult = crudSecurityHandler.evaluatePreRules(PolicyRuleType.CAN_ACCESS, clazz);
-			policyResult.throwIfFailed();
+			crudSecurityHandler.evaluatePreRulesAndThrow(PolicyRuleType.CAN_ACCESS, clazz);
 			filter.getFilterFields().addAll(crudSecurityHandler.getFilterFields(clazz));
 		}
 
@@ -113,8 +114,7 @@ public class CrudReadHandlerImpl implements CrudReadHandler {
 				data = crudHelper.getEntities(filter, clazz, persistCopy);
 				if (applyDefaultPolicies) {
 					for (Entity entity : data) {
-						MultiPolicyResult policyResult = crudSecurityHandler.evaluatePostRules(entity, PolicyRuleType.CAN_ACCESS , clazz);
-						policyResult.throwIfFailed();
+						crudSecurityHandler.evaluatePostRulesAndThrow(entity, PolicyRuleType.CAN_ACCESS , clazz);
 					}
 				}
 				hasMore = data.size() == filter.getLimit();
@@ -157,10 +157,15 @@ public class CrudReadHandlerImpl implements CrudReadHandler {
 
 	@Override
 	public <ID extends Serializable, Entity extends BaseCrudEntity<ID>> Entity showByInternal(DynamicModelFilter filter, Class<Entity> clazz,
-			HooksDTO<CRUDPreShowByHook<ID, Entity>, CRUDOnShowByHook<ID, Entity>, CRUDPostShowByHook<ID, Entity>> hooks, boolean fromCache, Boolean persistCopy, ShowByMode mode) {
+																							  HooksDTO<CRUDPreShowByHook<ID, Entity>, CRUDOnShowByHook<ID, Entity>, CRUDPostShowByHook<ID, Entity>> hooks, boolean fromCache, Boolean persistCopy, ShowByMode mode, boolean applyDefaultPolicies) {
 
 		if(filter == null) {
 			filter = new DynamicModelFilter();
+		}
+
+		if (applyDefaultPolicies) {
+			crudSecurityHandler.evaluatePreRulesAndThrow(PolicyRuleType.CAN_ACCESS, clazz);
+			filter.getFilterFields().addAll(crudSecurityHandler.getFilterFields(clazz));
 		}
 
 		crudHelper.validateAndFillFilterFieldMetadata(filter.getFilterFields(), clazz);
@@ -184,7 +189,7 @@ public class CrudReadHandlerImpl implements CrudReadHandler {
 		}
 
 		DynamicModelFilter finalFilter = filter;
-		Entity entity = (Entity) CacheUtils.getObjectAndCache(() -> crudReadHandlerProxy.showByTransactional(finalFilter, clazz, hooks.getOnHooks(), persistCopy, mode), "showBy_" + filter.hashCode(), cache);
+		Entity entity = (Entity) CacheUtils.getObjectAndCache(() -> crudReadHandlerProxy.showByTransactional(finalFilter, clazz, hooks.getOnHooks(), persistCopy, mode, applyDefaultPolicies), "showBy_" + filter.hashCode(), cache);
 
 		for(CRUDPostShowByHook<ID, Entity> postHook : hooks.getPostHooks()) {
 			postHook.run(entity);
@@ -196,9 +201,15 @@ public class CrudReadHandlerImpl implements CrudReadHandler {
 	@Override
 	@Transactional(readOnly = true)
 	public <ID extends Serializable, Entity extends BaseCrudEntity<ID>> Entity showByTransactional(DynamicModelFilter filter, Class<Entity> clazz, List<CRUDOnShowByHook<ID, Entity>> onHooks,
-			Boolean persistCopy,
-			ShowByMode mode) {
+																								   Boolean persistCopy,
+																								   ShowByMode mode, boolean applyDefaultPolicies) {
+		filter.setLimit(1);
 		List<Entity> entities = crudHelper.getEntities(filter, clazz, persistCopy);
+		if (applyDefaultPolicies) {
+			for (Entity entity : entities) {
+				crudSecurityHandler.evaluatePostRulesAndThrow(entity, PolicyRuleType.CAN_ACCESS , clazz);
+			}
+		}
 		Entity entity = null;
 		switch(mode) {
 			case THROW_EXCEPTION:
@@ -230,9 +241,11 @@ public class CrudReadHandlerImpl implements CrudReadHandler {
 
 	@Override
 	public <ID extends Serializable, Entity extends BaseCrudEntity<ID>> Entity showInternal(ID id, Class<Entity> clazz,
-			HooksDTO<CRUDPreShowHook<ID, Entity>, CRUDOnShowHook<ID, Entity>, CRUDPostShowHook<ID, Entity>> hooks, boolean fromCache, Boolean persistCopy) {
-
+																							HooksDTO<CRUDPreShowHook<ID, Entity>, CRUDOnShowHook<ID, Entity>, CRUDPostShowHook<ID, Entity>> hooks, boolean fromCache, Boolean persistCopy, boolean applyDefaultPolicies) {
 		List<ShowHooks> showHooksList = crudHelper.getHooks(ShowHooks.class, clazz);
+		if (applyDefaultPolicies) {
+			crudSecurityHandler.evaluatePreRulesAndThrow(PolicyRuleType.CAN_ACCESS, clazz);
+		}
 
 		if(showHooksList != null && !showHooksList.isEmpty()) {
 			for(ShowHooks<ID, Entity> showHooks : showHooksList) {
@@ -251,7 +264,7 @@ public class CrudReadHandlerImpl implements CrudReadHandler {
 			cache = crudHelper.getEntityCache(clazz);
 		}
 
-		Entity entity = (Entity) CacheUtils.getObjectAndCache(() -> crudReadHandlerProxy.showTransactional(id, clazz, hooks.getOnHooks(), persistCopy), BaseCrudEntity.Companion.getCacheKey(clazz, id), cache);
+		Entity entity = (Entity) CacheUtils.getObjectAndCache(() -> crudReadHandlerProxy.showTransactional(id, clazz, hooks.getOnHooks(), persistCopy, applyDefaultPolicies), BaseCrudEntity.Companion.getCacheKey(clazz, id), cache);
 
 		for(CRUDPostShowHook<ID, Entity> postHook : hooks.getPostHooks()) {
 			postHook.run(entity);
@@ -262,8 +275,18 @@ public class CrudReadHandlerImpl implements CrudReadHandler {
 
 	@Override
 	@Transactional(readOnly = true)
-	public <ID extends Serializable, Entity extends BaseCrudEntity<ID>> Entity showTransactional(ID id, Class<Entity> clazz, List<CRUDOnShowHook<ID, Entity>> onHooks, Boolean persistCopy) {
+	public <ID extends Serializable, Entity extends BaseCrudEntity<ID>> Entity showTransactional(ID id, Class<Entity> clazz, List<CRUDOnShowHook<ID, Entity>> onHooks, Boolean persistCopy, boolean applyDefaultPolicies) {
+		FilterFieldDataType entityIdDataType = FilterFieldDataType.get(id.getClass());
+		DynamicModelFilter filter = new DynamicModelFilter()
+				.add(FilterFields.eq("id", entityIdDataType));
+		if (applyDefaultPolicies) {
+			filter.getFilterFields().addAll(crudSecurityHandler.getFilterFields(clazz));
+		}
 		Entity entity = crudHelper.getEntityById(id, clazz, persistCopy);
+		if (applyDefaultPolicies) {
+			crudSecurityHandler.evaluatePostRulesAndThrow(entity, PolicyRuleType.CAN_ACCESS, clazz);
+		}
+
 
 		for(CRUDOnShowHook<ID, Entity> onHook : onHooks) {
 			onHook.run(entity);

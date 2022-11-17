@@ -34,7 +34,14 @@ class TestCrudHandler(
      * @param id ID argument
      */
     inline fun <reified EntityType : BaseCrudEntity<ID>, reified ID : Serializable> onShow(id: ID? = null): OngoingStubbing<EntityType?> {
-        return whenever(mockCrudReadHandler.showInternal(eqOrAny(id), eq(EntityType::class.java), anyOrNull(), anyOrNull(), anyOrNull()))
+        return whenever(mockCrudReadHandler.showInternal(
+            eqOrAny(id),
+            eq(EntityType::class.java),
+            anyOrNull(),
+            anyOrNull(),
+            anyOrNull(),
+            context.getApplyDefaultPolicies()
+        ))
     }
 
     /**
@@ -49,6 +56,7 @@ class TestCrudHandler(
             anyOrNull(),
             anyOrNull(),
             anyOrNull(),
+            context.getApplyDefaultPolicies(),
         ))
     }
 
@@ -121,7 +129,14 @@ class TestCrudHandler(
      */
     inline fun <reified EntityType : BaseCrudEntity<ID>, reified ID : Serializable> verifyShow(id: ID? = null, verificationMode: VerificationMode = times(1)): ID {
         val idCaptor = argumentCaptor<ID>()
-        verify(mockCrudReadHandler, verificationMode).showInternal(idCaptor.capture(), eq(EntityType::class.java), anyOrNull(), anyOrNull(), anyOrNull())
+        verify(mockCrudReadHandler, verificationMode).showInternal(
+            idCaptor.capture(),
+            eq(EntityType::class.java),
+            anyOrNull(),
+            anyOrNull(),
+            anyOrNull(),
+            context.getApplyDefaultPolicies()
+        )
         return idCaptor.lastValue
     }
 
@@ -139,6 +154,7 @@ class TestCrudHandler(
             anyOrNull(),
             anyOrNull(),
             anyOrNull(),
+            context.getApplyDefaultPolicies(),
         )
         return filterCaptor.allValues.lastOrNull()
     }
