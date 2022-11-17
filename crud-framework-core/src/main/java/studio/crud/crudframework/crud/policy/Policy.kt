@@ -49,7 +49,7 @@ class Policy<RootType : PersistentEntity>(
     fun evaluatePostRules(entity: RootType, type: PolicyRuleType, principal: Principal?): Result<RootType> {
         val ruleResults = when (type) {
             PolicyRuleType.CAN_ACCESS -> canAccessRules.evaluatePostConditions(entity, principal)
-            PolicyRuleType.CAN_CREATE -> canAccessRules.evaluatePostConditions(entity, principal) + canCreateRules.evaluatePostConditions(entity, principal)
+            PolicyRuleType.CAN_CREATE -> error("Post rules cannot be evaluated for create")
             PolicyRuleType.CAN_UPDATE -> canAccessRules.evaluatePostConditions(entity, principal) + canUpdateRules.evaluatePostConditions(entity, principal)
             PolicyRuleType.CAN_DELETE -> canAccessRules.evaluatePostConditions(entity, principal) + canDeleteRules.evaluatePostConditions(entity, principal)
         }

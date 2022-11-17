@@ -82,7 +82,11 @@ class TestCrudHandler(
      */
     inline fun <reified EntityType : BaseCrudEntity<ID>, reified ID : Serializable> onCreate(entity: EntityType? = null): OngoingStubbing<EntityType> {
         verify(mockCrudCreateHandler)
-        return whenever(mockCrudCreateHandler.createInternal(eqOrAny(entity), anyOrNull()))
+        return whenever(mockCrudCreateHandler.createInternal(
+            eqOrAny(entity),
+            anyOrNull(),
+            context.getApplyDefaultPolicies()
+        ))
     }
 
     /**
@@ -188,7 +192,11 @@ class TestCrudHandler(
      */
     inline fun <reified EntityType : BaseCrudEntity<ID>, reified ID : Serializable> verifyCreate(verificationMode: VerificationMode = times(1)): EntityType {
         val entityCaptor = argumentCaptor<EntityType>()
-        verify(mockCrudCreateHandler, verificationMode).createInternal(entityCaptor.capture(), anyOrNull())
+        verify(mockCrudCreateHandler, verificationMode).createInternal(
+            entityCaptor.capture(),
+            anyOrNull(),
+            context.getApplyDefaultPolicies()
+        )
         return entityCaptor.lastValue
     }
 

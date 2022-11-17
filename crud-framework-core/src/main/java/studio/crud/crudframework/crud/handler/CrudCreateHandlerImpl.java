@@ -13,6 +13,7 @@ import studio.crud.crudframework.crud.hooks.create.from.CRUDPostCreateFromHook;
 import studio.crud.crudframework.crud.hooks.create.from.CRUDPreCreateFromHook;
 import studio.crud.crudframework.crud.hooks.interfaces.CreateFromHooks;
 import studio.crud.crudframework.crud.hooks.interfaces.CreateHooks;
+import studio.crud.crudframework.crud.policy.PolicyRuleType;
 import studio.crud.crudframework.exception.WrapException;
 import studio.crud.crudframework.model.BaseCrudEntity;
 
@@ -30,10 +31,17 @@ public class CrudCreateHandlerImpl implements CrudCreateHandler {
 	@Resource(name = "crudCreateHandler")
 	private CrudCreateHandler crudCreateHandlerProxy;
 
+	@Autowired
+	private CrudSecurityHandler crudSecurityHandler;
+
 	@Override
-	public <ID extends Serializable, Entity extends BaseCrudEntity<ID>> Entity createInternal(Entity entity, HooksDTO<CRUDPreCreateHook<ID, Entity>, CRUDOnCreateHook<ID, Entity>, CRUDPostCreateHook<ID, Entity>> hooks) {
+	public <ID extends Serializable, Entity extends BaseCrudEntity<ID>> Entity createInternal(Entity entity, HooksDTO<CRUDPreCreateHook<ID, Entity>, CRUDOnCreateHook<ID, Entity>, CRUDPostCreateHook<ID, Entity>> hooks, boolean applyDefaultPolicies) {
 		Objects.requireNonNull(entity, "Entity cannot be null");
 		List<CreateHooks> createHooksList = crudHelper.getHooks(CreateHooks.class, entity.getClass());
+
+		if (applyDefaultPolicies) {
+			crudSecurityHandler.evaluatePreRulesAndThrow(PolicyRuleType.CAN_CREATE, entity.getClass());
+		}
 
 		if(createHooksList != null && !createHooksList.isEmpty()) {
 			for(CreateHooks<ID, Entity> createHooks : createHooksList) {
@@ -47,7 +55,7 @@ public class CrudCreateHandlerImpl implements CrudCreateHandler {
 			preHook.run(entity);
 		}
 
-			entity = crudCreateHandlerProxy.createTransactional(entity, hooks.getOnHooks());
+			entity = crudCreateHandlerProxy.createTransactional(entity, hooks.getOnHooks(), applyDefaultPolicies);
 		for(CRUDPostCreateHook<ID, Entity> postHook : hooks.getPostHooks()) {
 			postHook.run(entity);
 		}
@@ -57,7 +65,7 @@ public class CrudCreateHandlerImpl implements CrudCreateHandler {
 
 	@Override
 	@Transactional(readOnly = false)
-	public <ID extends Serializable, Entity extends BaseCrudEntity<ID>> Entity createTransactional(Entity entity, List<CRUDOnCreateHook<ID, Entity>> onHooks) {
+	public <ID extends Serializable, Entity extends BaseCrudEntity<ID>> Entity createTransactional(Entity entity, List<CRUDOnCreateHook<ID, Entity>> onHooks, boolean applyDefaultPolicies) {
 		for(CRUDOnCreateHook<ID, Entity> onHook : onHooks) {
 			onHook.run(entity);
 		}

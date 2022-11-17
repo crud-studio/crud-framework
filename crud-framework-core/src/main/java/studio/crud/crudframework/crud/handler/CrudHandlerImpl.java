@@ -125,14 +125,14 @@ public class CrudHandlerImpl implements CrudHandler {
 	@Override
 	public <ID extends Serializable, Entity extends BaseCrudEntity<ID>> UpdateCRUDRequestBuilder<CRUDPreCreateHook<ID, Entity>, CRUDOnCreateHook<ID, Entity>, CRUDPostCreateHook<ID, Entity>, Entity> create(
 			Entity entity) {
-		return new UpdateCRUDRequestBuilder<>((context) -> crudCreateHandler.createInternal(entity, context.getHooksDTO()));
+		return new UpdateCRUDRequestBuilder<>((context) -> crudCreateHandler.createInternal(entity, context.getHooksDTO(), context.getApplyDefaultPolicies()));
 	}
 
 	@Override
 	public <ID extends Serializable, Entity extends BaseCrudEntity<ID>, RO> UpdateCRUDRequestBuilder<CRUDPreCreateHook<ID, Entity>, CRUDOnCreateHook<ID, Entity>, CRUDPostCreateHook<ID, Entity>, RO> create(Entity entity,
 			Class<RO> toClazz) {
 		return new UpdateCRUDRequestBuilder<>((context) -> {
-			Entity result = crudCreateHandler.createInternal(entity, context.getHooksDTO());
+			Entity result = crudCreateHandler.createInternal(entity, context.getHooksDTO(), context.getApplyDefaultPolicies());
 			return crudHelper.fill(result, toClazz);
 		});
 	}
