@@ -50,12 +50,12 @@ public abstract class CRUDRequestBuilder<PreHook, OnHook, PostHook, EntityType> 
 	}
 
 	public CRUDRequestBuilder<PreHook, OnHook, PostHook, EntityType> enforceAccess(BaseCrudEntity requester) {
-		// todo:
+        // todo:
 		return this;
 	}
 
 	public CRUDRequestBuilder<PreHook, OnHook, PostHook, EntityType> enforceAccess(Class<?> requesterType, Long requesterId) {
-		// todo:
+        // todo:
 		return this;
 	}
 

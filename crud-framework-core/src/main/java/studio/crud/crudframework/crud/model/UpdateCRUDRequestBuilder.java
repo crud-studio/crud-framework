@@ -18,11 +18,11 @@ public class UpdateCRUDRequestBuilder<PreHook, OnHook, PostHook, ReturnType> ext
 	 */
 	@Override
 	public ReturnType execute() {
-		return this.onExecute.execute(new HooksDTO<>(preHooks, onHooks, postHooks));
+		return this.onExecute.execute(new UpdateRequestContext<>(new HooksDTO<>(preHooks, onHooks, postHooks)));
 	}
 
 	public interface UpdateCRUDExecutor<PreHook, OnHook, PostHook, EntityType> {
 
-		EntityType execute(HooksDTO<PreHook, OnHook, PostHook> hooksDTO);
+		EntityType execute(UpdateRequestContext<PreHook, OnHook, PostHook, EntityType> context);
 	}
 }

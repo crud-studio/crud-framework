@@ -9,14 +9,14 @@ public class MassUpdateCRUDRequestBuilder<PreHook, OnHook, PostHook, ReturnType>
 
 	private MassUpdateCRUDExecutor<PreHook, OnHook, PostHook, ReturnType> onExecute;
 
-	private Boolean persistCopy = null;
+	private boolean persistCopy = false;
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public ReturnType execute() {
-		return this.onExecute.execute(new HooksDTO<>(preHooks, onHooks, postHooks), persistCopy);
+		return this.onExecute.execute(new MassUpdateRequestContext<>(new HooksDTO<>(preHooks, onHooks, postHooks), persistCopy));
 	}
 
 	public MassUpdateCRUDRequestBuilder(MassUpdateCRUDExecutor<PreHook, OnHook, PostHook, ReturnType> onExecute) {
@@ -30,6 +30,6 @@ public class MassUpdateCRUDRequestBuilder<PreHook, OnHook, PostHook, ReturnType>
 
 	public interface MassUpdateCRUDExecutor<PreHook, OnHook, PostHook, EntityType> {
 
-		EntityType execute(HooksDTO<PreHook, OnHook, PostHook> hooksDTO, Boolean persistCopy);
+		EntityType execute(MassUpdateRequestContext<PreHook, OnHook, PostHook, EntityType> context);
 	}
 }

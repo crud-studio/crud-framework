@@ -13,18 +13,18 @@ public class ReadCRUDRequestBuilder<PreHook, OnHook, PostHook, ReturnType> exten
 
 	private ReadCRUDExecutor<PreHook, OnHook, PostHook, Long> onCount;
 
-	private Boolean persistCopy = null;
+	private boolean persistCopy = false;
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public ReturnType execute() {
-		return this.onExecute.execute(new HooksDTO<>(preHooks, onHooks, postHooks), fromCache, persistCopy);
+		return this.onExecute.execute(new ReadRequestContext<>(new HooksDTO<>(preHooks, onHooks, postHooks), fromCache, persistCopy));
 	}
 
 	public long count() {
-		return this.onCount.execute(new HooksDTO<>(preHooks, onHooks, postHooks), fromCache, persistCopy);
+		return this.onCount.execute(new ReadRequestContext<>(new HooksDTO<>(preHooks, onHooks, postHooks), fromCache, persistCopy));
 	}
 
 	public ReadCRUDRequestBuilder(ReadCRUDExecutor<PreHook, OnHook, PostHook, ReturnType> onExecute,
@@ -54,6 +54,6 @@ public class ReadCRUDRequestBuilder<PreHook, OnHook, PostHook, ReturnType> exten
 
 	public interface ReadCRUDExecutor<PreHook, OnHook, PostHook, EntityType> {
 
-		EntityType execute(HooksDTO<PreHook, OnHook, PostHook> hooksDTO, boolean fromCache, Boolean persistCopy);
+		EntityType execute(ReadRequestContext<PreHook, OnHook, PostHook, EntityType> context);
 	}
 }
