@@ -22,6 +22,8 @@ public abstract class CRUDRequestBuilder<PreHook, OnHook, PostHook, EntityType> 
 
 	protected List<PostHook> postHooks = new ArrayList<>();
 
+	protected boolean applyPolicies = false;
+
 	/**
 	 * Runs the CRUD action
 	 *
@@ -56,6 +58,11 @@ public abstract class CRUDRequestBuilder<PreHook, OnHook, PostHook, EntityType> 
 
 	public CRUDRequestBuilder<PreHook, OnHook, PostHook, EntityType> enforceAccess(Class<?> requesterType, Long requesterId) {
         // todo:
+		return this;
+	}
+
+	public CRUDRequestBuilder<PreHook, OnHook, PostHook, EntityType> applyPolicies() {
+		applyPolicies = true;
 		return this;
 	}
 

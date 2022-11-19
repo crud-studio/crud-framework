@@ -114,7 +114,7 @@ public class CrudHelperImpl implements CrudHelper {
     }
 
     @Override
-    public <ID extends Serializable, Entity extends BaseCrudEntity<ID>> void decorateFilter(DynamicModelFilter filter, Class<Entity> entityClazz, boolean forUpdate) {
+    public <ID extends Serializable, Entity extends BaseCrudEntity<ID>> void decorateFilter(DynamicModelFilter filter, Class<Entity> entityClazz) {
         EntityMetadataDTO metadataDTO = getEntityMetadata(entityClazz);
         if (metadataDTO.getDeleteableType() == EntityMetadataDTO.DeleteableType.Soft) {
             Field deleteField = metadataDTO.getDeleteField();
@@ -196,9 +196,8 @@ public class CrudHelperImpl implements CrudHelper {
 
     /* transactional */
     @Override
-    public <ID extends Serializable, Entity extends BaseCrudEntity<ID>> List<Entity> getEntities(DynamicModelFilter filter, Class<Entity> entityClazz, Boolean persistCopy,
-                                                                                                 boolean forUpdate) {
-        decorateFilter(filter, entityClazz, forUpdate);
+    public <ID extends Serializable, Entity extends BaseCrudEntity<ID>> List<Entity> getEntities(DynamicModelFilter filter, Class<Entity> entityClazz, Boolean persistCopy) {
+        decorateFilter(filter, entityClazz);
 
         if (persistCopy == null) {
             persistCopy = getEntityMetadata(entityClazz).getAlwaysPersistCopy();
@@ -215,19 +214,14 @@ public class CrudHelperImpl implements CrudHelper {
     /* transactional */
     @Override
     public <ID extends Serializable, Entity extends BaseCrudEntity<ID>> long getEntitiesCount(DynamicModelFilter filter, Class<Entity> entityClazz, boolean forUpdate) {
-        decorateFilter(filter, entityClazz, forUpdate);
+        decorateFilter(filter, entityClazz);
         return getCrudDaoForEntity(entityClazz).indexCount(filter, entityClazz);
     }
 
     /* transactional */
     @Override
-    public <ID extends Serializable, Entity extends BaseCrudEntity<ID>> Entity getEntityById(ID entityId, Class<Entity> entityClazz, Boolean persistCopy, boolean forUpdate) {
-        FilterFieldDataType entityIdDataType = FilterFieldDataType.get(entityId.getClass());
-        Objects.requireNonNull(entityIdDataType, "Could not assert entityId type");
-
-        DynamicModelFilter filter = new DynamicModelFilter()
-                .add(FilterFields.eq("id", entityIdDataType, entityId));
-        List<Entity> entities = getEntities(filter, entityClazz, persistCopy, forUpdate);
+    public <ID extends Serializable, Entity extends BaseCrudEntity<ID>> Entity getEntity(DynamicModelFilter filter, Class<Entity> entityClazz, Boolean persistCopy) {
+        List<Entity> entities = getEntities(filter, entityClazz, persistCopy);
         Entity entity = null;
         if (entities.size() > 0) {
             entity = entities.get(0);

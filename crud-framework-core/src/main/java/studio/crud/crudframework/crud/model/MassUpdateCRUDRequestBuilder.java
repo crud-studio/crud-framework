@@ -16,7 +16,7 @@ public class MassUpdateCRUDRequestBuilder<PreHook, OnHook, PostHook, ReturnType>
 	 */
 	@Override
 	public ReturnType execute() {
-		return this.onExecute.execute(new MassUpdateRequestContext<>(new HooksDTO<>(preHooks, onHooks, postHooks), persistCopy));
+		return this.onExecute.execute(new MassUpdateRequestContext<>(new HooksDTO<>(preHooks, onHooks, postHooks), persistCopy, applyPolicies));
 	}
 
 	public MassUpdateCRUDRequestBuilder(MassUpdateCRUDExecutor<PreHook, OnHook, PostHook, ReturnType> onExecute) {

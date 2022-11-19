@@ -19,8 +19,7 @@ abstract class AbstractCrudHelper : CrudHelper {
 
     override fun <ID : Serializable?, Entity : BaseCrudEntity<ID>?> decorateFilter(
         filter: DynamicModelFilter?,
-        entityClazz: Class<Entity>?,
-        forUpdate: Boolean
+        entityClazz: Class<Entity>?
     ) {
         throw UnsupportedOperationException()
     }
@@ -35,8 +34,7 @@ abstract class AbstractCrudHelper : CrudHelper {
     override fun <ID : Serializable?, Entity : BaseCrudEntity<ID>?> getEntities(
         filter: DynamicModelFilter?,
         entityClazz: Class<Entity>?,
-        persistCopy: Boolean?,
-        forUpdate: Boolean
+        persistCopy: Boolean?
     ): MutableList<Entity> {
         throw UnsupportedOperationException()
     }
@@ -49,11 +47,10 @@ abstract class AbstractCrudHelper : CrudHelper {
         throw UnsupportedOperationException()
     }
 
-    override fun <ID : Serializable?, Entity : BaseCrudEntity<ID>?> getEntityById(
-        entityId: ID,
+    override fun <ID : Serializable?, Entity : BaseCrudEntity<ID>?> getEntity(
+        filter: DynamicModelFilter,
         entityClazz: Class<Entity>?,
-        persistCopy: Boolean?,
-        forUpdate: Boolean
+        persistCopy: Boolean?
     ): Entity {
         throw UnsupportedOperationException()
     }

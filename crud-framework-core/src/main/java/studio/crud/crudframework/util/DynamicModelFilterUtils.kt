@@ -24,7 +24,7 @@ private fun getPropertyValue(target: Any, string: String): Any? {
 /**
  * Check if [target] matches all filter fields in [this]
  */
-fun DynamicModelFilter.matches(target: Any): Boolean {
+fun DynamicModelFilter.filtersMatch(target: Any): Boolean {
     return this.filterFields.all { filterField ->
         return@all filterField.matches(target)
     }

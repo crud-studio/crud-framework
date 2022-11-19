@@ -20,11 +20,11 @@ public class ReadCRUDRequestBuilder<PreHook, OnHook, PostHook, ReturnType> exten
 	 */
 	@Override
 	public ReturnType execute() {
-		return this.onExecute.execute(new ReadRequestContext<>(new HooksDTO<>(preHooks, onHooks, postHooks), fromCache, persistCopy));
+		return this.onExecute.execute(new ReadRequestContext<>(new HooksDTO<>(preHooks, onHooks, postHooks), fromCache, persistCopy, applyPolicies));
 	}
 
 	public long count() {
-		return this.onCount.execute(new ReadRequestContext<>(new HooksDTO<>(preHooks, onHooks, postHooks), fromCache, persistCopy));
+		return this.onCount.execute(new ReadRequestContext<>(new HooksDTO<>(preHooks, onHooks, postHooks), fromCache, persistCopy, applyPolicies));
 	}
 
 	public ReadCRUDRequestBuilder(ReadCRUDExecutor<PreHook, OnHook, PostHook, ReturnType> onExecute,

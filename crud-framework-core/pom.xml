@@ -16,7 +16,7 @@
 
     <properties>
         <jar-name>crud-framework-core</jar-name>
-        <shapeshift.version>0.6.0</shapeshift.version>
+        <shapeshift.version>0.7.0</shapeshift.version>
         <spring.componentmap.version>0.1.0</spring.componentmap.version>
     </properties>
 
@@ -71,6 +71,11 @@
             <groupId>dev.krud</groupId>
             <artifactId>spring-componentmap</artifactId>
             <version>${spring.componentmap.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.tomas-langer</groupId>
+            <artifactId>chalk</artifactId>
+            <version>1.0.2</version>
         </dependency>
     </dependencies>
 </project>
