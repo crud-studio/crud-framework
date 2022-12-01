@@ -13,7 +13,7 @@
     </parent>
 
     <properties>
-        <hibernate.core.version>5.2.17.Final</hibernate.core.version>
+        <hibernate.core.version>5.3.20.Final</hibernate.core.version>
         <jar-name>crud-framework-hibernate5-connector</jar-name>
     </properties>
     <dependencies>
